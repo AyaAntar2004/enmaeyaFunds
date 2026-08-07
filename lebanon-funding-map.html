@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lebanon Funding Network — Enmaeya</title>
+<script src="vendor/d3.min.js"></script>
+<style>
+  :root{--bg:#f4f6f8;--ink:#1c2733;--muted:#6b7c8d;--line:#c3ccd4;--ring:#3b6ea5;--hi:#141b22;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .app{display:grid;grid-template-columns:1.35fr 1fr;gap:0;min-height:100vh}
+  .left{padding:14px 10px 20px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:4px 14px;font-size:13px;color:var(--muted)}
+  .back{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--ink)}
+  .back:hover{color:var(--ring)}
+  .crumb{color:var(--muted)}
+  svg{width:100%;height:auto;display:block}
+  .right{padding:22px 26px;border-left:1px solid var(--line);background:#fff}
+  .phead{height:120px;border-radius:12px;display:flex;align-items:flex-end;padding:16px 18px;color:#fff;background:linear-gradient(135deg,#26344c,#3b6ea5);transition:background .3s}
+  .phead h2{margin:0;font-size:22px;line-height:1.15}
+  .curation{font-size:13px;opacity:.9;margin-top:4px}
+  .pmeta{font-size:12px;color:var(--muted);margin:14px 0 8px}
+  .pmeta .tag{background:#eef2f6;color:#42576a;border-radius:6px;padding:3px 10px;margin-right:6px}
+  .pbody{font-size:14px;line-height:1.55;color:#33404d}
+  .readmore{display:inline-block;margin-top:14px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--ring);padding-bottom:2px}
+  .pactions{display:flex;gap:26px;margin:20px 0 6px;color:var(--muted);font-size:12px}
+  .pactions div{text-align:center;cursor:pointer}
+  .pactions .ic{font-size:18px;color:var(--ink)}
+  .browse{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
+  .browse h3{margin:0 0 12px;font-size:16px}
+  .toggle{display:flex;background:#eef2f6;border-radius:8px;padding:5px;gap:5px;max-width:340px}
+  .toggle button{flex:1;border:0;border-radius:6px;padding:9px;font-size:14px;background:transparent;cursor:pointer;color:#42576a}
+  .toggle button.on{background:#fff;font-weight:700;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .list{margin-top:14px}
+  .item{display:flex;gap:10px;padding:10px 4px;border-bottom:1px solid #eef2f6;text-decoration:none;color:inherit;cursor:pointer}
+  .item:hover{background:#f8fafc}
+  .item .dot{width:9px;height:9px;border-radius:2px;margin-top:6px;flex:0 0 auto}
+  .item .t{font-size:13px;font-weight:600;line-height:1.3}
+  .item .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .link{fill:none;stroke:#b7c1cb;stroke-width:1;opacity:0}
+  .olabel{font-size:10.5px;fill:var(--ink);pointer-events:none}
+  .slabel{font-weight:700;font-size:13px;pointer-events:none}
+  .hublabel{fill:#fff;font-weight:700;text-anchor:middle}
+  .hubsub{fill:#aebfce;font-size:11px;text-anchor:middle}
+  .node circle{cursor:pointer;transition:fill .15s,stroke .15s}
+  .foot{font-size:11px;color:var(--muted);padding:6px 16px}
+  @media(max-width:900px){.app{grid-template-columns:1fr}.right{border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="left">
+    <div class="topbar">
+      <div class="back" id="back">&#8592; Dashboard</div>
+      <div class="crumb" id="crumb">Overview</div>
+    </div>
+    <svg id="map" viewBox="0 0 820 780"></svg>
+    <div class="foot">Source: Enmaeya (enmaeya.com) &middot; click a sector to open it, click again to close &middot; open as many as you like &middot; data prototype</div>
+  </div>
+  <div class="right">
+    <div class="phead" id="phead"><div><h2 id="ptitle">Lebanon Funding Network</h2>
+      <div class="curation" id="pcuration">Curation: Enmaeya</div></div></div>
+    <div class="pmeta" id="pmeta"></div>
+    <div class="pbody" id="pbody"></div>
+    <a class="readmore" id="preadmore" href="https://enmaeya.com/en/hub" target="_blank" rel="noopener">Read more</a>
+    <div class="pactions">
+      <div><div class="ic">&#10548;</div>Share</div>
+      <div><div class="ic">&lt;/&gt;</div>Embed</div>
+    </div>
+    <div class="browse">
+      <h3>Browse</h3>
+      <div class="toggle"><button class="on" id="tBrowse">Browse</button><button id="tLatest">Latest</button></div>
+      <div class="list" id="plist"></div>
+    </div>
+  </div>
+</div>
+<script>
+function R(title,src,date,url,blurb){return {title:title,src:src,date:date,url:url,blurb:blurb};}
+
+// Every sector gets the same six sub-nodes, linking to these exact
+// enmaeya.com pages. Funding isn't a category on enmaeya.com at all —
+// this dashboard IS that data, so it links back into index.html with the
+// sector pre-selected instead.
+const CATEGORY_URL = {
+  news: "https://enmaeya.com/en/news",
+  opinions: "https://enmaeya.com/en/opinions",
+  events: "https://enmaeya.com/en/hub/events",
+  resources: "https://enmaeya.com/en/hub/resources",
+  studio: "https://enmaeya.com/en/studio"
+};
+
+const CATEGORIES = [
+  { key: "funding",   label: "Funding",   hot: true },
+  { key: "news",       label: "News",      hot: true },
+  { key: "opinions",   label: "Opinions" },
+  { key: "resources",  label: "Resources" },
+  { key: "events",     label: "Events" },
+  { key: "studio",     label: "Studio" }
+];
+
+// This page's sector naming is the canonical one enmaeya.com itself uses;
+// only "ai" differs from the shorter pill label on the main dashboard.
+const LABEL_OVERRIDE = { ai: "Artificial Intelligence" };
+
+let TREE, BYID, PARENT;
+let openSectors = new Set();
+let selectedId = null;
+let outerLayer, linkLayer;
+
+// Same macro-figure exclusion as index.html's charts: flash appeals and
+// "since 20XX" cumulative totals get re-reported across many articles, so
+// summing every mention would double-count the same money repeatedly.
+function isMacroFigure(p) {
+  return /flash appeal|response plan/i.test(p.project) || /since 20\d\d/i.test(p.project + " " + p.amountRaw);
+}
+
+function summarizeSector(sectorId, allProjects) {
+  const ps = allProjects.filter(function (p) { return p.sector === sectorId; });
+  if (!ps.length) return "Data coming soon.";
+
+  const totalM = ps.reduce(function (sum, p) { return sum + (isMacroFigure(p) || !p.amountUSDm ? 0 : p.amountUSDm); }, 0);
+  const ministries = Array.from(new Set(ps.map(function (p) { return p.ministry; })));
+
+  const regionCounts = {};
+  ps.forEach(function (p) { if (p.region !== "National") regionCounts[p.region] = (regionCounts[p.region] || 0) + 1; });
+  const topRegion = Object.keys(regionCounts).sort(function (a, b) { return regionCounts[b] - regionCounts[a]; })[0];
+
+  const partnerCounts = {};
+  ps.forEach(function (p) { p.partners.forEach(function (prt) { partnerCounts[prt] = (partnerCounts[prt] || 0) + 1; }); });
+  const topPartner = Object.keys(partnerCounts).sort(function (a, b) { return partnerCounts[b] - partnerCounts[a]; })[0];
+
+  let s = ps.length + " tracked funding record" + (ps.length === 1 ? "" : "s") +
+    (ministries.length > 1 ? " across " + ministries.length + " ministries" : " under " + ministries[0]) + ".";
+  if (totalM > 0) s += " Reported funding totals roughly $" + Math.round(totalM) + "M (excluding recurring appeals).";
+  if (topRegion) s += " " + topRegion + " sees the most activity.";
+  if (topPartner) s += " " + topPartner + " is the most frequent implementing partner.";
+  return s;
+}
+
+function buildTree(data) {
+  const sectors = data.sectorFilters.filter(function (s) { return s.id !== "all"; });
+  const lastRecord = data.meta.lastRecord;
+  const projects = data.ministryProjects || [];
+
+  return {
+    id: "root", label: "Lebanon Funding", sub: "sectors · funding · news",
+    report: R("Lebanon Funding Network", "Curation: Enmaeya", lastRecord, "https://enmaeya.com/en/hub",
+      "A live map of where funding flows across Lebanon's sectors — education, economy, health, environment, artificial intelligence, and development. Click any sector to open its funding data, news, and the latest Enmaeya coverage."),
+    children: sectors.map(function (s) {
+      const label = LABEL_OVERRIDE[s.id] || s.label;
+
+      const urls = Object.assign({ funding: "index.html?sector=" + s.id }, CATEGORY_URL);
+
+      return {
+        id: s.id, label: label, color: s.color,
+        report: R(label, "Curation: Enmaeya", lastRecord, urls.news, summarizeSector(s.id, projects)),
+        children: CATEGORIES.map(function (cat) {
+          return {
+            id: s.id + "-" + cat.key,
+            label: cat.label,
+            value: cat.hot ? 26 : 16,
+            hot: !!cat.hot,
+            report: R(label + " — " + cat.label, "Enmaeya", lastRecord, urls[cat.key],
+              "Browse " + cat.label.toLowerCase() + " coverage related to " + label + " on Enmaeya.")
+          };
+        })
+      };
+    })
+  };
+}
+
+const W=820,H=780,cx=410,cy=390,Rc=112,Ri=180,Ro=290;
+const svg=d3.select("#map");
+const sizeScale=d3.scaleSqrt().domain([0,60]).range([5,15]);
+const dur=600, ease=d3.easeCubicInOut;
+function polar(r,a){return [cx+r*Math.cos(a),cy+r*Math.sin(a)];}
+function sectorColorOf(node){var p=node;while(p&&!p.color){p=PARENT[p.id];}return (p&&p.color)||"#3b6ea5";}
+function linkPath(d){
+  var mx=(d.o._x+d.s._x)/2, my=(d.o._y+d.s._y)/2;
+  var kx=cx+(mx-cx)*0.35, ky=cy+(my-cy)*0.35;
+  return "M"+d.o._x+","+d.o._y+" Q"+kx+","+ky+" "+d.s._x+","+d.s._y;
+}
+
+function layoutPositions(sectors){
+  const totalC=d3.sum(sectors,function(s){return s.children.length;});
+  const gap=0.06, avail=2*Math.PI-sectors.length*gap, per=avail/totalC;
+  let ang=-Math.PI/2+gap/2;
+  sectors.forEach(function(s){
+    const start=ang;
+    s.children.forEach(function(c){
+      const a=ang+per/2; c._a=a;
+      const p=polar(Ro,a); c._x=p[0]; c._y=p[1];
+      ang+=per;
+    });
+    const mid=(start+ang-gap)/2; s._a=mid;
+    const q=polar(Ri,mid); s._x=q[0]; s._y=q[1];
+    ang+=gap;
+  });
+}
+
+function openList(){
+  return TREE.children.filter(function(s){ return openSectors.has(s.id); });
+}
+
+function updateCrumbBack(){
+  const backEl=document.getElementById("back");
+  const crumbEl=document.getElementById("crumb");
+  const open=openList();
+  if(open.length){
+    crumbEl.textContent=open.map(function(s){return s.label;}).join(", ");
+    backEl.innerHTML="&#8592; Overview";
+    backEl.onclick=function(){ closeAll(); };
+  } else {
+    crumbEl.textContent="Overview";
+    backEl.innerHTML="&#8592; Dashboard";
+    backEl.onclick=function(){ window.location.href="index.html"; };
+  }
+  backEl.style.visibility="visible";
+}
+
+function refreshSelection(){
+  svg.select(".inner-layer").selectAll("g.node circle")
+    .attr("fill",function(d){return openSectors.has(d.id)?"#141b22":"#fff";})
+    .attr("stroke",function(d){return openSectors.has(d.id)?"#141b22":d.color;});
+  if(outerLayer){
+    outerLayer.selectAll("g.node circle")
+      .attr("fill",function(d){return d.id===selectedId?"#141b22":"#fff";})
+      .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";});
+  }
+}
+
+function toggleSector(sec){
+  if(openSectors.has(sec.id)){
+    openSectors.delete(sec.id);
+  } else {
+    openSectors.add(sec.id);
+  }
+  selectedId=sec.id;
+  setPanel(sec);
+  buildList(false);
+  refreshSelection();
+  updateCrumbBack();
+  animateOuter();
+}
+
+function closeAll(){
+  openSectors.clear();
+  selectedId=null;
+  setPanel(TREE);
+  buildList(false);
+  refreshSelection();
+  updateCrumbBack();
+  animateOuter();
+}
+
+function parentPos(leaf){
+  var p=PARENT[leaf.id];
+  return p ? [p._x,p._y] : [cx,cy];
+}
+function collapsedLinkPath(d){
+  return "M"+d.s._x+","+d.s._y+" Q"+d.s._x+","+d.s._y+" "+d.s._x+","+d.s._y;
+}
+
+function animateOuter(){
+  const open = openList();
+  const leaves = open.reduce(function(acc,s){return acc.concat(s.children);},[]);
+  const linkData = open.reduce(function(acc,s){return acc.concat(s.children.map(function(c){return {o:c,s:s};}));},[]);
+  const ringColor = open.length===1 ? open[0].color : "#3b6ea5";
+  const popEase = d3.easeBackOut.overshoot(1.8);
+
+  svg.select(".hubring")
+    .transition().duration(140).ease(d3.easeCubicOut).attr("r",Rc+20)
+    .transition().duration(dur).ease(d3.easeElasticOut.amplitude(1).period(0.35)).attr("r",Rc+15);
+  svg.select(".hubring").transition().duration(dur).ease(ease)
+    .attr("stroke", ringColor).attr("opacity", open.length?0.9:0.7);
+
+  // LINKS — grow from a zero-length stub at the parent sector out to the leaf,
+  // each one staggered so they fan out in sequence rather than all at once.
+  const linkSel=linkLayer.selectAll("path.link").data(linkData, function(d){return d.o.id;});
+  linkSel.exit()
+    .transition().delay(function(d,i){return i*18;}).duration(dur*0.5).ease(d3.easeCubicIn)
+    .attr("d",collapsedLinkPath).style("opacity",0)
+    .remove();
+  const linkEnter=linkSel.enter().append("path").attr("class","link")
+    .style("opacity",0).attr("d",collapsedLinkPath);
+  linkEnter.transition().delay(function(d,i){return i*45;}).duration(dur).ease(d3.easeCubicInOut)
+    .attr("d",linkPath).style("opacity",.5);
+
+  // NODES — pop outward from the parent's position with a springy overshoot,
+  // staggered per node for a cascading "bloom" effect.
+  const nodeSel=outerLayer.selectAll("g.node").data(leaves, function(d){return d.id;});
+
+  nodeSel.exit().each(function(d){
+    var pp=parentPos(d);
+    var g=d3.select(this);
+    g.select("circle").transition().duration(dur*0.4).ease(d3.easeCubicIn)
+      .attr("cx",pp[0]).attr("cy",pp[1]).attr("r",0);
+    g.select("text").transition().duration(dur*0.25).style("opacity",0);
+    g.transition().delay(dur*0.4).duration(1).remove();
+  });
+
+  const nodeEnter=nodeSel.enter().append("g").attr("class","node");
+  nodeEnter.append("circle")
+    .attr("cx",function(d){return parentPos(d)[0];}).attr("cy",function(d){return parentPos(d)[1];})
+    .attr("r",0)
+    .attr("fill",function(d){return d.id===selectedId?"#141b22":"#fff";})
+    .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";}).attr("stroke-width",1.4)
+    .on("click",function(e,d){ e.stopPropagation(); selectedId=d.id; setPanel(d); refreshSelection(); });
+  nodeEnter.append("text").attr("class","olabel").style("opacity",0).each(function(d){
+    var flip=Math.cos(d._a)<0, deg=d._a*180/Math.PI, lr=Ro+sizeScale(d.value||10)+7, p=polar(lr,d._a);
+    d3.select(this).attr("transform","translate("+p[0]+","+p[1]+") rotate("+(flip?deg+180:deg)+")").attr("text-anchor",flip?"end":"start").attr("dy","0.32em").text(d.label);
+  });
+
+  nodeEnter.select("circle")
+    .transition().delay(function(d,i){return i*55;}).duration(dur).ease(popEase)
+    .attr("cx",function(d){return d._x;}).attr("cy",function(d){return d._y;})
+    .attr("r",function(d){return sizeScale(d.value||10);});
+  nodeEnter.select("text")
+    .transition().delay(function(d,i){return i*55+dur*0.35;}).duration(260).ease(d3.easeCubicOut)
+    .style("opacity",1);
+}
+
+function drawHub(root){
+  svg.append("circle").attr("class","hubring").attr("cx",cx).attr("cy",cy).attr("r",Rc+15).attr("fill","none").attr("stroke","#3b6ea5").attr("stroke-width",2).attr("opacity",.7);
+  svg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",Rc).attr("fill","url(#hg)").style("cursor","pointer")
+    .on("click",function(){ closeAll(); });
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy-8).attr("font-size",21).text("Lebanon");
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy+16).attr("font-size",21).text("Funding");
+  svg.append("text").attr("class","hubsub").attr("x",cx).attr("y",cy+40).text(root.sub);
+}
+
+function drawInner(sectors){
+  const gg=svg.append("g").attr("class","inner-layer").selectAll("g").data(sectors).enter().append("g").attr("class","node");
+  gg.append("circle").attr("cx",function(d){return d._x;}).attr("cy",function(d){return d._y;}).attr("r",18)
+    .attr("fill",function(d){return openSectors.has(d.id)?"#141b22":"#fff";}).attr("stroke",function(d){return openSectors.has(d.id)?"#141b22":d.color;}).attr("stroke-width",3)
+    .on("click",function(e,d){
+      e.stopPropagation();
+      d3.select(this).transition().duration(110).ease(d3.easeCubicOut).attr("r",23)
+        .transition().duration(dur*0.6).ease(d3.easeElasticOut.amplitude(1).period(0.35)).attr("r",18);
+      toggleSector(d);
+    });
+  gg.append("text").attr("class","slabel").each(function(d){
+    var lr=Ri-30,p=polar(lr,d._a);
+    var anchor=Math.abs(Math.cos(d._a))<0.3?"middle":(Math.cos(d._a)<0?"end":"start");
+    d3.select(this).attr("x",p[0]).attr("y",p[1]).attr("dy","0.32em").attr("text-anchor",anchor).attr("fill",d.color).text(d.label);
+  });
+}
+
+function render(){
+  svg.selectAll("*").remove();
+  const defs=svg.append("defs");
+  const g=defs.append("radialGradient").attr("id","hg");
+  g.append("stop").attr("offset","0%").attr("stop-color","#40567a");
+  g.append("stop").attr("offset","100%").attr("stop-color","#26344c");
+
+  const sectors=TREE.children;
+  layoutPositions(sectors);
+
+  linkLayer=svg.append("g").attr("class","link-layer");
+  drawHub(TREE);
+  drawInner(sectors);
+  outerLayer=svg.append("g").attr("class","outer-layer");
+
+  openSectors=new Set(); selectedId=null;
+  setPanel(TREE);
+  buildList(false);
+  updateCrumbBack();
+}
+
+function setPanel(node){
+  var rep=node.report||node, color=node.color||sectorColorOf(node);
+  d3.select("#phead").style("background","linear-gradient(135deg,#26344c,"+color+")");
+  d3.select("#ptitle").text(rep.title);
+  d3.select("#pcuration").text(rep.src||"Curation: Enmaeya");
+  d3.select("#pmeta").html(rep.date?"<span class='tag'>"+(node.label||"Report")+"</span> "+rep.date:"");
+  d3.select("#pbody").text(rep.blurb||"");
+  d3.select("#preadmore").attr("href",rep.url||"https://enmaeya.com/en/hub");
+}
+
+function buildList(latest){
+  var open=openList();
+  var items;
+  if(open.length){
+    items=[];
+    open.forEach(function(sec){
+      items.push({node:sec,rep:sec.report});
+      sec.children.forEach(function(c){items.push({node:c,rep:c.report});});
+    });
+  } else {
+    items=TREE.children.map(function(s){return {node:s,rep:s.report};});
+  }
+  if(latest) items=items.slice().sort(function(a,b){return new Date(b.rep.date)-new Date(a.rep.date);});
+  d3.select("#plist").html(items.map(function(it){
+    var c=it.node.color||sectorColorOf(it.node);
+    return "<a class='item' href='"+it.rep.url+"' target='_blank' rel='noopener'><span class='dot' style='background:"+c+"'></span><span><span class='t'>"+it.rep.title+"</span><span class='s'>"+it.rep.src+" · "+it.rep.date+"</span></span></a>";
+  }).join(""));
+}
+
+document.getElementById("tBrowse").onclick=function(){this.classList.add("on");document.getElementById("tLatest").classList.remove("on");buildList(false);};
+document.getElementById("tLatest").onclick=function(){this.classList.add("on");document.getElementById("tBrowse").classList.remove("on");buildList(true);};
+
+async function init(){
+  const res = await fetch("data.json");
+  const data = await res.json();
+
+  TREE = buildTree(data);
+  BYID = {}; (function idx(n){BYID[n.id]=n;(n.children||[]).forEach(idx);})(TREE);
+  PARENT = {}; (function par(n){(n.children||[]).forEach(function(c){PARENT[c.id]=n;par(c);});})(TREE);
+
+  render();
+}
+
+init();
+</script>
+</body>
+</html>

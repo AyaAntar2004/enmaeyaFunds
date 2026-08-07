@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ENMAEYA Development Funding & Opportunities Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="vendor/d3.min.js"></script>
+<style>
+  :root {
+    --c-education: #493174;
+    --c-economy: #EE634D;
+    --c-health: #FBAA3C;
+    --c-environment: #1D9E98;
+    --c-ai: #1F5164;
+    --c-development: #0EA8DA;
+    --page-bg: #e6e6e7;
+    --card-bg: #f4f5f4;
+    --field-bg: #eceeed;
+    --title-color: #0f4c5c;
+    --insight-bg: #c7b9e0;
+    --insight-accent: #493174;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--page-bg);
+    padding: 28px;
+  }
+
+  .page {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  /* ---------- Sector pill filters ---------- */
+  .sector-filters {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .pill {
+    flex: 1 1 0;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 12px 10px;
+    border-radius: 8px;
+    border: 2px solid var(--pc, #1b1b1b);
+    background: #fff;
+    color: var(--pc, #1b1b1b);
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .pill.active {
+    background: var(--pc, #1b1b1b);
+    color: #fff;
+  }
+
+  /* ---------- Header card ---------- */
+  .header-card {
+    background: var(--card-bg);
+    border-radius: 28px;
+    padding: 32px 40px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .header-left {
+    flex: 0 0 320px;
+  }
+
+  .logo-img {
+    height: 44px;
+    display: block;
+    margin-bottom: 28px;
+  }
+
+  .header-title {
+    font-size: 34px;
+    line-height: 1.18;
+    font-weight: 700;
+    color: var(--title-color);
+    margin: 0;
+  }
+
+  .network-link {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--c-education);
+    text-decoration: none;
+    border-bottom: 2px solid var(--c-education);
+    padding-bottom: 2px;
+  }
+
+  .header-right {
+    flex: 1 1 640px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .filters-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    background: var(--field-bg);
+    border-radius: 18px;
+    padding: 12px 16px;
+    flex: 1 1 0;
+    min-width: 180px;
+  }
+
+  .filter-group label {
+    display: block;
+    font-size: 15px;
+    color: #2b2b2b;
+    margin-bottom: 8px;
+  }
+
+  .select-pill {
+    position: relative;
+    background: #fff;
+    border: 1.5px solid #1b1b1b;
+    border-radius: 8px;
+    padding: 0;
+  }
+
+  .select-pill select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    border: none;
+    background: transparent;
+    font: inherit;
+    font-size: 15px;
+    color: #1b1b1b;
+    padding: 8px 32px 8px 16px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .select-pill::after {
+    content: '\25BE';
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    pointer-events: none;
+  }
+
+  .insight-box {
+    display: flex;
+    background: var(--insight-bg);
+    border-radius: 18px;
+    overflow: hidden;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #2a1f42;
+  }
+
+  .insight-box .accent {
+    width: 8px;
+    background: var(--insight-accent);
+    flex-shrink: 0;
+  }
+
+  .insight-box .text {
+    padding: 18px 24px;
+  }
+
+  .insight-box strong {
+    color: #2a1f42;
+  }
+
+  /* ---------- Ministry-data charts ---------- */
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .chart-card {
+    background: var(--card-bg);
+    border-radius: 24px;
+    padding: 26px 30px;
+  }
+
+  .chart-title {
+    margin: 0 0 4px;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--title-color);
+  }
+
+  .chart-sub {
+    margin: 0 0 14px;
+    font-size: 12.5px;
+    color: #5c6b6f;
+    min-height: 32px;
+  }
+
+  .chart-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+
+  .chart-empty {
+    font-size: 13px;
+    fill: #8a97a0;
+  }
+
+  @media (max-width: 860px) {
+    .charts-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ---------- Governorate map card ---------- */
+  .chart-card.map-card {
+    grid-column: 1 / -1;
+  }
+
+  .map-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 36px;
+    align-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .map-layout { grid-template-columns: 1fr; }
+  }
+
+  .map-pane svg {
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+    display: block;
+    overflow: visible;
+  }
+
+  .lb-map .reg {
+    stroke: var(--card-bg);
+    stroke-width: 2;
+    cursor: pointer;
+    transition: filter .15s ease;
+  }
+
+  .lb-map .reg.no-data { fill: #e3e5e4; }
+
+  .lb-map .reg:hover,
+  .lb-map .reg.active {
+    stroke: #1b1b1b;
+    filter: brightness(1.05);
+  }
+
+  .lb-map .reg-label,
+  .lb-map .reg-count,
+  .lb-map .reg-amount {
+    pointer-events: none;
+  }
+
+  .lb-map .reg-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    fill: #233;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+
+  .lb-map .reg-count {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    fill: #fff;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: rgba(0,0,0,.32);
+    stroke-width: 3px;
+  }
+
+  .lb-map .reg-amount {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    fill: rgba(255,255,255,.94);
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: rgba(0,0,0,.32);
+    stroke-width: 3px;
+  }
+
+  .map-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #5c6b6f;
+  }
+
+  .map-legend .bar {
+    flex: 1 1 auto;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #e3e5e4, var(--pc, #0f4c5c));
+  }
+
+  /* One simple ranked list: name + count, same numbers already on the map. */
+  .map-rank {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .map-rank li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 10px;
+    transition: background .15s;
+  }
+
+  .map-rank li:hover,
+  .map-rank li.active {
+    background: #fff;
+  }
+
+  .map-rank .rk-dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 3px;
+    flex: none;
+  }
+
+  .map-rank .rk-name {
+    flex: 1 1 auto;
+    color: #233;
+    font-weight: 500;
+  }
+
+  .map-rank .rk-count {
+    font-weight: 700;
+    color: #1b1b1b;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="sector-filters" id="sectorFilters"></div>
+
+  <div class="header-card">
+    <div class="header-left">
+      <img src="logo.svg" alt="enmaeya" class="logo-img">
+      <h1 class="header-title">Funding<br>Relationships<br>Dashboard</h1>
+      <a class="network-link" href="lebanon-funding-map.html">Explore the funding network &#8594;</a>
+    </div>
+
+    <div class="header-right">
+      <div class="filters-row">
+        <div class="filter-group">
+          <label>Ministry:</label>
+          <div class="select-pill"><select id="ministrySelect"></select></div>
+        </div>
+        <div class="filter-group">
+          <label>Funder:</label>
+          <div class="select-pill"><select id="funderSelect"></select></div>
+        </div>
+        <div class="filter-group">
+          <label>Location</label>
+          <div class="select-pill"><select id="locationSelect"></select></div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <div class="accent"></div>
+        <div class="text" id="insightText"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h2 class="chart-title">Where is the funding going?</h2>
+      <p class="chart-sub" id="chart1Sub">Illustrative reported funding by ENMAEYA sector, from tracked ministry projects.</p>
+      <svg id="chartFunding" viewBox="0 0 480 300"></svg>
+    </div>
+    <div class="chart-card">
+      <h2 class="chart-title">Who funds whom?</h2>
+      <p class="chart-sub" id="chart2Sub">Leading funder &#8594; Lebanese ministry &#8594; sector</p>
+      <svg id="chartFlow" viewBox="0 0 480 328"></svg>
+    </div>
+    <div class="chart-card">
+      <h2 class="chart-title">Which partners dominate each sector?</h2>
+      <p class="chart-sub" id="chart4Sub">Partner frequency within the selected sector.</p>
+      <svg id="chartPartners" viewBox="0 0 480 300"></svg>
+    </div>
+    <div class="chart-card map-card">
+      <h2 class="chart-title">Where are projects concentrated?</h2>
+      <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
+      <div class="map-layout">
+        <div class="map-pane">
+          <svg id="chartMap" class="lb-map" viewBox="0 0 603.3 760"></svg>
+          <div class="map-legend"><span>Fewer</span><span class="bar" id="mapLegendBar"></span><span>More</span></div>
+        </div>
+        <ul class="map-rank" id="mapRank"></ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Real governorate boundaries (same geometry as lebanon-map.html), reused
+  // here as a small choropleth instead of a standalone map page. `region`
+  // is the value as it appears on ministryProjects records; Akkar isn't
+  // tracked as its own region in the current dataset (folded into North
+  // Lebanon at build time), so its shape always renders as "no data".
+  const REGION_SHAPES = [
+    { region: null, label: "Akkar",
+      d: "M462.0,49.3 L470.1,63.8 L476.9,69.9 L484.9,72.6 L493.4,72.5 L501.6,69.8 L500.3,82.7 L497.8,84.6 L494.2,81.7 L489.2,80.3 L484.2,83.4 L483.5,88.3 L483.9,94.3 L482.3,100.7 L475.7,105.9 L466.4,111.0 L460.7,117.0 L464.1,123.3 L456.8,124.2 L452.6,126.0 L436.6,138.5 L434.9,140.9 L434.4,145.1 L432.9,147.3 L290.6,147.3 L285.9,139.7 L285.9,137.1 L292.2,138.8 L319.1,131.8 L346.3,107.0 L348.2,101.2 L348.5,82.0 L347.5,73.3 L345.4,66.1 L341.8,61.4 L349.1,62.1 L357.5,68.1 L364.9,70.2 L372.7,70.4 L381.6,69.1 L405.0,70.8 L412.6,67.4 L420.4,71.8 L440.9,70.7 L444.3,69.2 L447.4,65.8 L448.7,62.1 L448.8,54.0 L449.9,50.9 L457.0,46.0 L462.0,49.3 Z",
+      lx: 415.7, ly: 97.5, size: 12 },
+    { region: "North Lebanon", label: "North",
+      d: "M427.4,154.4 L428.5,160.4 L419.1,179.6 L404.8,192.9 L402.9,196.0 L399.1,209.3 L388.7,220.1 L376.0,236.1 L373.8,250.3 L366.8,262.3 L364.6,264.2 L355.8,265.1 L352.6,263.4 L350.5,264.1 L345.9,263.5 L330.3,255.2 L328.5,255.3 L325.4,259.7 L316.5,258.3 L299.0,248.4 L292.0,248.7 L283.8,250.8 L275.4,250.5 L269.2,251.7 L263.1,250.8 L240.5,239.4 L231.3,238.3 L232.3,236.5 L232.5,223.6 L234.1,210.8 L238.2,200.0 L246.2,193.0 L252.0,197.8 L257.6,189.3 L262.7,176.3 L267.3,167.9 L286.1,157.6 L292.0,149.6 L290.6,147.3 L432.9,147.3 L427.4,154.4 Z",
+      lx: 318.4, ly: 204.6, size: 12 },
+    { region: "Baalbek-Hermel", label: "Baalbek-Hermel",
+      d: "M302.2,368.4 L307.3,360.5 L322.6,346.5 L326.6,344.7 L336.1,330.2 L351.3,299.7 L352.5,274.8 L355.8,265.1 L363.6,264.5 L366.8,262.3 L373.8,250.3 L376.0,236.1 L388.7,220.1 L399.1,209.3 L402.9,196.0 L404.8,192.9 L419.1,179.6 L428.5,160.4 L427.4,154.4 L433.9,146.1 L434.9,140.9 L436.6,138.5 L452.6,126.0 L456.8,124.2 L464.1,123.3 L465.1,125.2 L466.9,125.5 L475.4,123.2 L494.6,123.4 L499.3,125.1 L501.5,132.0 L504.9,137.3 L509.4,141.1 L515.2,143.6 L520.1,149.7 L522.6,151.3 L525.1,150.4 L530.5,154.3 L532.3,157.9 L532.1,162.4 L529.9,172.0 L527.6,176.0 L527.3,179.4 L528.3,182.7 L537.3,196.1 L540.9,200.1 L548.0,201.5 L549.8,204.7 L549.1,210.0 L543.3,219.8 L544.9,227.5 L547.1,233.4 L555.3,241.5 L557.3,245.9 L547.7,256.5 L539.8,269.7 L524.6,282.7 L518.0,291.1 L515.4,301.7 L513.5,305.5 L508.0,308.3 L503.3,308.5 L496.0,305.8 L492.1,305.5 L484.9,309.1 L473.6,323.5 L460.1,335.4 L454.7,342.0 L450.1,349.3 L442.8,364.1 L444.9,368.4 L302.2,368.4 Z",
+      lx: 465.6, ly: 243.7, size: 12 },
+    { region: "Mount Lebanon", label: "Mount Lebanon",
+      d: "M198.4,365.8 L201.6,366.0 L206.6,364.3 L208.7,361.5 L213.7,350.0 L213.3,347.7 L211.2,347.5 L214.1,344.1 L220.7,330.2 L228.5,329.3 L230.0,327.7 L229.8,323.9 L225.3,319.3 L225.2,309.3 L230.8,291.4 L232.3,278.7 L231.2,273.9 L226.4,264.9 L225.3,259.1 L225.3,245.1 L226.4,242.1 L231.3,238.3 L240.5,239.4 L263.1,250.8 L269.2,251.7 L275.4,250.5 L283.8,250.8 L292.0,248.7 L299.0,248.4 L316.5,258.3 L325.4,259.7 L328.5,255.3 L330.3,255.2 L345.9,263.5 L350.5,264.1 L352.6,263.4 L355.8,265.1 L352.5,274.8 L351.3,299.7 L336.1,330.2 L326.6,344.7 L322.6,346.5 L307.3,360.5 L303.5,365.2 L296.0,379.6 L273.9,406.0 L285.1,414.1 L286.6,417.1 L282.8,422.2 L273.3,422.4 L264.0,436.0 L269.2,441.4 L269.0,443.4 L264.5,449.0 L259.9,451.8 L240.3,481.6 L234.1,496.4 L228.5,518.7 L225.1,524.1 L220.7,528.1 L222.7,516.5 L222.1,513.9 L218.0,512.0 L215.9,509.2 L217.0,502.1 L217.2,493.8 L214.8,488.6 L213.3,488.3 L209.5,490.4 L202.4,491.4 L195.3,497.4 L188.1,498.3 L179.9,501.2 L175.6,501.2 L174.2,502.7 L160.8,501.2 L152.0,496.6 L140.3,495.5 L148.3,473.5 L146.2,470.7 L151.5,466.1 L155.4,449.3 L161.2,445.6 L160.9,440.7 L174.4,407.7 L175.7,399.6 L176.3,382.6 L182.8,384.0 L187.3,383.8 L190.7,380.2 L194.4,379.8 L198.4,365.8 Z",
+      lx: 232, ly: 420, size: 12 },
+    { region: "Beirut", label: "Beirut",
+      d: "M176.3,382.6 L175.3,374.8 L172.0,367.5 L173.9,364.3 L177.5,363.0 L182.0,363.8 L188.0,367.3 L190.3,367.3 L193.6,365.5 L198.4,365.8 L194.4,379.8 L190.7,380.2 L187.3,383.8 L182.8,384.0 L176.3,382.6 Z",
+      lx: 122, ly: 372, size: 11, leader: { x1: 188, y1: 372, x2: 126, y2: 369 } },
+    { region: "Bekaa", label: "Beqaa",
+      d: "M299.4,565.3 L278.0,561.8 L275.4,559.0 L271.0,548.9 L269.1,546.4 L262.2,542.2 L255.5,540.0 L251.5,542.3 L246.8,547.1 L237.0,560.6 L234.4,561.7 L227.9,559.4 L226.7,550.6 L223.5,544.7 L221.6,537.8 L220.7,528.1 L225.1,524.1 L228.5,518.7 L234.1,496.4 L240.3,481.6 L259.9,451.8 L264.5,449.0 L269.0,443.4 L269.2,441.4 L264.0,436.0 L273.3,422.4 L282.8,422.2 L286.6,417.1 L285.1,414.1 L273.9,406.0 L296.0,379.6 L302.2,368.4 L444.9,368.4 L447.7,372.0 L457.7,379.8 L471.1,382.1 L476.9,385.7 L477.6,394.1 L473.5,399.6 L467.0,400.6 L454.1,397.6 L436.7,388.9 L430.8,387.8 L425.6,389.7 L415.4,396.9 L408.3,397.1 L399.0,388.6 L386.8,396.1 L369.1,402.6 L365.8,407.0 L361.2,415.7 L350.0,425.4 L343.2,437.1 L337.0,442.8 L334.5,446.5 L334.0,449.9 L335.0,457.3 L334.1,461.2 L326.6,465.9 L325.3,474.7 L329.8,477.5 L337.4,478.9 L345.3,483.4 L350.1,484.7 L356.4,487.9 L362.1,492.1 L365.1,496.7 L364.0,504.3 L358.7,510.5 L351.8,515.2 L345.3,518.2 L337.3,518.1 L329.3,520.7 L325.4,526.1 L330.0,534.4 L324.6,547.5 L314.1,556.5 L299.4,565.3 Z",
+      lx: 286.8, ly: 470.3, size: 12 },
+    { region: "Nabatieh", label: "Nabatieh",
+      d: "M217.4,638.5 L211.0,633.5 L202.9,621.3 L198.9,621.7 L191.5,636.8 L188.9,645.8 L188.1,666.0 L186.2,676.4 L177.0,694.8 L175.3,701.0 L164.9,701.9 L148.6,708.9 L129.4,714.0 L125.0,713.4 L116.1,700.2 L110.3,696.1 L111.5,679.6 L115.7,668.5 L116.6,667.0 L121.9,667.3 L124.7,665.1 L126.2,662.2 L126.8,657.0 L132.3,656.4 L137.1,653.2 L135.9,651.1 L132.7,649.0 L132.8,648.1 L140.5,643.2 L153.4,627.6 L155.1,623.5 L155.1,612.9 L158.3,608.3 L153.1,609.3 L151.5,610.4 L148.0,610.6 L132.4,606.7 L127.1,601.0 L128.6,594.5 L127.8,591.9 L122.4,588.3 L115.8,588.0 L112.9,586.1 L118.1,584.9 L120.2,581.1 L121.1,575.3 L123.6,573.3 L127.0,572.4 L130.0,573.1 L131.6,576.7 L135.6,581.3 L137.1,581.6 L137.8,575.0 L144.2,562.8 L143.7,560.3 L140.5,560.5 L140.8,558.6 L145.2,551.2 L152.1,549.7 L153.8,548.4 L153.8,545.3 L151.6,543.6 L154.9,541.6 L169.6,538.2 L175.4,538.6 L182.1,535.4 L186.9,534.6 L190.1,531.6 L191.8,532.1 L189.9,546.8 L191.0,573.4 L190.4,578.9 L196.7,594.1 L200.5,583.1 L202.2,580.4 L206.1,578.7 L210.1,579.7 L213.1,578.7 L215.8,572.4 L225.1,564.7 L227.9,559.4 L234.4,561.7 L237.0,560.6 L246.8,547.1 L251.5,542.3 L255.5,540.0 L262.2,542.2 L269.1,546.4 L271.0,548.9 L275.4,559.0 L278.0,561.8 L299.4,565.3 L291.2,570.3 L286.0,576.6 L279.2,590.3 L273.6,596.5 L264.9,601.2 L249.5,604.7 L236.6,618.3 L233.8,623.5 L226.6,624.4 L222.9,626.4 L222.2,631.9 L217.6,636.7 L217.4,638.5 Z",
+      lx: 176.8, ly: 622.6, size: 11 },
+    { region: "South Lebanon", label: "South",
+      d: "M110.3,696.1 L104.4,695.3 L91.8,699.5 L82.6,697.9 L75.1,702.4 L47.9,700.3 L48.3,697.8 L46.3,697.6 L46.0,695.3 L51.1,686.1 L54.8,682.5 L62.3,679.3 L69.2,667.1 L67.1,664.3 L70.3,664.5 L71.5,667.1 L81.7,644.7 L83.2,632.5 L76.1,622.1 L83.4,616.7 L88.5,609.0 L95.0,591.2 L96.0,574.7 L97.3,569.0 L103.5,559.7 L105.6,554.6 L104.2,549.5 L121.9,535.8 L130.8,526.4 L134.6,514.3 L135.3,509.0 L140.3,495.5 L152.0,496.6 L160.8,501.2 L174.2,502.7 L175.6,501.2 L179.9,501.2 L188.1,498.3 L195.3,497.4 L202.4,491.4 L209.5,490.4 L213.3,488.3 L214.8,488.6 L217.2,493.8 L217.0,502.1 L215.9,509.2 L218.0,512.0 L222.1,513.9 L222.7,516.5 L220.7,528.1 L221.6,537.8 L223.5,544.7 L226.7,550.6 L227.9,559.4 L225.1,564.7 L215.8,572.4 L213.1,578.7 L210.1,579.7 L206.1,578.7 L202.2,580.4 L200.5,583.1 L196.7,594.1 L190.4,578.9 L191.0,573.4 L189.9,546.8 L191.9,532.1 L190.1,531.6 L186.9,534.6 L182.1,535.4 L175.4,538.6 L169.6,538.2 L154.9,541.6 L151.6,543.6 L153.8,545.3 L153.8,548.4 L152.1,549.7 L145.2,551.2 L140.8,558.6 L140.5,560.5 L143.7,560.3 L144.2,562.8 L137.8,575.0 L137.1,581.6 L135.6,581.3 L131.6,576.7 L130.0,573.1 L127.0,572.4 L123.6,573.3 L121.1,575.3 L120.2,581.1 L118.1,584.9 L112.9,586.1 L115.8,588.0 L122.4,588.3 L127.8,591.9 L128.6,594.5 L127.1,601.0 L132.4,606.7 L148.0,610.6 L151.5,610.4 L153.1,609.3 L158.3,608.3 L155.1,612.9 L155.1,623.5 L153.4,627.6 L140.5,643.2 L132.8,648.1 L132.7,649.0 L135.9,651.1 L137.1,653.2 L132.3,656.4 L126.8,657.0 L126.2,662.2 L124.7,665.1 L121.9,667.3 L116.6,667.0 L115.7,668.5 L111.5,679.6 L110.3,696.1 Z",
+      lx: 110.2, ly: 597.8, size: 12 }
+  ];
+
+  // Greedy word-wrap for SVG labels: breaks `str` onto up to `maxLines` lines
+  // of at most `maxChars` characters, so long names stay whole and readable
+  // instead of being cut off mid-word with an ellipsis. If it still doesn't
+  // fit in maxLines, only the final line is shortened.
+  function wrapLines(str, maxChars, maxLines) {
+    const words = str.split(/\s+/).filter(Boolean);
+    const lines = [];
+    let cur = "";
+    let i = 0;
+    while (i < words.length && lines.length < maxLines) {
+      const test = cur ? cur + " " + words[i] : words[i];
+      if (test.length <= maxChars || !cur) { cur = test; i++; }
+      else { lines.push(cur); cur = ""; }
+    }
+    if (cur && lines.length < maxLines) { lines.push(cur); i = words.length; }
+    if (i < words.length) {
+      let last = lines[lines.length - 1] || "";
+      if (last.length > maxChars - 1) last = last.slice(0, maxChars - 1).trimEnd();
+      lines[lines.length - 1] = last + "…";
+    }
+    return lines;
+  }
+
+  // Renders `str` as centered/end-anchored wrapped tspans under a single
+  // <text> node, vertically centered on the node's existing y position.
+  function wrapText(textSel, str, maxChars, maxLines, lineHeightEm) {
+    const lines = wrapLines(str, maxChars, maxLines);
+    const x = textSel.attr("x");
+    const lh = lineHeightEm || 1.15;
+    textSel.text(null);
+    lines.forEach((line, idx) => {
+      textSel.append("tspan").attr("x", x)
+        .attr("dy", idx === 0 ? (-(lines.length - 1) / 2 * lh + 0.32) + "em" : lh + "em")
+        .text(line);
+    });
+    return lines.length;
+  }
+
+  function chartEmpty(svg, W, H, msg) {
+    svg.append("text").attr("class", "chart-empty")
+      .attr("x", W / 2).attr("y", H / 2).attr("text-anchor", "middle")
+      .text(msg || "No tracked ministry projects yet for this sector.");
+  }
+
+  const AXIS_LABEL = { ai: "AI" };
+
+  // Multi-year cumulative totals ("...since 2011") and national humanitarian
+  // appeals get re-reported by multiple articles for the same underlying
+  // figure — summing every mention would double-count the same money many
+  // times over. They're still tracked (counted), just excluded from the $ sum.
+  function isMacroFigure(p) {
+    return /flash appeal|response plan/i.test(p.project) || /since 20\d\d/i.test(p.project + " " + p.amountRaw);
+  }
+
+  function renderFundingChart(sectors, projects, activeId) {
+    const svg = d3.select("#chartFunding");
+    svg.selectAll("*").remove();
+    const W = 480, H = 300, base = H - 78;
+
+    const rows = sectors.map(s => {
+      const ps = projects.filter(p => p.sector === s.id);
+      return { id: s.id, label: s.label, axisLabel: AXIS_LABEL[s.id] || s.label, color: s.color,
+        amount: d3.sum(ps, p => isMacroFigure(p) ? 0 : (p.amountUSDm || 0)), count: ps.length };
+    });
+    const maxAmt = d3.max(rows, d => d.amount) || 1;
+    const x = d3.scaleBand().domain(rows.map(d => d.id)).range([10, W - 10]).padding(0.3);
+    const y = d3.scaleLinear().domain([0, maxAmt]).range([base, 20]);
+
+    const g = svg.append("g");
+    g.selectAll("rect").data(rows).enter().append("rect")
+      .attr("x", d => x(d.id)).attr("width", x.bandwidth())
+      .attr("y", d => d.amount > 0 ? y(d.amount) : base - 6)
+      .attr("height", d => d.amount > 0 ? (base - y(d.amount)) : (d.count > 0 ? 6 : 0))
+      .attr("rx", 6)
+      .attr("fill", d => d.color)
+      .attr("opacity", d => d.id === activeId ? 1 : 0.32);
+
+    g.selectAll("text.val").data(rows).enter().append("text").attr("class", "val")
+      .attr("x", d => x(d.id) + x.bandwidth() / 2)
+      .attr("y", d => (d.amount > 0 ? y(d.amount) : base - 6) - 8)
+      .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 700)
+      .attr("fill", "#233")
+      .text(d => d.amount > 0 ? "$" + Math.round(d.amount) + "M" : (d.count ? d.count + " proj" : "—"));
+
+    g.selectAll("text.lab").data(rows).enter().append("text").attr("class", "lab")
+      .attr("transform", d => "translate(" + (x(d.id) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
+      .attr("text-anchor", "end").attr("font-size", 10)
+      .attr("font-weight", d => d.id === activeId ? 700 : 400)
+      .attr("fill", "#3a4750")
+      .text(d => d.axisLabel)
+      .append("title").text(d => d.count + " project" + (d.count === 1 ? "" : "s"));
+  }
+
+  function renderFlowChart(sectorObj, projects) {
+    const svg = d3.select("#chartFlow");
+    svg.selectAll("*").remove();
+    const W = 480, H = 328;
+    const ps = projects.filter(p => p.sector === sectorObj.id);
+    if (!ps.length) { chartEmpty(svg, W, H); return; }
+
+    const ministryName = new Map();
+    const linkCount = new Map();
+    ps.forEach(p => {
+      ministryName.set(p.ministryCode, p.ministry || p.ministryCode);
+      const funders = p.funders.length ? p.funders : (p.partners.length ? [p.partners[0] + " (partner)"] : ["Not disclosed"]);
+      funders.forEach(f => {
+        const key = p.ministryCode + "|" + f;
+        linkCount.set(key, (linkCount.get(key) || 0) + 1);
+      });
+    });
+    let links = Array.from(linkCount.entries()).map(([k, c]) => {
+      const [ministryCode, funder] = k.split("|");
+      return { ministryCode, funder, count: c };
+    });
+
+    // Cap to the top funders by link weight so sectors with many ministries
+    // (and dozens of distinct funders) stay legible instead of turning into
+    // a hairball. The rest are summarized in a footnote. Keeping this cap
+    // fairly tight (rather than cramming in every funder) is what keeps the
+    // ribbons readable instead of a tangled hairball.
+    const MAX_FUNDERS = 6;
+    const funderTotals = new Map();
+    links.forEach(l => funderTotals.set(l.funder, (funderTotals.get(l.funder) || 0) + l.count));
+    const rankedFunders = Array.from(funderTotals.entries()).sort((a, b) => b[1] - a[1]);
+    const funders = rankedFunders.slice(0, MAX_FUNDERS).map(d => d[0]);
+    const omittedCount = rankedFunders.length - funders.length;
+    const funderSet = new Set(funders);
+    links = links.filter(l => funderSet.has(l.funder));
+
+    // Order ministries by total weight too, so the heaviest nodes cluster
+    // near the top on both sides of the funder->ministry ribbons — that
+    // alone removes most of the avoidable line crossings.
+    const ministryTotals = new Map();
+    links.forEach(l => ministryTotals.set(l.ministryCode, (ministryTotals.get(l.ministryCode) || 0) + l.count));
+    const ministries = Array.from(ministryTotals.entries()).sort((a, b) => b[1] - a[1]).map(d => d[0]);
+
+    const colFdot = 156, colM = 292, colS = 412;
+    const funderY = d3.scalePoint().domain(funders).range([38, H - 60]).padding(1);
+    const ministryY = d3.scalePoint().domain(ministries).range([56, H - 56]).padding(1);
+    const sectorYPos = H / 2;
+
+    const linkG = svg.append("g").attr("fill", "none").attr("stroke-linecap", "round");
+    links.forEach(l => {
+      const y1 = funderY(l.funder), y2 = ministryY(l.ministryCode);
+      linkG.append("path")
+        .attr("d", `M${colFdot},${y1} C${(colFdot + colM) / 2},${y1} ${(colFdot + colM) / 2},${y2} ${colM - 19},${y2}`)
+        .attr("stroke", sectorObj.color)
+        .attr("stroke-width", Math.min(5, 1.4 + Math.sqrt(l.count) * 1.8)).attr("opacity", 0.3);
+    });
+    ministries.forEach(m => {
+      const y2 = ministryY(m);
+      linkG.append("path")
+        .attr("d", `M${colM + 19},${y2} C${(colM + colS) / 2},${y2} ${(colM + colS) / 2},${sectorYPos} ${colS - 20},${sectorYPos}`)
+        .attr("stroke", sectorObj.color).attr("stroke-width", 3).attr("opacity", 0.4);
+    });
+
+    const nodeG = svg.append("g");
+    funders.forEach(f => {
+      const y = funderY(f);
+      nodeG.append("circle").attr("cx", colFdot).attr("cy", y).attr("r", 4.5).attr("fill", "#fff").attr("stroke", "#8a97a0").attr("stroke-width", 1.5);
+      const t = nodeG.append("text").attr("x", colFdot - 11).attr("y", y).attr("text-anchor", "end")
+        .attr("font-size", 11).attr("fill", "#2c363c");
+      wrapText(t, f, 22, 2);
+      t.append("title").text(f);
+    });
+    ministries.forEach(m => {
+      const y = ministryY(m);
+      // Longer ministry codes (e.g. "MoInfo") shrink to fit inside the fixed-size
+      // circle instead of spilling past its edge and becoming unreadable.
+      const codeSize = Math.min(9.5, 27 / (m.length * 0.62));
+      nodeG.append("circle").attr("cx", colM).attr("cy", y).attr("r", 16).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
+      nodeG.append("text").attr("x", colM).attr("y", y).attr("dy", "0.32em").attr("text-anchor", "middle")
+        .attr("font-size", codeSize).attr("font-weight", 700).attr("fill", "#fff").text(m)
+        .append("title").text(ministryName.get(m) || m);
+    });
+    nodeG.append("circle").attr("cx", colS).attr("cy", sectorYPos).attr("r", 18).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
+    const sectorLabel = nodeG.append("text").attr("x", colS).attr("y", sectorYPos + 30).attr("text-anchor", "middle")
+      .attr("font-size", 11).attr("font-weight", 700).attr("fill", "#2c363c");
+    wrapText(sectorLabel, sectorObj.label, 15, 2);
+
+    if (omittedCount > 0) {
+      svg.append("text").attr("x", 4).attr("y", H - 8)
+        .attr("font-size", 9.5).attr("fill", "#8a97a0")
+        .text("+ " + omittedCount + " more funder" + (omittedCount === 1 ? "" : "s") + " not shown");
+    }
+  }
+
+  function fmtAmount(m) {
+    if (!m) return "Not disclosed";
+    return m >= 1000 ? "$" + (m / 1000).toFixed(1) + "B" : "$" + Math.round(m) + "M";
+  }
+
+  // The map, the count baked onto each shape, and the list all show the same
+  // numbers — one source of truth (`stats`), no separate hover-detail panel
+  // that has to be kept in sync with what's already on screen.
+  function renderMapChart(sectorObj, projects) {
+    const svg = d3.select("#chartMap");
+    svg.selectAll("*").remove();
+    document.getElementById("mapLegendBar").style.setProperty("--pc", sectorObj.color);
+
+    const ps = projects.filter(p => p.sector === sectorObj.id);
+    const rankList = document.getElementById("mapRank");
+    const sub = document.getElementById("chart3Sub");
+
+    if (!ps.length) {
+      chartEmpty(svg, 603.3, 760);
+      rankList.innerHTML = "";
+      sub.textContent = "No tracked " + sectorObj.label + " projects yet.";
+      return;
+    }
+
+    const stats = new Map(); // region -> { count, amount }
+    ps.forEach(p => {
+      const s = stats.get(p.region) || { count: 0, amount: 0 };
+      s.count += 1;
+      s.amount += isMacroFigure(p) ? 0 : (p.amountUSDm || 0);
+      stats.set(p.region, s);
+    });
+    const totalAmount = d3.sum(ps, p => isMacroFigure(p) ? 0 : (p.amountUSDm || 0));
+    const nationalCount = stats.get("National") ? stats.get("National").count : 0;
+
+    sub.textContent = ps.length + " tracked " + sectorObj.label + " project" + (ps.length === 1 ? "" : "s") +
+      " · " + fmtAmount(totalAmount) + " reported" + (nationalCount ? " · " + nationalCount + " national/unspecified" : "");
+
+    // Even the lowest tracked count still reads as a clearly-tinted region (not
+    // a washed-out gray), and a power scale pushes mid-range counts toward full
+    // saturation faster than a straight linear ramp would.
+    const maxCount = d3.max(REGION_SHAPES, d => d.region && stats.has(d.region) ? stats.get(d.region).count : 0) || 1;
+    const lightTint = d3.interpolateRgb(sectorObj.color, "#ffffff")(0.78);
+    const intensity = d3.scalePow().exponent(0.55).domain([0, maxCount]).range([0.28, 1]);
+    const colorScale = count => d3.interpolateRgb(lightTint, sectorObj.color)(intensity(count));
+
+    function highlight(region) {
+      svg.selectAll(".reg").classed("active", d => d.region === region);
+      rankList.querySelectorAll("li").forEach(li => li.classList.toggle("active", li.dataset.region === region));
+    }
+    function clearHighlight() { highlight(null); }
+
+    const g = svg.append("g");
+    g.selectAll("path.reg").data(REGION_SHAPES).enter().append("path")
+      .attr("id", d => "reg-" + d.label.replace(/\s+/g, "_"))
+      .attr("class", d => "reg" + (d.region && stats.has(d.region) ? "" : " no-data"))
+      .attr("d", d => d.d)
+      .attr("fill", d => d.region && stats.has(d.region) ? colorScale(stats.get(d.region).count) : "#e3e5e4")
+      .on("mouseenter", (e, d) => d.region && highlight(d.region))
+      .on("mouseleave", clearHighlight);
+
+    REGION_SHAPES.forEach(d => {
+      if (d.leader) {
+        g.append("line").attr("class", "reg-leader").attr("pointer-events", "none")
+          .attr("x1", d.leader.x1).attr("y1", d.leader.y1).attr("x2", d.leader.x2).attr("y2", d.leader.y2)
+          .attr("stroke", "#8a97a0").attr("stroke-width", 1);
+        g.append("circle").attr("pointer-events", "none").attr("cx", d.leader.x1).attr("cy", d.leader.y1).attr("r", 3.4)
+          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.2);
+      }
+    });
+
+    g.selectAll("text.reg-label").data(REGION_SHAPES).enter().append("text").attr("class", "reg-label")
+      .attr("x", d => d.lx).attr("y", d => (d.region && stats.has(d.region)) ? d.ly - 13 : d.ly)
+      .attr("font-size", d => d.size)
+      .attr("text-anchor", d => d.leader ? "end" : "middle")
+      .text(d => d.label.toUpperCase());
+
+    const withData = REGION_SHAPES.filter(d => d.region && stats.has(d.region));
+
+    g.selectAll("text.reg-count").data(withData).enter()
+      .append("text").attr("class", "reg-count")
+      .attr("x", d => d.lx).attr("y", d => d.ly + 1)
+      .attr("text-anchor", d => d.leader ? "end" : "middle")
+      .text(d => stats.get(d.region).count);
+
+    g.selectAll("text.reg-amount").data(withData).enter()
+      .append("text").attr("class", "reg-amount")
+      .attr("x", d => d.lx).attr("y", d => d.ly + 14)
+      .attr("text-anchor", d => d.leader ? "end" : "middle")
+      .text(d => fmtAmount(stats.get(d.region).amount));
+
+    // Ranked list mirrors the map 1:1; National/unspecified pinned last since it has no shape.
+    const ranked = Array.from(stats.entries())
+      .filter(([region]) => region !== "National")
+      .sort((a, b) => b[1].count - a[1].count);
+    if (nationalCount) ranked.push(["National", stats.get("National")]);
+
+    rankList.innerHTML = "";
+    ranked.forEach(([region, s]) => {
+      const li = document.createElement("li");
+      li.dataset.region = region;
+      li.innerHTML = '<span class="rk-dot" style="background:' + (region === "National" ? "#c7ccd1" : sectorObj.color) + '"></span>' +
+        '<span class="rk-name">' + region + '</span><span class="rk-count">' + s.count + "</span>";
+      li.addEventListener("mouseenter", () => region !== "National" && highlight(region));
+      li.addEventListener("mouseleave", clearHighlight);
+      rankList.appendChild(li);
+    });
+  }
+
+  function renderPartnersChart(sectorObj, projects) {
+    const svg = d3.select("#chartPartners");
+    svg.selectAll("*").remove();
+    const W = 480, H = 300;
+    const ps = projects.filter(p => p.sector === sectorObj.id);
+    if (!ps.length) { chartEmpty(svg, W, H); return; }
+
+    const counts = new Map();
+    ps.forEach(p => p.partners.forEach(prt => counts.set(prt, (counts.get(prt) || 0) + 1)));
+    const rows = Array.from(counts.entries())
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 7);
+
+    if (!rows.length) { chartEmpty(svg, W, H, "No named partners recorded yet for this sector."); return; }
+
+    const barH = 30, gap = 8, top = 10, labelW = 150;
+    const maxC = d3.max(rows, d => d.count);
+    const x = d3.scaleLinear().domain([0, maxC]).range([0, W - labelW - 50]);
+
+    rows.forEach((d, i) => {
+      const y = top + i * (barH + gap);
+      const label = svg.append("text").attr("x", 0).attr("y", y + barH / 2)
+        .attr("font-size", 12).attr("fill", "#233");
+      wrapText(label, d.name, 20, 2, 1.05);
+      label.append("title").text(d.name);
+      svg.append("rect").attr("x", labelW).attr("y", y)
+        .attr("width", Math.max(4, x(d.count))).attr("height", barH).attr("rx", 5)
+        .attr("fill", sectorObj.color).attr("opacity", 0.85);
+      svg.append("text").attr("x", labelW + Math.max(4, x(d.count)) + 8).attr("y", y + barH / 2).attr("dy", "0.32em")
+        .attr("font-size", 12).attr("font-weight", 700).attr("fill", "#233").text(d.count);
+    });
+  }
+
+  function renderMinistryCharts(id, sectors, projects) {
+    if (typeof d3 === "undefined") {
+      document.querySelectorAll(".chart-card svg").forEach(svg => {
+        const vb = svg.viewBox.baseVal;
+        svg.innerHTML = '<text x="' + (vb.width / 2) + '" y="' + (vb.height / 2) +
+          '" text-anchor="middle" font-size="13" fill="#c0392b">Charts failed to load: vendor/d3.min.js did not load.</text>';
+      });
+      return;
+    }
+    const sectorObj = sectors.find(s => s.id === id);
+    document.getElementById("chart2Sub").innerHTML = "Leading funder &#8594; " + sectorObj.label + " ministry &#8594; sector";
+    document.getElementById("chart4Sub").textContent = "Partner frequency within the " + sectorObj.label + " sector.";
+
+    renderFundingChart(sectors, projects, id);
+    renderFlowChart(sectorObj, projects);
+    renderMapChart(sectorObj, projects);
+    renderPartnersChart(sectorObj, projects);
+  }
+
+  async function init() {
+    const res = await fetch('data.json');
+    const data = await res.json();
+
+    const sectors = data.sectorFilters.filter(s => s.id !== 'all');
+    const pillsWrap = document.getElementById('sectorFilters');
+
+    sectors.forEach((s, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (i === 0 ? ' active' : '');
+      btn.dataset.sector = s.id;
+      btn.style.setProperty('--pc', s.color);
+      btn.textContent = s.label;
+      btn.addEventListener('click', () => selectSector(s.id));
+      pillsWrap.appendChild(btn);
+    });
+
+    function selectSector(id) {
+      pillsWrap.querySelectorAll('.pill').forEach(p => {
+        p.classList.toggle('active', p.dataset.sector === id);
+      });
+      const sd = data.sectorData[id];
+      document.getElementById('insightText').innerHTML =
+        '<strong>What this view suggests:</strong> ' + (sd ? sd.main : 'Data coming soon.');
+      renderMinistryCharts(id, sectors, data.ministryProjects);
+    }
+
+    function fillSelect(elId, placeholder, items) {
+      const el = document.getElementById(elId);
+      const opt0 = document.createElement('option');
+      opt0.value = '';
+      opt0.textContent = placeholder;
+      el.appendChild(opt0);
+      items.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        el.appendChild(opt);
+      });
+    }
+
+    const ministries = [...new Set(data.flows.map(f => f.ministry))];
+    const funders = [...new Set([
+      ...data.flows.map(f => f.funder),
+      ...data.heatmap.partners.map(p => p.name)
+    ])];
+    const locations = data.locations.list.map(l => l.name);
+
+    fillSelect('ministrySelect', 'All ministries', ministries);
+    fillSelect('funderSelect', 'All funders', funders);
+    fillSelect('locationSelect', 'All locations', locations);
+
+    const requested = new URLSearchParams(location.search).get('sector');
+    const initial = sectors.some(s => s.id === requested) ? requested : sectors[0].id;
+    selectSector(initial);
+  }
+
+  init();
+</script>
+</body>
+</html>
