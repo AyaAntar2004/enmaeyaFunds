@@ -20,7 +20,6 @@
     --card-bg: #f4f5f4;
     --field-bg: #eceeed;
     --title-color: #0f4c5c;
-    --insight-bg: #c7b9e0;
     --insight-accent: #493174;
   }
 
@@ -168,27 +167,45 @@
   }
 
   .insight-box {
-    display: flex;
-    background: var(--insight-bg);
-    border-radius: 18px;
-    overflow: hidden;
-    font-size: 16px;
-    line-height: 1.5;
-    color: #2a1f42;
+    background: #fff;
+    border: 1px solid rgba(15, 76, 92, 0.08);
+    border-left: 5px solid var(--pc, var(--insight-accent));
+    border-radius: 16px;
+    padding: 20px 26px;
+    box-shadow: 0 2px 10px rgba(15, 76, 92, 0.06);
+    transition: border-color 0.2s ease;
   }
 
-  .insight-box .accent {
-    width: 8px;
-    background: var(--insight-accent);
+  .insight-kicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--pc, var(--insight-accent));
+    margin-bottom: 8px;
+    transition: color 0.2s ease;
+  }
+
+  .insight-kicker .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
     flex-shrink: 0;
   }
 
-  .insight-box .text {
-    padding: 18px 24px;
+  .insight-text {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: #33393c;
   }
 
-  .insight-box strong {
-    color: #2a1f42;
+  .insight-text strong {
+    color: #1b1b1b;
+    font-weight: 600;
   }
 
   /* ---------- Ministry-data charts ---------- */
@@ -231,6 +248,50 @@
     fill: #8a97a0;
   }
 
+  /* ---------- Hover analysis tooltip (shared across charts) ---------- */
+  .chart-tooltip {
+    position: fixed;
+    z-index: 40;
+    max-width: 240px;
+    background: #fff;
+    border: 1px solid rgba(15, 76, 92, 0.08);
+    border-left: 4px solid var(--pc, var(--insight-accent));
+    border-radius: 10px;
+    padding: 10px 14px;
+    box-shadow: 0 6px 20px rgba(15, 76, 92, 0.16);
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+
+  .chart-tooltip.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .chart-tooltip .tt-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1b1b1b;
+    margin-bottom: 4px;
+  }
+
+  .chart-tooltip .tt-row {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #45505a;
+  }
+
+  .chart-tooltip .tt-row strong {
+    color: #1b1b1b;
+    font-weight: 600;
+  }
+
+  .chart-card svg .hoverable {
+    cursor: pointer;
+  }
+
   @media (max-width: 860px) {
     .charts-grid { grid-template-columns: 1fr; }
   }
@@ -242,13 +303,22 @@
 
   .map-layout {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 36px;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 40px;
     align-items: center;
   }
 
   @media (max-width: 860px) {
     .map-layout { grid-template-columns: 1fr; }
+  }
+
+  .map-info .chart-sub { min-height: 0; }
+
+  .map-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #45505a;
+    margin: 0 0 18px;
   }
 
   .map-pane svg {
@@ -404,9 +474,9 @@
         </div>
       </div>
 
-      <div class="insight-box">
-        <div class="accent"></div>
-        <div class="text" id="insightText"></div>
+      <div class="insight-box" id="insightBox">
+        <div class="insight-kicker"><span class="dot"></span>What this view suggests</div>
+        <div class="insight-text" id="insightText"></div>
       </div>
     </div>
   </div>
@@ -428,19 +498,24 @@
       <svg id="chartPartners" viewBox="0 0 480 300"></svg>
     </div>
     <div class="chart-card map-card">
-      <h2 class="chart-title">Where are projects concentrated?</h2>
-      <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
       <div class="map-layout">
+        <div class="map-info">
+          <h2 class="chart-title">Where are projects concentrated?</h2>
+          <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
+          <p class="map-description" id="mapDescription"></p>
+          <ul class="map-rank" id="mapRank"></ul>
+        </div>
         <div class="map-pane">
           <svg id="chartMap" class="lb-map" viewBox="0 0 603.3 760"></svg>
           <div class="map-legend"><span>Fewer</span><span class="bar" id="mapLegendBar"></span><span>More</span></div>
         </div>
-        <ul class="map-rank" id="mapRank"></ul>
       </div>
     </div>
   </div>
 
 </div>
+
+<div class="chart-tooltip" id="chartTooltip"></div>
 
 <script>
   // Real governorate boundaries (same geometry as lebanon-map.html), reused
@@ -519,6 +594,30 @@
       .text(msg || "No tracked ministry projects yet for this sector.");
   }
 
+  // Shared hover-analysis tooltip: any chart element can call showTip(event, title, rows, color)
+  // to surface the numbers behind that data point right where the cursor is, instead of
+  // requiring a separate always-visible detail panel per chart.
+  const tooltipEl = document.getElementById("chartTooltip");
+  function showTip(event, title, rows, color) {
+    tooltipEl.style.setProperty("--pc", color || "var(--insight-accent)");
+    tooltipEl.innerHTML = '<div class="tt-title">' + title + '</div>' +
+      rows.map(r => '<div class="tt-row">' + r + '</div>').join("");
+    tooltipEl.classList.add("visible");
+    moveTip(event);
+  }
+  function moveTip(event) {
+    const pad = 16;
+    let x = event.clientX + pad, y = event.clientY + pad;
+    const rect = tooltipEl.getBoundingClientRect();
+    if (x + rect.width > window.innerWidth - 8) x = event.clientX - rect.width - pad;
+    if (y + rect.height > window.innerHeight - 8) y = event.clientY - rect.height - pad;
+    tooltipEl.style.left = x + "px";
+    tooltipEl.style.top = y + "px";
+  }
+  function hideTip() {
+    tooltipEl.classList.remove("visible");
+  }
+
   const AXIS_LABEL = { ai: "AI" };
 
   // Multi-year cumulative totals ("...since 2011") and national humanitarian
@@ -540,17 +639,33 @@
         amount: d3.sum(ps, p => isMacroFigure(p) ? 0 : (p.amountUSDm || 0)), count: ps.length };
     });
     const maxAmt = d3.max(rows, d => d.amount) || 1;
+    const totalAmt = d3.sum(rows, d => d.amount) || 0;
     const x = d3.scaleBand().domain(rows.map(d => d.id)).range([10, W - 10]).padding(0.3);
     const y = d3.scaleLinear().domain([0, maxAmt]).range([base, 20]);
 
     const g = svg.append("g");
     g.selectAll("rect").data(rows).enter().append("rect")
+      .attr("class", "hoverable")
       .attr("x", d => x(d.id)).attr("width", x.bandwidth())
       .attr("y", d => d.amount > 0 ? y(d.amount) : base - 6)
       .attr("height", d => d.amount > 0 ? (base - y(d.amount)) : (d.count > 0 ? 6 : 0))
       .attr("rx", 6)
       .attr("fill", d => d.color)
-      .attr("opacity", d => d.id === activeId ? 1 : 0.32);
+      .attr("opacity", d => d.id === activeId ? 1 : 0.32)
+      .on("mouseenter", (e, d) => {
+        d3.select(e.currentTarget).attr("opacity", 1);
+        const share = totalAmt > 0 ? Math.round((d.amount / totalAmt) * 100) : 0;
+        showTip(e, d.label, [
+          "<strong>" + (d.amount > 0 ? "$" + Math.round(d.amount) + "M" : "Not disclosed") + "</strong> reported",
+          d.count + " tracked project" + (d.count === 1 ? "" : "s"),
+          d.amount > 0 ? share + "% of total tracked funding" : ""
+        ].filter(Boolean), d.color);
+      })
+      .on("mousemove", moveTip)
+      .on("mouseleave", (e, d) => {
+        d3.select(e.currentTarget).attr("opacity", d.id === activeId ? 1 : 0.32);
+        hideTip();
+      });
 
     g.selectAll("text.val").data(rows).enter().append("text").attr("class", "val")
       .attr("x", d => x(d.id) + x.bandwidth() / 2)
@@ -619,10 +734,23 @@
     const linkG = svg.append("g").attr("fill", "none").attr("stroke-linecap", "round");
     links.forEach(l => {
       const y1 = funderY(l.funder), y2 = ministryY(l.ministryCode);
+      const baseOpacity = 0.3;
       linkG.append("path")
+        .attr("class", "hoverable")
         .attr("d", `M${colFdot},${y1} C${(colFdot + colM) / 2},${y1} ${(colFdot + colM) / 2},${y2} ${colM - 19},${y2}`)
         .attr("stroke", sectorObj.color)
-        .attr("stroke-width", Math.min(5, 1.4 + Math.sqrt(l.count) * 1.8)).attr("opacity", 0.3);
+        .attr("stroke-width", Math.min(5, 1.4 + Math.sqrt(l.count) * 1.8)).attr("opacity", baseOpacity)
+        .on("mouseenter", (e, d) => {
+          d3.select(e.currentTarget).attr("opacity", 0.85);
+          showTip(e, l.funder + " → " + (ministryName.get(l.ministryCode) || l.ministryCode), [
+            l.count + " tracked project" + (l.count === 1 ? "" : "s")
+          ], sectorObj.color);
+        })
+        .on("mousemove", moveTip)
+        .on("mouseleave", e => {
+          d3.select(e.currentTarget).attr("opacity", baseOpacity);
+          hideTip();
+        });
     });
     ministries.forEach(m => {
       const y2 = ministryY(m);
@@ -631,27 +759,54 @@
         .attr("stroke", sectorObj.color).attr("stroke-width", 3).attr("opacity", 0.4);
     });
 
+    // Funders linked to each ministry, for the ministry tooltip's "N funders" line.
+    const ministryFunderCount = new Map();
+    ministries.forEach(m => {
+      ministryFunderCount.set(m, new Set(links.filter(l => l.ministryCode === m).map(l => l.funder)).size);
+    });
+
     const nodeG = svg.append("g");
     funders.forEach(f => {
       const y = funderY(f);
-      nodeG.append("circle").attr("cx", colFdot).attr("cy", y).attr("r", 4.5).attr("fill", "#fff").attr("stroke", "#8a97a0").attr("stroke-width", 1.5);
-      const t = nodeG.append("text").attr("x", colFdot - 11).attr("y", y).attr("text-anchor", "end")
+      const total = funderTotals.get(f) || 0;
+      const node = nodeG.append("g").attr("class", "hoverable")
+        .on("mouseenter", e => showTip(e, f, [
+          total + " tracked project" + (total === 1 ? "" : "s") + " in " + sectorObj.label,
+        ], sectorObj.color))
+        .on("mousemove", moveTip)
+        .on("mouseleave", hideTip);
+      node.append("circle").attr("cx", colFdot).attr("cy", y).attr("r", 4.5).attr("fill", "#fff").attr("stroke", "#8a97a0").attr("stroke-width", 1.5);
+      const t = node.append("text").attr("x", colFdot - 11).attr("y", y).attr("text-anchor", "end")
         .attr("font-size", 11).attr("fill", "#2c363c");
       wrapText(t, f, 22, 2);
-      t.append("title").text(f);
     });
     ministries.forEach(m => {
       const y = ministryY(m);
       // Longer ministry codes (e.g. "MoInfo") shrink to fit inside the fixed-size
       // circle instead of spilling past its edge and becoming unreadable.
       const codeSize = Math.min(9.5, 27 / (m.length * 0.62));
-      nodeG.append("circle").attr("cx", colM).attr("cy", y).attr("r", 16).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
-      nodeG.append("text").attr("x", colM).attr("y", y).attr("dy", "0.32em").attr("text-anchor", "middle")
-        .attr("font-size", codeSize).attr("font-weight", 700).attr("fill", "#fff").text(m)
-        .append("title").text(ministryName.get(m) || m);
+      const total = ministryTotals.get(m) || 0;
+      const funderCount = ministryFunderCount.get(m) || 0;
+      const node = nodeG.append("g").attr("class", "hoverable")
+        .on("mouseenter", e => showTip(e, ministryName.get(m) || m, [
+          total + " tracked project" + (total === 1 ? "" : "s"),
+          funderCount + " funder" + (funderCount === 1 ? "" : "s") + " shown"
+        ], sectorObj.color))
+        .on("mousemove", moveTip)
+        .on("mouseleave", hideTip);
+      node.append("circle").attr("cx", colM).attr("cy", y).attr("r", 16).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
+      node.append("text").attr("x", colM).attr("y", y).attr("dy", "0.32em").attr("text-anchor", "middle")
+        .attr("font-size", codeSize).attr("font-weight", 700).attr("fill", "#fff").text(m);
     });
-    nodeG.append("circle").attr("cx", colS).attr("cy", sectorYPos).attr("r", 18).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
-    const sectorLabel = nodeG.append("text").attr("x", colS).attr("y", sectorYPos + 30).attr("text-anchor", "middle")
+    const sectorNode = nodeG.append("g").attr("class", "hoverable")
+      .on("mouseenter", e => showTip(e, sectorObj.label, [
+        ps.length + " tracked project" + (ps.length === 1 ? "" : "s"),
+        ministries.length + " ministr" + (ministries.length === 1 ? "y" : "ies") + " · " + funders.length + " funder" + (funders.length === 1 ? "" : "s") + " shown"
+      ], sectorObj.color))
+      .on("mousemove", moveTip)
+      .on("mouseleave", hideTip);
+    sectorNode.append("circle").attr("cx", colS).attr("cy", sectorYPos).attr("r", 18).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
+    const sectorLabel = sectorNode.append("text").attr("x", colS).attr("y", sectorYPos + 30).attr("text-anchor", "middle")
       .attr("font-size", 11).attr("font-weight", 700).attr("fill", "#2c363c");
     wrapText(sectorLabel, sectorObj.label, 15, 2);
 
@@ -678,11 +833,13 @@
     const ps = projects.filter(p => p.sector === sectorObj.id);
     const rankList = document.getElementById("mapRank");
     const sub = document.getElementById("chart3Sub");
+    const desc = document.getElementById("mapDescription");
 
     if (!ps.length) {
       chartEmpty(svg, 603.3, 760);
       rankList.innerHTML = "";
       sub.textContent = "No tracked " + sectorObj.label + " projects yet.";
+      desc.textContent = "";
       return;
     }
 
@@ -789,17 +946,28 @@
     const barH = 30, gap = 8, top = 10, labelW = 150;
     const maxC = d3.max(rows, d => d.count);
     const x = d3.scaleLinear().domain([0, maxC]).range([0, W - labelW - 50]);
+    const totalMentions = d3.sum(Array.from(counts.values()));
 
     rows.forEach((d, i) => {
       const y = top + i * (barH + gap);
-      const label = svg.append("text").attr("x", 0).attr("y", y + barH / 2)
+      const share = totalMentions > 0 ? Math.round((d.count / totalMentions) * 100) : 0;
+      const row = svg.append("g").attr("class", "hoverable")
+        .on("mouseenter", e => {
+          row.select("rect").attr("opacity", 1);
+          showTip(e, d.name, [
+            d.count + " tracked project" + (d.count === 1 ? "" : "s"),
+            share + "% of partner mentions in " + sectorObj.label
+          ], sectorObj.color);
+        })
+        .on("mousemove", moveTip)
+        .on("mouseleave", () => { row.select("rect").attr("opacity", 0.85); hideTip(); });
+      const label = row.append("text").attr("x", 0).attr("y", y + barH / 2)
         .attr("font-size", 12).attr("fill", "#233");
       wrapText(label, d.name, 20, 2, 1.05);
-      label.append("title").text(d.name);
-      svg.append("rect").attr("x", labelW).attr("y", y)
+      row.append("rect").attr("x", labelW).attr("y", y)
         .attr("width", Math.max(4, x(d.count))).attr("height", barH).attr("rx", 5)
         .attr("fill", sectorObj.color).attr("opacity", 0.85);
-      svg.append("text").attr("x", labelW + Math.max(4, x(d.count)) + 8).attr("y", y + barH / 2).attr("dy", "0.32em")
+      row.append("text").attr("x", labelW + Math.max(4, x(d.count)) + 8).attr("y", y + barH / 2).attr("dy", "0.32em")
         .attr("font-size", 12).attr("font-weight", 700).attr("fill", "#233").text(d.count);
     });
   }
@@ -844,9 +1012,10 @@
       pillsWrap.querySelectorAll('.pill').forEach(p => {
         p.classList.toggle('active', p.dataset.sector === id);
       });
+      const sectorObj = sectors.find(s => s.id === id);
       const sd = data.sectorData[id];
-      document.getElementById('insightText').innerHTML =
-        '<strong>What this view suggests:</strong> ' + (sd ? sd.main : 'Data coming soon.');
+      document.getElementById('insightBox').style.setProperty('--pc', sectorObj.color);
+      document.getElementById('insightText').textContent = sd ? sd.main : 'Data coming soon.';
       renderMinistryCharts(id, sectors, data.ministryProjects);
     }
 
