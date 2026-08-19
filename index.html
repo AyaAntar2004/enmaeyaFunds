@@ -208,6 +208,165 @@
     font-weight: 600;
   }
 
+  /* ---------- About strip (What is this? / Why it matters / Mission & Vision) ---------- */
+  /* The content here is static (unrelated to the sector filter), but the color theme
+     isn't: --pc is set on #aboutGrid by selectSector(), same convention as .pill and
+     .insight-box, so all three steps re-tint together with whichever sector is active. */
+  .about-grid {
+    --pc: var(--insight-accent);
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 28px;
+  }
+
+  .about-card {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about-arrow {
+    flex: 0 0 auto;
+    width: 34px;
+    padding-top: 18px;
+    display: flex;
+    justify-content: center;
+    color: #c7ccd1;
+  }
+
+  .about-arrow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 860px) {
+    .about-grid { flex-direction: column; gap: 22px; }
+    .about-arrow { display: none; }
+  }
+
+  .about-head {
+    position: relative;
+    width: 100%;
+    background: var(--pc);
+    border-radius: 14px 14px 0 0;
+    padding: 13px 22px 32px;
+    text-align: center;
+    transition: background 0.2s ease;
+  }
+
+  /* On "All sectors" the shared --pc is the neutral near-black used for pills/insight-box —
+     fine as an accent, but too heavy as three title-bar fills. Light grey reads calmer there
+     (with dark text swapped in for contrast) while every other sector view keeps its own
+     color. #c7ccd1 is the same light grey already used for "National/unspecified" elsewhere. */
+  .about-grid.is-all .about-head {
+    background: #c7ccd1;
+  }
+
+  .about-grid.is-all .about-head h3 {
+    color: #1b1b1b;
+  }
+
+  .about-head h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .about-badge {
+    position: absolute;
+    top: -15px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--pc);
+    color: var(--pc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(15, 76, 92, 0.16);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .about-icon {
+    position: relative;
+    z-index: 2;
+    width: 56px;
+    height: 56px;
+    margin: -28px 0;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid var(--pc);
+    color: var(--pc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    box-shadow: 0 2px 6px rgba(15, 76, 92, 0.1);
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .about-icon svg {
+    width: 26px;
+    height: 26px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .about-body {
+    width: 100%;
+    flex: 1 1 auto;
+    background: #fff;
+    border: 1.5px solid var(--pc);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 32px 20px 18px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+  }
+
+  .about-body p {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #33393c;
+  }
+
+  .about-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-body ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #33393c;
+  }
+
+  .about-body li {
+    margin-bottom: 4px;
+  }
+
+  .about-body li:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-body strong {
+    color: #1b1b1b;
+    font-weight: 600;
+  }
+
   /* ---------- Ministry-data charts ---------- */
   .charts-grid {
     display: grid;
@@ -243,9 +402,106 @@
     overflow: visible;
   }
 
+  .chart-card svg.is-hidden {
+    display: none;
+  }
+
+  .chart-card.is-hidden {
+    display: none;
+  }
+
+  .chart-card-wide {
+    grid-column: 1 / -1;
+  }
+
   .chart-empty {
     font-size: 13px;
     fill: #8a97a0;
+  }
+
+  /* Small, data-driven takeaway sentence under each graph — separate from the
+     static .chart-sub caption above the chart, which just says what the chart is.
+     Styled like a little callout card (tinted background, colored kicker label,
+     left accent bar) so it reads as a highlight, not another line of gray caption
+     text — same sector-color convention as .insight-box up top. */
+  .chart-insight {
+    position: relative;
+    margin: 14px 0 0;
+    padding: 13px 16px 12px;
+    font-size: 13.5px;
+    line-height: 1.55;
+    font-weight: 500;
+    color: #1b1b1b;
+    background: color-mix(in srgb, var(--pc, var(--insight-accent)) 7%, #ffffff);
+    border: 1px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 18%, transparent);
+    border-left: 4px solid var(--pc, var(--insight-accent));
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(15, 76, 92, 0.07);
+    min-height: 0;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .chart-insight::before {
+    content: "\25CF  Insight";
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--pc, var(--insight-accent));
+    margin-bottom: 5px;
+  }
+
+  .chart-insight:empty {
+    display: none;
+  }
+
+  .map-description.chart-insight {
+    margin: 12px 0 16px;
+  }
+
+  /* On "All sectors" the shared --pc is the near-black used for the pill itself —
+     fine as a border/background tint, but the kicker's bullet + label read better
+     in the same light grey already used for "National/unspecified" elsewhere. */
+  .charts-grid.is-all .chart-insight {
+    --pc: #c7ccd1;
+  }
+
+  /* ---------- "Who this data helps" audience boxes ---------- */
+  /* One shared block, relocated by JS: sits under the ministry bubble chart on
+     "All sectors" (the only place that chart shows) and under the partners chart
+     on every individual sector page — see selectSector(). */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .audience-box {
+    background: #f4f5f4;
+    border-left: 4px solid var(--pc, var(--insight-accent));
+    border-radius: 12px;
+    padding: 16px 18px;
+    transition: border-color 0.2s ease;
+  }
+
+  .audience-box h3 {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--title-color);
+  }
+
+  .audience-box p {
+    margin: 0 0 8px;
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: #33393c;
+  }
+
+  .audience-box p:last-child {
+    margin-bottom: 0;
   }
 
   /* ---------- Hover analysis tooltip (shared across charts) ---------- */
@@ -314,19 +570,46 @@
 
   .map-info .chart-sub { min-height: 0; }
 
-  .map-description {
-    font-size: 14px;
-    line-height: 1.6;
-    color: #45505a;
-    margin: 0 0 18px;
-  }
-
   .map-pane svg {
     width: 100%;
     height: auto;
     max-height: 520px;
     display: block;
     overflow: visible;
+  }
+
+  /* With no single sector selected, the map is the main event — stack it full-width
+     under the info panel instead of sharing a row, and size it by viewport height
+     (rather than by container width) so the whole country is visible on screen at
+     once instead of trailing off the bottom of the window. */
+  .map-card.is-all .map-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .map-card.is-all .map-pane {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .map-card.is-all .map-pane svg {
+    width: auto;
+    /* 270px reserves the title, subtitle, chip-row rank list, legend and card
+       padding around the map (with room for the rank chips to wrap an extra
+       line on narrower screens), so the whole card — not just the map — fits
+       one viewport instead of the map alone fitting while its own card overflows. */
+    height: calc(100vh - 270px);
+    max-height: calc(100vh - 270px);
+    min-height: 320px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .map-card.is-all .map-legend {
+    width: 100%;
+    max-width: 640px;
   }
 
   .lb-map .reg {
@@ -444,6 +727,47 @@
     color: #1b1b1b;
     font-size: 15px;
   }
+
+  /* ---------- Ministry bubble chart (All sectors only) ---------- */
+  .bubble-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 16px;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #45505a;
+  }
+
+  .bubble-legend .bl-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .bubble-legend .bl-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  /* The vertical ranked list is fine next to a modest map, but at full-viewport-height
+     size every row it adds is a row the map has to give up. Wrap it into compact chips
+     instead so it stays legible while barely eating into the map's vertical budget. */
+  .map-card.is-all .map-rank {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 10px;
+  }
+
+  .map-card.is-all .map-rank li {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .map-card.is-all .map-rank .rk-name {
+    flex: none;
+  }
 </style>
 </head>
 <body>
@@ -481,28 +805,126 @@
     </div>
   </div>
 
+  <div class="about-grid" id="aboutGrid">
+    <div class="about-card">
+      <div class="about-head">
+        <h3>What is this?</h3>
+        <span class="about-badge">1</span>
+      </div>
+      <div class="about-icon">
+        <svg viewBox="0 0 24 24"><line x1="6" y1="20" x2="6" y2="16"/><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/></svg>
+      </div>
+      <div class="about-body">
+        <p>This dashboard tracks development funding in Lebanon — showing where money is allocated across government ministries, sectors, implementing organizations, and geographic locations. It's built to make this information accessible to the public, promoting transparency and helping users understand the country's development landscape.</p>
+      </div>
+    </div>
+
+    <div class="about-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
+    </div>
+
+    <div class="about-card">
+      <div class="about-head">
+        <h3>Why it matters</h3>
+        <span class="about-badge">2</span>
+      </div>
+      <div class="about-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <div class="about-body">
+        <p>Development funding shapes which sectors expand, where jobs are created, and where innovation opportunities emerge.</p>
+        <ul>
+          <li>Students can see which fields have growing demand</li>
+          <li>Job seekers can spot expanding sectors and active employers</li>
+          <li>Startups can find underserved sectors and procurement openings</li>
+          <li>NGOs and researchers can track donors, gaps, and partnership openings</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="about-arrow" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
+    </div>
+
+    <div class="about-card">
+      <div class="about-head">
+        <h3>Mission &amp; Vision</h3>
+        <span class="about-badge">3</span>
+      </div>
+      <div class="about-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.3 13.3 8.5 15.5 10.7 10.7 15.5 8.5"/></svg>
+      </div>
+      <div class="about-body">
+        <p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable — giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p>
+        <p><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>
+      </div>
+    </div>
+  </div>
+
   <div class="charts-grid">
     <div class="chart-card">
       <h2 class="chart-title">Where is the funding going?</h2>
       <p class="chart-sub" id="chart1Sub">Illustrative reported funding by ENMAEYA sector, from tracked ministry projects.</p>
       <svg id="chartFunding" viewBox="0 0 480 300"></svg>
+      <p class="chart-insight" id="fundingInsight"></p>
     </div>
     <div class="chart-card">
-      <h2 class="chart-title">Who funds whom?</h2>
+      <h2 class="chart-title" id="chart2Title">Who funds whom?</h2>
       <p class="chart-sub" id="chart2Sub">Leading funder &#8594; Lebanese ministry &#8594; sector</p>
       <svg id="chartFlow" viewBox="0 0 480 328"></svg>
+      <svg id="chartFunderSectors" viewBox="0 0 480 300"></svg>
+      <p class="chart-insight" id="chart2Insight"></p>
     </div>
-    <div class="chart-card">
+    <div class="chart-card chart-card-wide" id="bubbleCard">
+      <h2 class="chart-title">How do ministries compare on projects and funding?</h2>
+      <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding — bubble color follows its main sector.</p>
+      <svg id="chartMinistryBubble" viewBox="0 0 980 420"></svg>
+      <div class="bubble-legend" id="bubbleLegend"></div>
+      <p class="chart-insight" id="bubbleInsight"></p>
+    </div>
+    <div class="chart-card" id="partnersCard">
       <h2 class="chart-title">Which partners dominate each sector?</h2>
       <p class="chart-sub" id="chart4Sub">Partner frequency within the selected sector.</p>
       <svg id="chartPartners" viewBox="0 0 480 300"></svg>
+      <p class="chart-insight" id="partnersInsight"></p>
+    </div>
+    <div class="chart-card chart-card-wide audience-card" id="audienceCard">
+      <h2 class="chart-title">Who this data helps</h2>
+      <p class="chart-sub">Practical takeaways for people using this dashboard.</p>
+      <div class="audience-grid">
+        <div class="audience-box">
+          <h3>For Students</h3>
+          <p>Development, health, and social-sector fields show the most active project pipelines right now.</p>
+          <p>Programs in public health, environmental policy, and social protection align closely with current funding priorities.</p>
+        </div>
+        <div class="audience-box">
+          <h3>For Job Seekers</h3>
+          <p>Health and Development show the highest project volume, suggesting steadier hiring demand in those sectors.</p>
+          <p>Beirut and Mount Lebanon concentrate the most project activity, and likely the most roles.</p>
+        </div>
+        <div class="audience-box">
+          <h3>For Startups</h3>
+          <p>AI &amp; Technology is the smallest funded sector — a potential underserved niche for new ventures.</p>
+          <p>66 projects are recorded nationally rather than regionally, suggesting demand for solutions that scale beyond one area.</p>
+        </div>
+        <div class="audience-box">
+          <h3>For NGOs</h3>
+          <p>World Bank, EU, and UNICEF are the most active funders to approach for partnership conversations.</p>
+          <p>MoSA's broad partner network (9 organizations) suggests openness to new implementing partners.</p>
+        </div>
+        <div class="audience-box">
+          <h3>For Researchers</h3>
+          <p>AI &amp; Technology and Education are comparatively data-poor and underfunded relative to their long-run importance.</p>
+          <p>Funder concentration (e.g. MoPWT's 57% single-funder dependency) is a notable risk area worth investigating.</p>
+        </div>
+      </div>
     </div>
     <div class="chart-card map-card">
       <div class="map-layout">
         <div class="map-info">
-          <h2 class="chart-title">Where are projects concentrated?</h2>
+          <h2 class="chart-title" id="chart3Title">Where are projects concentrated?</h2>
           <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
-          <p class="map-description" id="mapDescription"></p>
+          <p class="map-description chart-insight" id="mapDescription"></p>
           <ul class="map-rank" id="mapRank"></ul>
         </div>
         <div class="map-pane">
@@ -642,6 +1064,9 @@
     const totalAmt = d3.sum(rows, d => d.amount) || 0;
     const x = d3.scaleBand().domain(rows.map(d => d.id)).range([10, W - 10]).padding(0.3);
     const y = d3.scaleLinear().domain([0, maxAmt]).range([base, 20]);
+    // With "All sectors" selected there's no single bar to spotlight, so every
+    // bar keeps its own full color instead of one being highlighted and the rest dimmed.
+    const isActive = d => activeId === "all" || d.id === activeId;
 
     const g = svg.append("g");
     g.selectAll("rect").data(rows).enter().append("rect")
@@ -651,7 +1076,7 @@
       .attr("height", d => d.amount > 0 ? (base - y(d.amount)) : (d.count > 0 ? 6 : 0))
       .attr("rx", 6)
       .attr("fill", d => d.color)
-      .attr("opacity", d => d.id === activeId ? 1 : 0.32)
+      .attr("opacity", d => isActive(d) ? 1 : 0.32)
       .on("mouseenter", (e, d) => {
         d3.select(e.currentTarget).attr("opacity", 1);
         const share = totalAmt > 0 ? Math.round((d.amount / totalAmt) * 100) : 0;
@@ -663,7 +1088,7 @@
       })
       .on("mousemove", moveTip)
       .on("mouseleave", (e, d) => {
-        d3.select(e.currentTarget).attr("opacity", d.id === activeId ? 1 : 0.32);
+        d3.select(e.currentTarget).attr("opacity", isActive(d) ? 1 : 0.32);
         hideTip();
       });
 
@@ -677,10 +1102,27 @@
     g.selectAll("text.lab").data(rows).enter().append("text").attr("class", "lab")
       .attr("transform", d => "translate(" + (x(d.id) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
       .attr("text-anchor", "end").attr("font-size", 10)
-      .attr("font-weight", d => d.id === activeId ? 700 : 400)
+      .attr("font-weight", d => activeId !== "all" && d.id === activeId ? 700 : 400)
       .attr("fill", "#3a4750")
       .text(d => d.axisLabel)
       .append("title").text(d => d.count + " project" + (d.count === 1 ? "" : "s"));
+
+    const insightEl = document.getElementById("fundingInsight");
+    const ranked = rows.slice().sort((a, b) => b.amount - a.amount);
+    const top = ranked[0];
+    if (!top || totalAmt <= 0) {
+      insightEl.textContent = "Reported funding by sector is not yet disclosed.";
+    } else if (activeId === "all") {
+      const share = Math.round((top.amount / totalAmt) * 100);
+      insightEl.textContent = top.label + " leads with " + fmtAmount(top.amount) + " reported — " + share + "% of all tracked funding.";
+    } else {
+      const active = rows.find(d => d.id === activeId);
+      const rank = ranked.findIndex(d => d.id === activeId) + 1;
+      insightEl.textContent = active.amount > 0
+        ? active.label + " reports " + fmtAmount(active.amount) + " — " + Math.round((active.amount / totalAmt) * 100) +
+          "% of total tracked funding, ranked #" + rank + " of " + rows.length + " sectors."
+        : active.label + " has " + active.count + " tracked project" + (active.count === 1 ? "" : "s") + " but no disclosed funding amount yet.";
+    }
   }
 
   function renderFlowChart(sectorObj, projects) {
@@ -688,7 +1130,7 @@
     svg.selectAll("*").remove();
     const W = 480, H = 328;
     const ps = projects.filter(p => p.sector === sectorObj.id);
-    if (!ps.length) { chartEmpty(svg, W, H); return; }
+    if (!ps.length) { chartEmpty(svg, W, H); document.getElementById("chart2Insight").textContent = ""; return; }
 
     const ministryName = new Map();
     const linkCount = new Map();
@@ -815,6 +1257,303 @@
         .attr("font-size", 9.5).attr("fill", "#8a97a0")
         .text("+ " + omittedCount + " more funder" + (omittedCount === 1 ? "" : "s") + " not shown");
     }
+
+    const topFunder = rankedFunders[0];
+    if (topFunder) {
+      document.getElementById("chart2Insight").textContent = topFunder[0] + " is the leading funder in " + sectorObj.label +
+        ", tied to " + topFunder[1] + " tracked project" + (topFunder[1] === 1 ? "" : "s") +
+        " across " + ministries.length + " ministr" + (ministries.length === 1 ? "y" : "ies") + ".";
+    }
+  }
+
+  // One stacked column per funder, segmented by sector — the segment count shows how many
+  // sectors a funder spans, segment height shows how much of its activity sits in each.
+  // Always drawn from every tracked project (not the selected sector's subset), since the
+  // whole point is the cross-sector picture; the active sector's segments are just highlighted.
+  // Vertical + capped to the top 6 keeps it reading like the funding-by-sector chart above it,
+  // rather than a wide, dense table of ribbons.
+  function renderFunderSectorsChart(sectorsList, projects, activeId) {
+    const svg = d3.select("#chartFunderSectors");
+    svg.selectAll("*").remove();
+    const W = 480, H = 300, base = H - 78;
+    if (!projects.length) { chartEmpty(svg, W, H); document.getElementById("chart2Insight").textContent = ""; return; }
+
+    const sectorById = new Map(sectorsList.map(s => [s.id, s]));
+    const funderSectors = new Map(); // funder -> Map(sectorId -> count)
+    projects.forEach(p => {
+      (p.funders || []).forEach(f => {
+        if (!sectorById.has(p.sector)) return;
+        if (!funderSectors.has(f)) funderSectors.set(f, new Map());
+        const bySector = funderSectors.get(f);
+        bySector.set(p.sector, (bySector.get(p.sector) || 0) + 1);
+      });
+    });
+
+    const rows = Array.from(funderSectors.entries()).map(([name, bySector]) => ({
+      name, bySector,
+      total: d3.sum(Array.from(bySector.values())),
+      sectorCount: bySector.size
+    })).sort((a, b) => b.total - a.total);
+
+    if (!rows.length) { chartEmpty(svg, W, H, "No named funders recorded yet."); document.getElementById("chart2Insight").textContent = ""; return; }
+
+    const MAX_FUNDERS = 6;
+    const shown = rows.slice(0, MAX_FUNDERS);
+    const omittedCount = rows.length - shown.length;
+
+    const x = d3.scaleBand().domain(shown.map(d => d.name)).range([10, W - 10]).padding(0.32);
+    const maxTotal = d3.max(shown, d => d.total) || 1;
+    const y = d3.scaleLinear().domain([0, maxTotal]).range([base, 20]);
+
+    const g = svg.append("g");
+    shown.forEach(d => {
+      let cum = 0;
+      sectorsList.forEach(s => {
+        const c = d.bySector.get(s.id) || 0;
+        if (!c) return;
+        const y0 = cum, y1 = cum + c;
+        cum = y1;
+        const dim = activeId !== "all" && s.id !== activeId;
+        g.append("rect")
+          .attr("class", "hoverable")
+          .attr("x", x(d.name)).attr("width", x.bandwidth())
+          .attr("y", y(y1)).attr("height", Math.max(1, y(y0) - y(y1)))
+          .attr("fill", s.color).attr("opacity", dim ? 0.25 : 0.88)
+          .on("mouseenter", e => {
+            d3.select(e.currentTarget).attr("opacity", 1);
+            showTip(e, d.name, [s.label + ": " + c + " tracked project" + (c === 1 ? "" : "s")], s.color);
+          })
+          .on("mousemove", moveTip)
+          .on("mouseleave", e => {
+            d3.select(e.currentTarget).attr("opacity", dim ? 0.25 : 0.88);
+            hideTip();
+          });
+      });
+
+      g.append("text")
+        .attr("x", x(d.name) + x.bandwidth() / 2).attr("y", y(d.total) - 8)
+        .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 700)
+        .attr("fill", "#233")
+        .text(d.sectorCount + " sector" + (d.sectorCount === 1 ? "" : "s"));
+
+      const lab = g.append("text")
+        .attr("transform", "translate(" + (x(d.name) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
+        .attr("text-anchor", "end").attr("font-size", 10).attr("fill", "#3a4750")
+        .text(d.name.length > 18 ? d.name.slice(0, 17) + "…" : d.name);
+      lab.append("title").text(d.name);
+    });
+
+    if (omittedCount > 0) {
+      svg.append("text").attr("x", 4).attr("y", H - 6)
+        .attr("font-size", 9.5).attr("fill", "#8a97a0")
+        .text("+ " + omittedCount + " more funder" + (omittedCount === 1 ? "" : "s") + " not shown");
+    }
+
+    const topByReach = rows.slice().sort((a, b) => b.sectorCount - a.sectorCount || b.total - a.total)[0];
+    if (topByReach) {
+      document.getElementById("chart2Insight").textContent = topByReach.name + " funds the most sectors — " +
+        topByReach.sectorCount + " of " + sectorsList.length + " tracked, across " + topByReach.total +
+        " project" + (topByReach.total === 1 ? "" : "s") + ".";
+    }
+  }
+
+  // Short acronyms so each bubble can carry its own label (as on the reference
+  // chart) without the ministry's full name overrunning its neighbors.
+  const MINISTRY_ABBR = {
+    "Ministry of Public Health": "MoPH",
+    "Ministry of Social Affairs": "MoSA",
+    "Ministry of Agriculture": "MoA",
+    "Ministry of Education and Higher Education": "MoEHE",
+    "Ministry of Energy and Water": "MoEW",
+    "Ministry of Environment": "MoEnv",
+    "Ministry of National Defense": "MoND",
+    "Ministry of Public Works and Transport": "MoPWT",
+    "Ministry of Foreign Affairs and Emigrants": "MoFA",
+    "Ministry of Justice": "MoJ",
+    "Ministry of Information": "MoInf",
+    "Ministry of Culture": "MoCul",
+    "Ministry of Industry": "MoInd",
+    "Ministry of Interior and Municipalities": "MoIM",
+    "Ministry of Labour": "MoLab",
+    "Ministry of Economy and Trade": "MoET",
+    "Ministry of Finance": "MoFin",
+    "Ministry of State for Administrative Development": "MoSAD",
+    "Ministry of State for Administrative Reform (OMSAR)": "OMSAR",
+    "Ministry of Telecommunications": "MoTel",
+    "Ministry of Tourism": "MoTou"
+  };
+
+  // Bubble chart: one circle per ministry, x = tracked project count, y = reported
+  // funding, bubble size also tracks funding (the visually dominant read), and color
+  // follows whichever sector accounts for most of that ministry's tracked projects.
+  // Solid cross-lines at the median split the field into four quadrants, labeled
+  // right at the crossing (not the corners) so the read is "which quadrant is this
+  // bubble in" at a glance, matching the reference layout the client provided.
+  function renderMinistryBubbleChart(sectorsList, projects) {
+    const svg = d3.select("#chartMinistryBubble");
+    svg.selectAll("*").remove();
+    const legendEl = document.getElementById("bubbleLegend");
+    legendEl.innerHTML = "";
+    const W = 980, H = 420;
+    const marginL = 66, marginR = 24, marginT = 34, marginB = 62;
+
+    const sectorById = new Map(sectorsList.map(s => [s.id, s]));
+    const byMinistry = new Map(); // ministry -> { count, amount, sectorCounts }
+    projects.forEach(p => {
+      if (!p.ministry || p.ministry === "Not specified") return;
+      if (!sectorById.has(p.sector)) return;
+      if (!byMinistry.has(p.ministry)) byMinistry.set(p.ministry, { count: 0, amount: 0, sectorCounts: new Map() });
+      const m = byMinistry.get(p.ministry);
+      m.count += 1;
+      m.amount += isMacroFigure(p) ? 0 : (p.amountUSDm || 0);
+      m.sectorCounts.set(p.sector, (m.sectorCounts.get(p.sector) || 0) + 1);
+    });
+
+    const rows = Array.from(byMinistry.entries()).map(([name, m]) => {
+      let domSector = null, domCount = -1;
+      m.sectorCounts.forEach((c, sid) => { if (c > domCount) { domCount = c; domSector = sid; } });
+      return { name, abbr: MINISTRY_ABBR[name] || name.replace(/^Ministry of /, "").slice(0, 5),
+        count: m.count, amount: m.amount, sector: sectorById.get(domSector) };
+    });
+
+    if (!rows.length) { chartEmpty(svg, W, H, "No tracked ministry projects yet."); document.getElementById("bubbleInsight").textContent = ""; return; }
+
+    const maxCount = d3.max(rows, d => d.count) || 1;
+    const maxAmount = d3.max(rows, d => d.amount) || 1;
+    // Both project counts and funding amounts span roughly an order of magnitude
+    // across ministries (a handful of mega-projects vs. many modest ones) — a
+    // straight linear scale would crush most bubbles into one corner, so both
+    // axes use sqrt scaling to spread the bulk of ministries out while still
+    // anchoring at zero and keeping the biggest outliers visibly biggest.
+    const x = d3.scaleSqrt().domain([0, maxCount * 1.08]).range([marginL, W - marginR]);
+    // Extra headroom above the tallest bubble keeps the top "High funding" quadrant
+    // labels clear of the data instead of sitting on top of the biggest circle.
+    const y = d3.scaleSqrt().domain([0, maxAmount * 1.3]).range([H - marginB, marginT]);
+    const r = d3.scaleSqrt().domain([0, maxAmount]).range([7, 26]);
+
+    // With ~20 ministries on one chart, labeling every bubble collides constantly —
+    // only the most notable ones (by project count or funding) get a persistent
+    // acronym tag; the rest are still fully visible bubbles, just identified via
+    // hover instead, keeping the crowded low-count/low-funding cluster legible.
+    const importance = d => d.count / maxCount + d.amount / maxAmount;
+    const labelSet = new Set(
+      rows.slice().sort((a, b) => importance(b) - importance(a)).slice(0, 10).map(d => d.name)
+    );
+
+    // Several ministries share nearly identical (count, amount) values, so their
+    // true positions would sit on top of one another. A short collision simulation
+    // nudges overlapping bubbles apart just enough that every one stays visible,
+    // while an x/y pull keeps each bubble anchored close to its real data point.
+    const nodes = rows.map(d => {
+      const rad = r(d.amount);
+      return Object.assign({}, d, { rad, tx: x(d.count), ty: y(d.amount), x: x(d.count), y: y(d.amount) });
+    });
+    const sim = d3.forceSimulation(nodes)
+      .force("x", d3.forceX(d => d.tx).strength(0.85))
+      .force("y", d3.forceY(d => d.ty).strength(0.85))
+      .force("collide", d3.forceCollide(d => d.rad + 2.5))
+      .stop();
+    for (let i = 0; i < 220; i++) sim.tick();
+    nodes.forEach(d => {
+      d.x = Math.min(W - marginR - d.rad, Math.max(marginL + d.rad, d.x));
+      d.y = Math.min(H - marginB - d.rad, Math.max(marginT + d.rad, d.y));
+    });
+
+    const g = svg.append("g");
+    g.append("rect").attr("x", marginL).attr("y", marginT)
+      .attr("width", W - marginL - marginR).attr("height", H - marginT - marginB)
+      .attr("fill", "#f4f5f4");
+
+    // Cross sits at the geometric center of the plot (not the data median), so the
+    // four quadrants are always equal in size regardless of how the data skews.
+    const midX = (marginL + (W - marginR)) / 2, midY = (marginT + (H - marginB)) / 2;
+    g.append("line").attr("x1", midX).attr("x2", midX).attr("y1", marginT).attr("y2", H - marginB)
+      .attr("stroke", "#1b1b1b").attr("stroke-width", 1.3);
+    g.append("line").attr("x1", marginL).attr("x2", W - marginR).attr("y1", midY).attr("y2", midY)
+      .attr("stroke", "#1b1b1b").attr("stroke-width", 1.3);
+
+    // Two-line labels sitting right at the quadrant crossing (not the far corners),
+    // second line bold — mirrors the reference chart's "Few projects / High funding"
+    // stacked callouts that sit beside the cross itself.
+    const quadLabel = (qx, qy, anchor, line1, line2) => {
+      const t = g.append("text").attr("x", qx).attr("y", qy).attr("text-anchor", anchor)
+        .attr("font-size", 11.5).attr("fill", "#3a4750")
+        .attr("paint-order", "stroke").attr("stroke", "#fff").attr("stroke-width", 4).attr("stroke-linejoin", "round");
+      t.append("tspan").attr("x", qx).attr("dy", 0).attr("font-weight", 500).text(line1);
+      t.append("tspan").attr("x", qx).attr("dy", 18).attr("font-weight", 700).text(line2);
+    };
+    quadLabel(midX - 10, marginT + 12, "end", "Few projects", "High funding");
+    quadLabel(midX + 10, marginT + 12, "start", "Many projects", "High funding");
+    quadLabel(midX - 10, H - marginB - 34, "end", "Few projects", "lower funding");
+    quadLabel(midX + 10, H - marginB - 34, "start", "Many projects", "lower funding");
+
+    g.append("line").attr("x1", marginL).attr("x2", W - marginR).attr("y1", H - marginB).attr("y2", H - marginB).attr("stroke", "#c7ccd1");
+    g.append("line").attr("x1", marginL).attr("x2", marginL).attr("y1", marginT).attr("y2", H - marginB).attr("stroke", "#c7ccd1");
+
+    const xTicks = x.ticks(Math.min(8, maxCount)).filter(t => Number.isInteger(t));
+    g.selectAll(".bx-tick").data(xTicks).enter().append("text")
+      .attr("x", d => x(d)).attr("y", H - marginB + 20).attr("text-anchor", "middle")
+      .attr("font-size", 10).attr("fill", "#5c6b6f").text(d => d);
+    const yTicks = y.ticks(5);
+    g.selectAll(".by-tick").data(yTicks).enter().append("text")
+      .attr("x", marginL - 10).attr("y", d => y(d) + 4).attr("text-anchor", "end")
+      .attr("font-size", 10).attr("fill", "#5c6b6f").text(d => fmtAmount(d));
+
+    g.append("text").attr("x", (marginL + W - marginR) / 2).attr("y", H - 12).attr("text-anchor", "middle")
+      .attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#3a4750").text("Number of tracked projects");
+    g.append("text").attr("transform", "translate(18," + (marginT + (H - marginB - marginT) / 2) + ") rotate(-90)")
+      .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#3a4750")
+      .text("Reported funding");
+
+    nodes.sort((a, b) => b.amount - a.amount).forEach(d => {
+      const color = d.sector ? d.sector.color : "#8a97a0";
+      const cx = d.x, cy = d.y, rad = d.rad;
+      const node = g.append("g").attr("class", "hoverable");
+      const circle = node.append("circle")
+        .attr("cx", cx).attr("cy", cy).attr("r", rad)
+        .attr("fill", color).attr("opacity", 0.75).attr("stroke", "#fff").attr("stroke-width", 1.6);
+
+      // Acronym rotated along the chart's rising trend line, anchored just past
+      // the bubble's upper-right edge — same diagonal-label treatment as the
+      // reference chart's ministry tags.
+      if (labelSet.has(d.name)) {
+        const lx = cx + rad * 0.55 + 4, ly = cy - rad * 0.55 - 4;
+        node.append("text").attr("x", lx).attr("y", ly)
+          .attr("transform", "rotate(-30," + lx + "," + ly + ")")
+          .attr("text-anchor", "start").attr("font-size", 11).attr("font-weight", 700).attr("fill", color)
+          .attr("paint-order", "stroke").attr("stroke", "#fff").attr("stroke-width", 4).attr("stroke-linejoin", "round")
+          .text(d.abbr);
+      }
+
+      node.on("mouseenter", e => {
+        circle.attr("opacity", 0.95).attr("stroke-width", 2.4);
+        showTip(e, d.name, [
+          d.count + " tracked project" + (d.count === 1 ? "" : "s"),
+          fmtAmount(d.amount) + " reported funding",
+          d.sector ? "Mainly " + d.sector.label : ""
+        ].filter(Boolean), color);
+      })
+      .on("mousemove", moveTip)
+      .on("mouseleave", () => { circle.attr("opacity", 0.75).attr("stroke-width", 1.6); hideTip(); });
+    });
+
+    const usedSectors = sectorsList.filter(s => rows.some(d => d.sector && d.sector.id === s.id));
+    usedSectors.forEach(s => {
+      const item = document.createElement("span");
+      item.className = "bl-item";
+      item.innerHTML = '<span class="bl-dot" style="background:' + s.color + '"></span>' + s.label;
+      legendEl.appendChild(item);
+    });
+
+    const topByCount = rows.slice().sort((a, b) => b.count - a.count)[0];
+    const topByAmount = rows.slice().sort((a, b) => b.amount - a.amount)[0];
+    const bubbleInsightEl = document.getElementById("bubbleInsight");
+    if (topByCount && topByAmount) {
+      bubbleInsightEl.textContent = topByCount.name + " leads in tracked projects (" + topByCount.count + ")" +
+        (topByAmount.name !== topByCount.name
+          ? ", while " + topByAmount.name + " reports the highest single funding at " + fmtAmount(topByAmount.amount) + "."
+          : " and also reports the highest single funding at " + fmtAmount(topByAmount.amount) + ".");
+    }
   }
 
   function fmtAmount(m) {
@@ -822,15 +1561,28 @@
     return m >= 1000 ? "$" + (m / 1000).toFixed(1) + "B" : "$" + Math.round(m) + "M";
   }
 
+  // "All sectors" isn't a real sector value on any project record, so it means
+  // "don't filter" rather than "match this id" everywhere sector-scoped charts read it.
+  function projectsInSector(sectorObj, projects) {
+    return sectorObj.id === "all" ? projects : projects.filter(p => p.sector === sectorObj.id);
+  }
+
   // The map, the count baked onto each shape, and the list all show the same
   // numbers — one source of truth (`stats`), no separate hover-detail panel
   // that has to be kept in sync with what's already on screen.
-  function renderMapChart(sectorObj, projects) {
+  function renderMapChart(sectorObj, projects, sectorsList) {
     const svg = d3.select("#chartMap");
     svg.selectAll("*").remove();
+
+    const isAll = sectorObj.id === "all";
+    document.querySelector(".map-card").classList.toggle("is-all", isAll);
+    document.getElementById("chart3Title").textContent = isAll
+      ? "Where are sectorial projects concentrated?"
+      : "Where are projects concentrated?";
+
     document.getElementById("mapLegendBar").style.setProperty("--pc", sectorObj.color);
 
-    const ps = projects.filter(p => p.sector === sectorObj.id);
+    const ps = projectsInSector(sectorObj, projects);
     const rankList = document.getElementById("mapRank");
     const sub = document.getElementById("chart3Sub");
     const desc = document.getElementById("mapDescription");
@@ -838,7 +1590,7 @@
     if (!ps.length) {
       chartEmpty(svg, 603.3, 760);
       rankList.innerHTML = "";
-      sub.textContent = "No tracked " + sectorObj.label + " projects yet.";
+      sub.textContent = sectorObj.id === "all" ? "No tracked projects yet." : "No tracked " + sectorObj.label + " projects yet.";
       desc.textContent = "";
       return;
     }
@@ -853,8 +1605,20 @@
     const totalAmount = d3.sum(ps, p => isMacroFigure(p) ? 0 : (p.amountUSDm || 0));
     const nationalCount = stats.get("National") ? stats.get("National").count : 0;
 
-    sub.textContent = ps.length + " tracked " + sectorObj.label + " project" + (ps.length === 1 ? "" : "s") +
+    sub.textContent = ps.length + " tracked" + (sectorObj.id === "all" ? "" : " " + sectorObj.label) + " project" + (ps.length === 1 ? "" : "s") +
       " · " + fmtAmount(totalAmount) + " reported" + (nationalCount ? " · " + nationalCount + " national/unspecified" : "");
+
+    const topRegionEntry = Array.from(stats.entries())
+      .filter(([region]) => region !== "National")
+      .sort((a, b) => b[1].count - a[1].count)[0];
+    if (topRegionEntry) {
+      const [topRegionName, topRegionStats] = topRegionEntry;
+      const shareOfTotal = ps.length > 0 ? Math.round((topRegionStats.count / ps.length) * 100) : 0;
+      desc.textContent = topRegionName + " leads with " + topRegionStats.count + " tracked project" + (topRegionStats.count === 1 ? "" : "s") +
+        " (" + shareOfTotal + "% of the total) and " + fmtAmount(topRegionStats.amount) + " reported.";
+    } else {
+      desc.textContent = "";
+    }
 
     // Even the lowest tracked count still reads as a clearly-tinted region (not
     // a washed-out gray), and a power scale pushes mid-range counts toward full
@@ -909,6 +1673,39 @@
       .attr("text-anchor", d => d.leader ? "end" : "middle")
       .text(d => fmtAmount(stats.get(d.region).amount));
 
+    // With no single sector selected, drop one small colored point per sector that
+    // has a tracked project in that region — a quick read on *which* sectors sit
+    // where, not just how many projects total (which the shade + count already show).
+    if (isAll) {
+      const regionSectorStats = new Map(); // region -> Map(sectorId -> count)
+      ps.forEach(p => {
+        if (!regionSectorStats.has(p.region)) regionSectorStats.set(p.region, new Map());
+        const bySector = regionSectorStats.get(p.region);
+        bySector.set(p.sector, (bySector.get(p.sector) || 0) + 1);
+      });
+
+      withData.forEach(d => {
+        const bySector = regionSectorStats.get(d.region);
+        if (!bySector) return;
+        const entries = sectorsList.filter(s => bySector.has(s.id)).map(s => ({ s, c: bySector.get(s.id) }));
+        const pitch = 12, dotY = d.ly + 28;
+        const startX = d.leader ? d.lx - (entries.length - 1) * pitch : d.lx - (entries.length - 1) * pitch / 2;
+        entries.forEach((e, i) => {
+          g.append("circle")
+            .attr("class", "hoverable reg-dot")
+            .attr("cx", startX + i * pitch).attr("cy", dotY)
+            .attr("r", Math.min(7.5, 3 + Math.sqrt(e.c) * 1.15))
+            .attr("fill", e.s.color).attr("stroke", "#fff").attr("stroke-width", 1.2)
+            .on("mouseenter", ev => {
+              highlight(d.region);
+              showTip(ev, d.label + " — " + e.s.label, [e.c + " tracked project" + (e.c === 1 ? "" : "s")], e.s.color);
+            })
+            .on("mousemove", moveTip)
+            .on("mouseleave", () => { clearHighlight(); hideTip(); });
+        });
+      });
+    }
+
     // Ranked list mirrors the map 1:1; National/unspecified pinned last since it has no shape.
     const ranked = Array.from(stats.entries())
       .filter(([region]) => region !== "National")
@@ -931,8 +1728,8 @@
     const svg = d3.select("#chartPartners");
     svg.selectAll("*").remove();
     const W = 480, H = 300;
-    const ps = projects.filter(p => p.sector === sectorObj.id);
-    if (!ps.length) { chartEmpty(svg, W, H); return; }
+    const ps = projectsInSector(sectorObj, projects);
+    if (!ps.length) { chartEmpty(svg, W, H); document.getElementById("partnersInsight").textContent = ""; return; }
 
     const counts = new Map();
     ps.forEach(p => p.partners.forEach(prt => counts.set(prt, (counts.get(prt) || 0) + 1)));
@@ -941,12 +1738,17 @@
       .sort((a, b) => b.count - a.count)
       .slice(0, 7);
 
-    if (!rows.length) { chartEmpty(svg, W, H, "No named partners recorded yet for this sector."); return; }
+    if (!rows.length) { chartEmpty(svg, W, H, "No named partners recorded yet for this sector."); document.getElementById("partnersInsight").textContent = ""; return; }
 
     const barH = 30, gap = 8, top = 10, labelW = 150;
     const maxC = d3.max(rows, d => d.count);
     const x = d3.scaleLinear().domain([0, maxC]).range([0, W - labelW - 50]);
     const totalMentions = d3.sum(Array.from(counts.values()));
+
+    const topPartner = rows[0];
+    const topShare = totalMentions > 0 ? Math.round((topPartner.count / totalMentions) * 100) : 0;
+    document.getElementById("partnersInsight").textContent = topPartner.name + " appears in " + topPartner.count +
+      " tracked project" + (topPartner.count === 1 ? "" : "s") + " — " + topShare + "% of partner mentions in " + sectorObj.label + ".";
 
     rows.forEach((d, i) => {
       const y = top + i * (barH + gap);
@@ -982,12 +1784,37 @@
       return;
     }
     const sectorObj = sectors.find(s => s.id === id);
-    document.getElementById("chart2Sub").innerHTML = "Leading funder &#8594; " + sectorObj.label + " ministry &#8594; sector";
-    document.getElementById("chart4Sub").textContent = "Partner frequency within the " + sectorObj.label + " sector.";
+    const realSectors = sectors.filter(s => s.id !== "all");
+    const isAll = id === "all";
 
-    renderFundingChart(sectors, projects, id);
-    renderFlowChart(sectorObj, projects);
-    renderMapChart(sectorObj, projects);
+    // The cross-sector stacked bars only make sense with no single sector picked
+    // (each bar would otherwise collapse to one segment); "Who funds whom?" only
+    // makes sense once a sector narrows the ministries down to a legible handful.
+    document.getElementById("chart2Title").textContent = isAll ? "How many sectors does each funder fund?" : "Who funds whom?";
+    document.getElementById("chart2Sub").textContent = isAll
+      ? "Every tracked funder, broken down by sector."
+      : "Leading funder → " + sectorObj.label + " ministry → sector";
+    document.getElementById("chartFunderSectors").classList.toggle("is-hidden", !isAll);
+    document.getElementById("chartFlow").classList.toggle("is-hidden", isAll);
+
+    document.getElementById("chart4Sub").textContent = isAll
+      ? "Partner frequency across all tracked sectors."
+      : "Partner frequency within the " + sectorObj.label + " sector.";
+
+    // The ministry bubble chart only makes sense across the whole dataset (that's
+    // the point of it), so it swaps in for the partner-frequency chart on "All
+    // sectors" the same way the stacked funder bars swap in for "Who funds whom?".
+    document.getElementById("bubbleCard").classList.toggle("is-hidden", !isAll);
+    document.getElementById("partnersCard").classList.toggle("is-hidden", isAll);
+
+    renderFundingChart(realSectors, projects, id);
+    if (isAll) {
+      renderFunderSectorsChart(realSectors, projects, id);
+      renderMinistryBubbleChart(realSectors, projects);
+    } else {
+      renderFlowChart(sectorObj, projects);
+    }
+    renderMapChart(sectorObj, projects, realSectors);
     renderPartnersChart(sectorObj, projects);
   }
 
@@ -995,7 +1822,7 @@
     const res = await fetch('data.json');
     const data = await res.json();
 
-    const sectors = data.sectorFilters.filter(s => s.id !== 'all');
+    const sectors = data.sectorFilters;
     const pillsWrap = document.getElementById('sectorFilters');
 
     sectors.forEach((s, i) => {
@@ -1015,6 +1842,20 @@
       const sectorObj = sectors.find(s => s.id === id);
       const sd = data.sectorData[id];
       document.getElementById('insightBox').style.setProperty('--pc', sectorObj.color);
+      const aboutGrid = document.getElementById('aboutGrid');
+      aboutGrid.style.setProperty('--pc', sectorObj.color);
+      aboutGrid.classList.toggle('is-all', id === 'all');
+      // Sets --pc once on the shared grid so every .chart-insight box below inherits
+      // it, matching the sector-color convention used everywhere else on the page.
+      const chartsGrid = document.querySelector('.charts-grid');
+      chartsGrid.style.setProperty('--pc', sectorObj.color);
+      chartsGrid.classList.toggle('is-all', id === 'all');
+      // "Who this data helps" sits under whichever of the two ministry charts is
+      // actually showing: the bubble chart on "All sectors", the partners chart
+      // on every individual sector page (see bubbleCard/partnersCard toggle below).
+      const audienceCard = document.getElementById('audienceCard');
+      const anchorCard = document.getElementById(id === 'all' ? 'bubbleCard' : 'partnersCard');
+      anchorCard.after(audienceCard);
       document.getElementById('insightText').textContent = sd ? sd.main : 'Data coming soon.';
       renderMinistryCharts(id, sectors, data.ministryProjects);
     }
@@ -1033,7 +1874,9 @@
       });
     }
 
-    const ministries = [...new Set(data.flows.map(f => f.ministry))];
+    const ministries = [...new Set(data.ministryProjects.map(p => p.ministry))]
+      .filter(m => m && m !== 'Not specified')
+      .sort();
     const funders = [...new Set([
       ...data.flows.map(f => f.funder),
       ...data.heatmap.partners.map(p => p.name)

@@ -23,7 +23,8 @@
   "sectorFilters": [
     {
       "id": "all",
-      "label": "All sectors"
+      "label": "All sectors",
+      "color": "#1b1b1b"
     },
     {
       "id": "education",
