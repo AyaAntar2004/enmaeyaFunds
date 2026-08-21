@@ -78,26 +78,21 @@
 <script>
 function R(title,src,date,url,blurb){return {title:title,src:src,date:date,url:url,blurb:blurb};}
 
-// Every sector gets the same six sub-nodes, linking to these exact
-// enmaeya.com pages. Funding isn't a category on enmaeya.com at all —
-// this dashboard IS that data, so it links back into index.html with the
-// sector pre-selected instead.
-const CATEGORY_URL = {
-  news: "https://enmaeya.com/en/news",
-  opinions: "https://enmaeya.com/en/opinions",
-  events: "https://enmaeya.com/en/hub/events",
-  resources: "https://enmaeya.com/en/hub/resources",
-  studio: "https://enmaeya.com/en/studio"
-};
+// "Funding" is the one real, working link — this dashboard IS Enmaeya's
+// funding data, so it opens index.html with the sector pre-selected. The
+// rest of each sector's ring is thematic subtopics, not a site-navigation
+// menu — there's no dedicated Enmaeya page per subtopic, so those just
+// point at the sector's general news feed as a "related coverage" catch-all.
+const NEWS_URL = "https://enmaeya.com/en/news";
 
-const CATEGORIES = [
-  { key: "funding",   label: "Funding",   hot: true },
-  { key: "news",       label: "News",      hot: true },
-  { key: "opinions",   label: "Opinions" },
-  { key: "resources",  label: "Resources" },
-  { key: "events",     label: "Events" },
-  { key: "studio",     label: "Studio" }
-];
+const SUBTOPICS = {
+  education:   ["Culture", "Literacy", "Curriculum", "Higher Education", "Vocational Training"],
+  economy:     ["Trade", "Employment", "Entrepreneurship", "Investment", "Industry"],
+  health:      ["Primary Care", "Nutrition", "Maternal Health", "Mental Health", "Vaccination"],
+  environment: ["Nature", "Climate", "Water", "Biodiversity", "Waste"],
+  ai:          ["Automation", "Data", "Innovation", "Digital Skills", "Research"],
+  development: ["Infrastructure", "Housing", "Governance", "Urban Planning", "Resilience"]
+};
 
 // This page's sector naming is the canonical one enmaeya.com itself uses;
 // only "ai" differs from the shorter pill label on the main dashboard.
@@ -149,22 +144,26 @@ function buildTree(data) {
       "A live map of where funding flows across Lebanon's sectors — education, economy, health, environment, artificial intelligence, and development. Click any sector to open its funding data, news, and the latest Enmaeya coverage."),
     children: sectors.map(function (s) {
       const label = LABEL_OVERRIDE[s.id] || s.label;
+      const fundingUrl = "index.html?sector=" + s.id;
+      const subtopics = SUBTOPICS[s.id] || [];
 
-      const urls = Object.assign({ funding: "index.html?sector=" + s.id }, CATEGORY_URL);
+      const fundingNode = {
+        id: s.id + "-funding", label: "Funding", value: 26, hot: true,
+        report: R(label + " — Funding", "Enmaeya", lastRecord, fundingUrl,
+          "Explore tracked " + label + " funding data on the dashboard.")
+      };
+      const subtopicNodes = subtopics.map(function (word, i) {
+        return {
+          id: s.id + "-sub" + i, label: word, value: 17, hot: false,
+          report: R(label + " — " + word, "Enmaeya", lastRecord, NEWS_URL,
+            word + " is a tracked subtopic within " + label + " — explore related Enmaeya coverage.")
+        };
+      });
 
       return {
         id: s.id, label: label, color: s.color,
-        report: R(label, "Curation: Enmaeya", lastRecord, urls.news, summarizeSector(s.id, projects)),
-        children: CATEGORIES.map(function (cat) {
-          return {
-            id: s.id + "-" + cat.key,
-            label: cat.label,
-            value: cat.hot ? 26 : 16,
-            hot: !!cat.hot,
-            report: R(label + " — " + cat.label, "Enmaeya", lastRecord, urls[cat.key],
-              "Browse " + cat.label.toLowerCase() + " coverage related to " + label + " on Enmaeya.")
-          };
-        })
+        report: R(label, "Curation: Enmaeya", lastRecord, NEWS_URL, summarizeSector(s.id, projects)),
+        children: [fundingNode].concat(subtopicNodes)
       };
     })
   };
@@ -182,21 +181,43 @@ function linkPath(d){
   return "M"+d.o._x+","+d.o._y+" Q"+kx+","+ky+" "+d.s._x+","+d.s._y;
 }
 
+// Inner ring only — always all 6 sectors, evenly spaced regardless of which
+// are open. The outer ring (each open sector's own subtopic words) is laid
+// out separately, and dynamically, by layoutOuterPositions() below.
 function layoutPositions(sectors){
-  const totalC=d3.sum(sectors,function(s){return s.children.length;});
-  const gap=0.06, avail=2*Math.PI-sectors.length*gap, per=avail/totalC;
-  let ang=-Math.PI/2+gap/2;
+  const gap=0.06, per=(2*Math.PI-sectors.length*gap)/sectors.length;
+  let ang=-Math.PI/2+gap/2+per/2;
   sectors.forEach(function(s){
-    const start=ang;
-    s.children.forEach(function(c){
-      const a=ang+per/2; c._a=a;
-      const p=polar(Ro,a); c._x=p[0]; c._y=p[1];
-      ang+=per;
-    });
-    const mid=(start+ang-gap)/2; s._a=mid;
-    const q=polar(Ri,mid); s._x=q[0]; s._y=q[1];
-    ang+=gap;
+    s._a=ang;
+    const q=polar(Ri,ang); s._x=q[0]; s._y=q[1];
+    ang+=per+gap;
   });
+}
+
+// Recomputed every time a sector opens or closes: each open sector's words
+// fan out from its own fixed hub angle (never relocated), but the WIDTH of
+// that fan grows the fewer sectors are open — one sector alone gets to
+// spread its words across a wide, roomy arc; with several open at once each
+// one's fan narrows back down, capped so neighboring fans can never cross.
+function layoutOuterPositions(open){
+  const n = open.length || 1;
+  const baseArc = (2*Math.PI - 6*0.06) / 6;
+  const maxArc = 100 * Math.PI / 180;
+  const arc = Math.min(baseArc * (6 / n), maxArc);
+  open.forEach(function(s){
+    const per = arc / s.children.length;
+    const start = s._a - arc / 2 + per / 2;
+    s.children.forEach(function(c,i){
+      const a = start + i * per;
+      c._a = a;
+      const p = polar(Ro, a); c._x = p[0]; c._y = p[1];
+    });
+  });
+}
+
+function leafLabelAttrs(d){
+  var flip=Math.cos(d._a)<0, deg=d._a*180/Math.PI, lr=Ro+sizeScale(d.value||10)+7, p=polar(lr,d._a);
+  return { transform:"translate("+p[0]+","+p[1]+") rotate("+(flip?deg+180:deg)+")", anchor: flip?"end":"start" };
 }
 
 function openList(){
@@ -264,6 +285,7 @@ function collapsedLinkPath(d){
 
 function animateOuter(){
   const open = openList();
+  layoutOuterPositions(open);
   const leaves = open.reduce(function(acc,s){return acc.concat(s.children);},[]);
   const linkData = open.reduce(function(acc,s){return acc.concat(s.children.map(function(c){return {o:c,s:s};}));},[]);
   const ringColor = open.length===1 ? open[0].color : "#3b6ea5";
@@ -286,6 +308,9 @@ function animateOuter(){
     .style("opacity",0).attr("d",collapsedLinkPath);
   linkEnter.transition().delay(function(d,i){return i*45;}).duration(dur).ease(d3.easeCubicInOut)
     .attr("d",linkPath).style("opacity",.5);
+  // Links for sectors that were already open reflow to their new arc width too
+  // (opening/closing a neighbor changes everyone else's fan), not just new ones.
+  linkSel.transition().duration(dur).ease(ease).attr("d",linkPath);
 
   // NODES — pop outward from the parent's position with a springy overshoot,
   // staggered per node for a cascading "bloom" effect.
@@ -308,8 +333,8 @@ function animateOuter(){
     .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";}).attr("stroke-width",1.4)
     .on("click",function(e,d){ e.stopPropagation(); selectedId=d.id; setPanel(d); refreshSelection(); });
   nodeEnter.append("text").attr("class","olabel").style("opacity",0).each(function(d){
-    var flip=Math.cos(d._a)<0, deg=d._a*180/Math.PI, lr=Ro+sizeScale(d.value||10)+7, p=polar(lr,d._a);
-    d3.select(this).attr("transform","translate("+p[0]+","+p[1]+") rotate("+(flip?deg+180:deg)+")").attr("text-anchor",flip?"end":"start").attr("dy","0.32em").text(d.label);
+    var a=leafLabelAttrs(d);
+    d3.select(this).attr("transform",a.transform).attr("text-anchor",a.anchor).attr("dy","0.32em").text(d.label);
   });
 
   nodeEnter.select("circle")
@@ -319,6 +344,17 @@ function animateOuter(){
   nodeEnter.select("text")
     .transition().delay(function(d,i){return i*55+dur*0.35;}).duration(260).ease(d3.easeCubicOut)
     .style("opacity",1);
+
+  // Words for sectors that were already open glide to their new spot in the
+  // (possibly wider or narrower) fan too, instead of only ever moving on
+  // their own sector's open/close — this is what keeps everything currently
+  // on screen from ever overlapping, no matter what else opens or closes.
+  nodeSel.select("circle").transition().duration(dur).ease(ease)
+    .attr("cx",function(d){return d._x;}).attr("cy",function(d){return d._y;});
+  nodeSel.select("text")
+    .attr("text-anchor",function(d){return leafLabelAttrs(d).anchor;})
+    .transition().duration(dur).ease(ease)
+    .attr("transform",function(d){return leafLabelAttrs(d).transform;});
 }
 
 function drawHub(root){
@@ -340,11 +376,13 @@ function drawInner(sectors){
         .transition().duration(dur*0.6).ease(d3.easeElasticOut.amplitude(1).period(0.35)).attr("r",18);
       toggleSector(d);
     });
-  gg.append("text").attr("class","slabel").each(function(d){
-    var lr=Ri-30,p=polar(lr,d._a);
-    var anchor=Math.abs(Math.cos(d._a))<0.3?"middle":(Math.cos(d._a)<0?"end":"start");
-    d3.select(this).attr("x",p[0]).attr("y",p[1]).attr("dy","0.32em").attr("text-anchor",anchor).attr("fill",d.color).text(d.label);
-  });
+  // Always centered directly under the sector's own circle — not beside it
+  // at the same ring angle — so every label sits in the same relative spot
+  // no matter where around the hub that sector falls.
+  gg.append("text").attr("class","slabel")
+    .attr("x",function(d){return d._x;}).attr("y",function(d){return d._y+34;})
+    .attr("text-anchor","middle")
+    .attr("fill",function(d){return d.color;}).text(function(d){return d.label;});
 }
 
 function render(){

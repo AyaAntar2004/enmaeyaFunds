@@ -112,17 +112,6 @@
     margin: 0;
   }
 
-  .network-link {
-    display: inline-block;
-    margin-top: 16px;
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--c-education);
-    text-decoration: none;
-    border-bottom: 2px solid var(--c-education);
-    padding-bottom: 2px;
-  }
-
   .header-right {
     flex: 1 1 640px;
     display: flex;
@@ -185,34 +174,36 @@
   }
 
   .insight-box {
-    background: #fff;
-    border: 1px solid rgba(15, 76, 92, 0.08);
-    border-left: 5px solid var(--pc, var(--insight-accent));
-    border-radius: 16px;
-    padding: 20px 26px;
-    box-shadow: 0 2px 10px rgba(15, 76, 92, 0.06);
-    transition: border-color 0.2s ease;
+    position: relative;
+    background: color-mix(in srgb, var(--pc, var(--insight-accent)) 6%, #fffdf6);
+    border: 1.5px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 30%, transparent);
+    border-radius: 14px;
+    padding: 24px 26px 20px;
+    box-shadow: 0 10px 26px rgba(15, 76, 92, 0.1);
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .insight-box::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 24px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--pc, var(--insight-accent));
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+    transition: background 0.2s ease;
   }
 
   .insight-kicker {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 11.5px;
-    font-weight: 700;
-    letter-spacing: 0.09em;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     color: var(--pc, var(--insight-accent));
-    margin-bottom: 8px;
+    margin: 4px 0 8px;
     transition: color 0.2s ease;
-  }
-
-  .insight-kicker .dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
   }
 
   .insight-text {
@@ -275,16 +266,13 @@
     transition: background 0.2s ease;
   }
 
-  /* On "All sectors" the shared --pc is the neutral near-black used for pills/insight-box —
-     fine as an accent, but too heavy as three title-bar fills. Light grey reads calmer there
-     (with dark text swapped in for contrast) while every other sector view keeps its own
-     color. #c7ccd1 is the same light grey already used for "National/unspecified" elsewhere. */
-  .about-grid.is-all .about-head {
-    background: #c7ccd1;
-  }
-
-  .about-grid.is-all .about-head h3 {
-    color: #1b1b1b;
+  /* On "All sectors" every card re-tints to plain black instead of any one
+     sector's color — set on .about-card (not .about-head directly) so it cascades
+     to the head bar, its badge, and the icon ring below, all of which read off
+     the inherited --pc. The head's own h3 stays the default white from its base
+     rule below, which is exactly what black calls for. */
+  .about-grid.is-all .about-card {
+    --pc: #1b1b1b;
   }
 
   .about-head h3 {
@@ -444,30 +432,45 @@
      text — same sector-color convention as .insight-box up top. */
   .chart-insight {
     position: relative;
-    margin: 14px 0 0;
-    padding: 13px 16px 12px;
+    margin: 22px 0 0;
+    padding: 16px 18px 14px;
     font-size: 13.5px;
     line-height: 1.55;
     font-weight: 500;
     color: #1b1b1b;
-    background: color-mix(in srgb, var(--pc, var(--insight-accent)) 7%, #ffffff);
-    border: 1px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 18%, transparent);
-    border-left: 4px solid var(--pc, var(--insight-accent));
+    background: color-mix(in srgb, var(--pc, var(--insight-accent)) 10%, #fff8f1);
+    border: 1px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 35%, transparent);
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(15, 76, 92, 0.07);
+    box-shadow: 0 8px 20px rgba(15, 76, 92, 0.08);
     min-height: 0;
     transition: border-color 0.2s ease, background 0.2s ease;
   }
 
   .chart-insight::before {
-    content: "\25CF  Insight";
+    content: "Enmaeya's Insight";
     display: block;
-    font-size: 10.5px;
+    font-size: 10px;
     font-weight: 800;
-    letter-spacing: 0.09em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--pc, var(--insight-accent));
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+  }
+
+  /* Speech-bubble tail poking out of the left edge, like a callout pointing
+     back at the number/chart it's explaining. */
+  .chart-insight::after {
+    content: "";
+    position: absolute;
+    top: 22px;
+    left: -7px;
+    width: 14px;
+    height: 14px;
+    background: inherit;
+    border-left: inherit;
+    border-bottom: inherit;
+    border-radius: 0 0 0 3px;
+    transform: rotate(45deg);
   }
 
   .chart-insight:empty {
@@ -475,12 +478,12 @@
   }
 
   .map-description.chart-insight {
-    margin: 12px 0 16px;
+    margin: 20px 0 18px;
   }
 
-  /* On "All sectors" the shared --pc is the near-black used for the pill itself —
-     fine as a border/background tint, but the kicker's bullet + label read better
-     in the same light grey already used for "National/unspecified" elsewhere. */
+  /* On "All sectors" the shared --pc is the medium grey used for the pill itself —
+     fine as a border/background tint, but this panel reads calmer in the lighter
+     grey already used for "National/unspecified" elsewhere. */
   .charts-grid.is-all .chart-insight {
     --pc: #c7ccd1;
   }
@@ -595,6 +598,54 @@
   .chart-tooltip .tt-row strong {
     color: #1b1b1b;
     font-weight: 600;
+  }
+
+  .chart-tooltip.pie-tip {
+    max-width: 280px;
+  }
+
+  .tt-pie-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .tt-pie-row svg {
+    flex: none;
+  }
+
+  .tt-pie-legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .tt-pie-legend li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: #45505a;
+    white-space: nowrap;
+  }
+
+  .tt-pie-legend li b {
+    margin-left: auto;
+    padding-left: 8px;
+    color: #1b1b1b;
+    font-weight: 700;
+  }
+
+  .tt-pie-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
   }
 
   .chart-card svg .hoverable {
@@ -978,6 +1029,8 @@
   }
 
   .coverage-network .cov-text {
+    flex: 1 1 auto;
+    min-width: 0;
     font-size: 13.5px;
     font-weight: 600;
     line-height: 1.35;
@@ -989,6 +1042,23 @@
     font-size: 11px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.78);
+  }
+
+  .coverage-network .cov-arrow {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: #fff;
+  }
+
+  .coverage-network .cov-arrow svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
   }
 </style>
 </head>
@@ -1002,7 +1072,6 @@
     <div class="header-left">
       <img src="logo.svg" alt="enmaeya" class="logo-img">
       <h1 class="header-title">Funding<br>Relationships<br>Dashboard</h1>
-      <a class="network-link" href="lebanon-funding-map.html">Explore the funding network &#8594;</a>
     </div>
 
     <div class="header-right">
@@ -1022,7 +1091,7 @@
       </div>
 
       <div class="insight-box" id="insightBox">
-        <div class="insight-kicker"><span class="dot"></span>What this view suggests</div>
+        <div class="insight-kicker">What this view suggests</div>
         <div class="insight-text" id="insightText"></div>
       </div>
     </div>
@@ -1101,9 +1170,15 @@
     <div class="chart-card chart-card-wide" id="bubbleCard">
       <h2 class="chart-title">How do ministries compare on projects and funding?</h2>
       <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding — bubble color follows its main sector.</p>
-      <svg id="chartMinistryBubble" viewBox="0 0 980 420"></svg>
+      <svg id="chartMinistryBubble" viewBox="0 0 980 620"></svg>
       <div class="bubble-legend" id="bubbleLegend"></div>
       <p class="chart-insight" id="bubbleInsight"></p>
+    </div>
+    <div class="chart-card" id="statusCard">
+      <h2 class="chart-title">What stage are these projects at?</h2>
+      <p class="chart-sub" id="chart5Sub">Project count by stage within the selected sector.</p>
+      <svg id="chartStatus" viewBox="0 0 480 300"></svg>
+      <p class="chart-insight" id="statusInsight"></p>
     </div>
     <div class="chart-card" id="partnersCard">
       <h2 class="chart-title">Which partners dominate each sector?</h2>
@@ -1210,6 +1285,7 @@
   <a class="coverage-network" href="lebanon-funding-map.html">
     <span class="cov-icon"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><line x1="8" y1="7.2" x2="10.4" y2="16"/><line x1="16" y1="7.2" x2="13.6" y2="16"/><line x1="8.3" y1="6" x2="15.7" y2="6"/></svg></span>
     <span class="cov-text">Explore the funding network<small>Interactive map of who funds whom</small></span>
+    <span class="cov-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg></span>
   </a>
 </aside>
 
@@ -1316,6 +1392,38 @@
   }
   function hideTip() {
     tooltipEl.classList.remove("visible");
+    tooltipEl.classList.remove("pie-tip");
+  }
+
+  // Pie-chart variant of the tooltip above: used when hovering a region name in the
+  // map's ranked list, to show the sector split behind that region's headline color
+  // and dots (rows are already sorted by size — see sectorBreakdown()).
+  function pieSlicePath(cx, cy, r, startAngle, endAngle) {
+    const x1 = cx + r * Math.sin(startAngle), y1 = cy - r * Math.cos(startAngle);
+    const x2 = cx + r * Math.sin(endAngle), y2 = cy - r * Math.cos(endAngle);
+    const large = endAngle - startAngle > Math.PI ? 1 : 0;
+    return "M" + cx + "," + cy + " L" + x1 + "," + y1 + " A" + r + "," + r + " 0 " + large + " 1 " + x2 + "," + y2 + " Z";
+  }
+  function showRegionPieTip(event, region, entries) {
+    const total = d3.sum(entries, e => e.c) || 1;
+    const size = 62, r = size / 2;
+    let angle = 0, slices = "";
+    entries.forEach(e => {
+      const span = (e.c / total) * Math.PI * 2;
+      slices += '<path d="' + pieSlicePath(r, r, r, angle, angle + span) + '" fill="' + e.s.color + '" stroke="#fff" stroke-width="1.5"></path>';
+      angle += span;
+    });
+    const legend = entries.map(e => {
+      const pct = Math.round((e.c / total) * 100);
+      return '<li><span class="tt-pie-dot" style="background:' + e.s.color + '"></span>' + e.s.label + '<b>' + pct + '%</b></li>';
+    }).join("");
+    tooltipEl.style.setProperty("--pc", entries[0].s.color);
+    tooltipEl.classList.add("pie-tip");
+    tooltipEl.innerHTML = '<div class="tt-title">' + region + '</div>' +
+      '<div class="tt-pie-row"><svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' + slices + '</svg>' +
+      '<ul class="tt-pie-legend">' + legend + '</ul></div>';
+    tooltipEl.classList.add("visible");
+    moveTip(event);
   }
 
   const AXIS_LABEL = { ai: "AI" };
@@ -1672,7 +1780,7 @@
     svg.selectAll("*").remove();
     const legendEl = document.getElementById("bubbleLegend");
     legendEl.innerHTML = "";
-    const W = 980, H = 420;
+    const W = 980, H = 620;
     const marginL = 66, marginR = 24, marginT = 34, marginB = 62;
 
     const sectorById = new Map(sectorsList.map(s => [s.id, s]));
@@ -1718,33 +1826,49 @@
       rows.slice().sort((a, b) => importance(b) - importance(a)).slice(0, 10).map(d => d.name)
     );
 
+    // Cross sits at the geometric center of the plot (not the data median), so the
+    // four quadrants are always equal in size regardless of how the data skews.
+    const midX = (marginL + (W - marginR)) / 2, midY = (marginT + (H - marginB)) / 2;
+
     // Several ministries share nearly identical (count, amount) values, so their
     // true positions would sit on top of one another. A short collision simulation
     // nudges overlapping bubbles apart just enough that every one stays visible,
     // while an x/y pull keeps each bubble anchored close to its real data point.
+    // Labeled bubbles get a much larger collision radius than their circle alone —
+    // it has to clear room for the diagonal acronym tag too, not just the bubble —
+    // so no two labels (or a label and a neighboring bubble) ever end up overlapping.
+    // The four quadrant captions join the same simulation as fixed, invisible
+    // obstacles, so a bubble that would otherwise land right on top of "Few
+    // projects / lower funding" gets pushed clear of it exactly like it would a
+    // crowded neighboring bubble.
+    const quadObstacles = [
+      { x: midX - 60, y: marginT + 20, rad: 62, obstacle: true },
+      { x: midX + 62, y: marginT + 20, rad: 66, obstacle: true },
+      { x: midX - 60, y: H - marginB - 26, rad: 62, obstacle: true },
+      { x: midX + 62, y: H - marginB - 26, rad: 66, obstacle: true }
+    ];
     const nodes = rows.map(d => {
       const rad = r(d.amount);
       return Object.assign({}, d, { rad, tx: x(d.count), ty: y(d.amount), x: x(d.count), y: y(d.amount) });
-    });
+    }).concat(quadObstacles.map(o => Object.assign({}, o, { tx: o.x, ty: o.y, fx: o.x, fy: o.y })));
     const sim = d3.forceSimulation(nodes)
       .force("x", d3.forceX(d => d.tx).strength(0.85))
       .force("y", d3.forceY(d => d.ty).strength(0.85))
-      .force("collide", d3.forceCollide(d => d.rad + 2.5))
+      .force("collide", d3.forceCollide(d => d.rad + (labelSet.has(d.name) ? 34 : 2.5)))
       .stop();
-    for (let i = 0; i < 220; i++) sim.tick();
+    for (let i = 0; i < 320; i++) sim.tick();
     nodes.forEach(d => {
+      if (d.obstacle) return;
       d.x = Math.min(W - marginR - d.rad, Math.max(marginL + d.rad, d.x));
       d.y = Math.min(H - marginB - d.rad, Math.max(marginT + d.rad, d.y));
     });
+    const realNodes = nodes.filter(d => !d.obstacle);
 
     const g = svg.append("g");
     g.append("rect").attr("x", marginL).attr("y", marginT)
       .attr("width", W - marginL - marginR).attr("height", H - marginT - marginB)
       .attr("fill", "#f4f5f4");
 
-    // Cross sits at the geometric center of the plot (not the data median), so the
-    // four quadrants are always equal in size regardless of how the data skews.
-    const midX = (marginL + (W - marginR)) / 2, midY = (marginT + (H - marginB)) / 2;
     g.append("line").attr("x1", midX).attr("x2", midX).attr("y1", marginT).attr("y2", H - marginB)
       .attr("stroke", "#1b1b1b").attr("stroke-width", 1.3);
     g.append("line").attr("x1", marginL).attr("x2", W - marginR).attr("y1", midY).attr("y2", midY)
@@ -1783,7 +1907,7 @@
       .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#3a4750")
       .text("Reported funding");
 
-    nodes.sort((a, b) => b.amount - a.amount).forEach(d => {
+    realNodes.sort((a, b) => b.amount - a.amount).forEach(d => {
       const color = d.sector ? d.sector.color : "#8a97a0";
       const cx = d.x, cy = d.y, rad = d.rad;
       const node = g.append("g").attr("class", "hoverable");
@@ -1906,6 +2030,38 @@
     const intensity = d3.scalePow().exponent(0.55).domain([0, maxCount]).range([0.28, 1]);
     const colorScale = count => d3.interpolateRgb(lightTint, sectorObj.color)(intensity(count));
 
+    // On "All sectors" each region mixes several sectors' projects — tally them here
+    // (region -> sectorId -> count) so the map can shade every region by whichever
+    // sector actually leads there, instead of one flat hue for the whole country.
+    const regionSectorStats = new Map();
+    ps.forEach(p => {
+      if (!regionSectorStats.has(p.region)) regionSectorStats.set(p.region, new Map());
+      const bySector = regionSectorStats.get(p.region);
+      bySector.set(p.sector, (bySector.get(p.sector) || 0) + 1);
+    });
+    function sectorBreakdown(region) {
+      const bySector = regionSectorStats.get(region);
+      if (!bySector) return [];
+      return sectorsList.filter(s => bySector.has(s.id))
+        .map(s => ({ s, c: bySector.get(s.id) }))
+        .sort((a, b) => b.c - a.c);
+    }
+    function dominantSector(region) {
+      const breakdown = sectorBreakdown(region);
+      return breakdown.length ? breakdown[0].s : null;
+    }
+    function regionFillColor(region) {
+      const s = stats.get(region);
+      if (!s) return "#e3e5e4";
+      if (isAll && region !== "National") {
+        const dom = dominantSector(region);
+        const base = dom ? dom.color : "#8a97a0";
+        const regionTint = d3.interpolateRgb(base, "#ffffff")(0.78);
+        return d3.interpolateRgb(regionTint, base)(intensity(s.count));
+      }
+      return colorScale(s.count);
+    }
+
     function highlight(region) {
       svg.selectAll(".reg").classed("active", d => d.region === region);
       rankList.querySelectorAll("li").forEach(li => li.classList.toggle("active", li.dataset.region === region));
@@ -1917,9 +2073,20 @@
       .attr("id", d => "reg-" + d.label.replace(/\s+/g, "_"))
       .attr("class", d => "reg" + (d.region && stats.has(d.region) ? "" : " no-data"))
       .attr("d", d => d.d)
-      .attr("fill", d => d.region && stats.has(d.region) ? colorScale(stats.get(d.region).count) : "#e3e5e4")
-      .on("mouseenter", (e, d) => d.region && highlight(d.region))
-      .on("mouseleave", clearHighlight);
+      .attr("fill", d => d.region && stats.has(d.region) ? regionFillColor(d.region) : "#e3e5e4")
+      .on("mouseenter", (e, d) => {
+        if (!d.region) return;
+        highlight(d.region);
+        // Same sector-breakdown popup the ranked list already shows on hover,
+        // triggered here too — but only on "All sectors", where a region can
+        // actually mix more than one sector.
+        if (isAll) {
+          const breakdown = sectorBreakdown(d.region);
+          if (breakdown.length) showRegionPieTip(e, d.region, breakdown);
+        }
+      })
+      .on("mousemove", e => { if (isAll) moveTip(e); })
+      .on("mouseleave", () => { clearHighlight(); if (isAll) hideTip(); });
 
     REGION_SHAPES.forEach(d => {
       if (d.leader) {
@@ -1951,21 +2118,14 @@
       .attr("text-anchor", d => d.leader ? "end" : "middle")
       .text(d => fmtAmount(stats.get(d.region).amount));
 
-    // With no single sector selected, drop one small colored point per sector that
-    // has a tracked project in that region — a quick read on *which* sectors sit
-    // where, not just how many projects total (which the shade + count already show).
+    // With no single sector selected, the region's fill already flags its leading
+    // sector — so drop one small colored point per *other* sector that also has a
+    // tracked project there, a quick read on the rest of the mix behind that headline color.
     if (isAll) {
-      const regionSectorStats = new Map(); // region -> Map(sectorId -> count)
-      ps.forEach(p => {
-        if (!regionSectorStats.has(p.region)) regionSectorStats.set(p.region, new Map());
-        const bySector = regionSectorStats.get(p.region);
-        bySector.set(p.sector, (bySector.get(p.sector) || 0) + 1);
-      });
-
       withData.forEach(d => {
-        const bySector = regionSectorStats.get(d.region);
-        if (!bySector) return;
-        const entries = sectorsList.filter(s => bySector.has(s.id)).map(s => ({ s, c: bySector.get(s.id) }));
+        const dom = dominantSector(d.region);
+        const entries = sectorBreakdown(d.region).filter(e => !dom || e.s.id !== dom.id);
+        if (!entries.length) return;
         const pitch = 12, dotY = d.ly + 28;
         const startX = d.leader ? d.lx - (entries.length - 1) * pitch : d.lx - (entries.length - 1) * pitch / 2;
         entries.forEach((e, i) => {
@@ -1994,10 +2154,23 @@
     ranked.forEach(([region, s]) => {
       const li = document.createElement("li");
       li.dataset.region = region;
-      li.innerHTML = '<span class="rk-dot" style="background:' + (region === "National" ? "#c7ccd1" : sectorObj.color) + '"></span>' +
+      const dom = isAll && region !== "National" ? dominantSector(region) : null;
+      const dotColor = region === "National" ? "#c7ccd1" : (dom ? dom.color : sectorObj.color);
+      li.innerHTML = '<span class="rk-dot" style="background:' + dotColor + '"></span>' +
         '<span class="rk-name">' + region + '</span><span class="rk-count">' + s.count + "</span>";
       li.addEventListener("mouseenter", () => region !== "National" && highlight(region));
       li.addEventListener("mouseleave", clearHighlight);
+      // On "All sectors" every region blends several sectors — surface that mix as a
+      // small pie chart right where the cursor is, the same way the map's own hover
+      // tooltips work, instead of making it a separate always-visible breakdown.
+      if (isAll) {
+        const breakdown = sectorBreakdown(region);
+        if (breakdown.length) {
+          li.addEventListener("mouseenter", e => showRegionPieTip(e, region, breakdown));
+          li.addEventListener("mousemove", moveTip);
+          li.addEventListener("mouseleave", hideTip);
+        }
+      }
       rankList.appendChild(li);
     });
   }
@@ -2052,6 +2225,92 @@
     });
   }
 
+  // Lifecycle order (not count order) — reads as a pipeline from first announced
+  // to fully completed, which matters more here than which stage has the most.
+  const PROJECT_STAGES = ["Announced", "Planned", "Signed", "Ongoing", "Completed"];
+
+  function renderStatusChart(sectorObj, projects) {
+    const svg = d3.select("#chartStatus");
+    svg.selectAll("*").remove();
+    const W = 480, H = 300;
+    const insight = document.getElementById("statusInsight");
+    const ps = projectsInSector(sectorObj, projects);
+    if (!ps.length) { chartEmpty(svg, W, H); insight.textContent = ""; return; }
+
+    const total = ps.length;
+    const counts = new Map();
+    ps.forEach(p => counts.set(p.status, (counts.get(p.status) || 0) + 1));
+
+    // Color follows lifecycle order (pale "Announced" up to full-color "Completed").
+    const lightTint = d3.interpolateRgb(sectorObj.color, "#ffffff")(0.72);
+    const stageColor = st => {
+      const i = PROJECT_STAGES.indexOf(st);
+      return d3.interpolateRgb(lightTint, sectorObj.color)(i / Math.max(1, PROJECT_STAGES.length - 1));
+    };
+    // Every label is black except "Completed" — its band is the fullest, darkest
+    // sector color, so it's the one stage that needs white instead.
+    const textColorFor = status => status === "Completed" ? "#fff" : "#1b1b1b";
+
+    // A fixed geometric triangle — same true-point apex, base and level count on
+    // every sector page, in a constant lifecycle order that's never resorted by
+    // count — so only the numbers change from one sector to the next, not the
+    // shape. Band width is purely geometric (distance from the apex), not scaled
+    // to the data. The outline is a single straight-sided triangle to a sharp
+    // point, but the horizontal dividers aren't evenly spaced: the tip band gets
+    // extra height (and its label sits low, near its own wider edge) so a real
+    // point apex still leaves room to fit "Announced" and its count.
+    const N = PROJECT_STAGES.length;
+    const cx = W / 2, apexY = 10, baseY = 274, baseHalfW = 215, gapY = 3;
+    const boundaryFrac = [0, 0.32, 0.495, 0.655, 0.81, 1];
+    const halfWidthAt = y => baseHalfW * (y - apexY) / (baseY - apexY);
+
+    PROJECT_STAGES.forEach((status, i) => {
+      const y0 = apexY + boundaryFrac[i] * (baseY - apexY);
+      const y1 = apexY + boundaryFrac[i + 1] * (baseY - apexY) - (i < N - 1 ? gapY : 0);
+      const topHalf = halfWidthAt(y0);
+      const botHalf = halfWidthAt(y1);
+      const textY = y0 + (y1 - y0) * 0.78;
+      const count = counts.get(status) || 0;
+      const pct = Math.round((count / total) * 100);
+      const bandColor = stageColor(status);
+
+      const path = "M" + (cx - topHalf) + "," + y0 + " L" + (cx + topHalf) + "," + y0 +
+        " L" + (cx + botHalf) + "," + y1 +
+        " L" + (cx - botHalf) + "," + y1 + " Z";
+
+      const g = svg.append("g").attr("class", "hoverable");
+      const band = g.append("path")
+        .attr("d", path)
+        .attr("fill", bandColor)
+        .style("transition", "opacity 0.15s ease");
+
+      g.on("mouseenter", e => {
+        band.attr("opacity", 0.85);
+        showTip(e, status, [
+          count + " of " + total + " tracked " + sectorObj.label + " project" + (total === 1 ? "" : "s"),
+          pct + "% of the sector's tracked projects"
+        ], bandColor);
+      }).on("mousemove", moveTip)
+        .on("mouseleave", () => { band.attr("opacity", 1); hideTip(); });
+
+      g.append("text")
+        .attr("x", cx).attr("y", textY).attr("dy", "0.32em")
+        .attr("text-anchor", "middle").attr("pointer-events", "none")
+        .attr("font-size", 13).attr("font-weight", 700)
+        .attr("fill", textColorFor(status))
+        .text(status + "   " + count);
+    });
+
+    const rows = PROJECT_STAGES.map(st => ({ status: st, count: counts.get(st) || 0 })).filter(r => r.count > 0);
+    const leading = rows.slice().sort((a, b) => b.count - a.count)[0];
+    const leadPct = Math.round((leading.count / total) * 100);
+    const completed = counts.get("Completed") || 0;
+    const completedPct = Math.round((completed / total) * 100);
+    insight.textContent = leading.count + " of " + total + " tracked " + sectorObj.label + " project" + (total === 1 ? "" : "s") +
+      " are currently " + leading.status.toLowerCase() + " (" + leadPct + "%)" +
+      (completed && leading.status !== "Completed" ? ", with " + completed + " (" + completedPct + "%) fully completed." : ".");
+  }
+
   function renderMinistryCharts(id, sectors, projects) {
     if (typeof d3 === "undefined") {
       document.querySelectorAll(".chart-card svg").forEach(svg => {
@@ -2084,6 +2343,7 @@
     // sectors" the same way the stacked funder bars swap in for "Who funds whom?".
     document.getElementById("bubbleCard").classList.toggle("is-hidden", !isAll);
     document.getElementById("partnersCard").classList.toggle("is-hidden", isAll);
+    document.getElementById("statusCard").classList.toggle("is-hidden", isAll);
 
     renderFundingChart(realSectors, projects, id);
     if (isAll) {
@@ -2094,6 +2354,7 @@
     }
     renderMapChart(sectorObj, projects, realSectors);
     renderPartnersChart(sectorObj, projects);
+    renderStatusChart(sectorObj, projects);
   }
 
   async function init() {
@@ -2113,7 +2374,27 @@
       pillsWrap.appendChild(btn);
     });
 
+    let activeSectorId = null;
+
+    // The Ministry/Funder/Location filters stack on top of whichever sector pill
+    // is active — filtering the project list once, here, means every chart below
+    // (funding, flow, map, bubble, partners, stage pyramid) sees the same
+    // narrowed data automatically, the same way they already all key off
+    // whichever sector is selected.
+    function filteredProjects() {
+      const ministryVal = document.getElementById('ministrySelect').value;
+      const funderVal = document.getElementById('funderSelect').value;
+      const locationVal = document.getElementById('locationSelect').value;
+      return data.ministryProjects.filter(p => {
+        if (ministryVal && p.ministry !== ministryVal) return false;
+        if (funderVal && !(p.funders || []).includes(funderVal)) return false;
+        if (locationVal && p.region !== locationVal) return false;
+        return true;
+      });
+    }
+
     function selectSector(id) {
+      activeSectorId = id;
       pillsWrap.querySelectorAll('.pill').forEach(p => {
         p.classList.toggle('active', p.dataset.sector === id);
       });
@@ -2123,7 +2404,8 @@
       const aboutGrid = document.getElementById('aboutGrid');
       aboutGrid.style.setProperty('--pc', sectorObj.color);
       aboutGrid.classList.toggle('is-all', id === 'all');
-      // Sets --pc once on the shared grid so every .chart-insight box below inherits
+      // Sets --pc once on the shared grid so every .chart-
+      //  box below inherits
       // it, matching the sector-color convention used everywhere else on the page.
       const chartsGrid = document.querySelector('.charts-grid');
       chartsGrid.style.setProperty('--pc', sectorObj.color);
@@ -2135,8 +2417,12 @@
       const anchorCard = document.getElementById(id === 'all' ? 'bubbleCard' : 'partnersCard');
       anchorCard.after(audienceCard);
       document.getElementById('insightText').textContent = sd ? sd.main : 'Data coming soon.';
-      renderMinistryCharts(id, sectors, data.ministryProjects);
+      renderMinistryCharts(id, sectors, filteredProjects());
     }
+
+    ['ministrySelect', 'funderSelect', 'locationSelect'].forEach(elId => {
+      document.getElementById(elId).addEventListener('change', () => selectSector(activeSectorId));
+    });
 
     function fillSelect(elId, placeholder, items) {
       const el = document.getElementById(elId);
@@ -2155,11 +2441,15 @@
     const ministries = [...new Set(data.ministryProjects.map(p => p.ministry))]
       .filter(m => m && m !== 'Not specified')
       .sort();
-    const funders = [...new Set([
-      ...data.flows.map(f => f.funder),
-      ...data.heatmap.partners.map(p => p.name)
-    ])];
-    const locations = data.locations.list.map(l => l.name);
+    // Pulled from every project's own `funders` list (not just the handful
+    // summarized in `flows`/`heatmap`), so every funder that can actually match
+    // a project shows up as a choice here.
+    const funders = [...new Set(data.ministryProjects.flatMap(p => p.funders || []))]
+      .filter(Boolean)
+      .sort();
+    const locations = [...new Set(data.ministryProjects.map(p => p.region))]
+      .filter(Boolean)
+      .sort();
 
     fillSelect('ministrySelect', 'All ministries', ministries);
     fillSelect('funderSelect', 'All funders', funders);
