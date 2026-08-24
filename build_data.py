@@ -4,19 +4,21 @@ build_data.py
 Rebuilds the `ministryProjects` array in data.json from the Lebanon
 Ministry Funding 2026 workbook.
 
-The workbook has four tabs:
-  - "Ministries" — the master data sheet (437 records), 13 columns:
+The workbook has five tabs:
+  - "Ministries" — the master data sheet (526 records), 22 columns:
     Ministry, Project / Initiative, Status, Funder(s), Amount / Scale,
-    Partner(s), Region, Date, Description, Source / Link, Confidence,
-    Source Feed, Note. This is the source of truth for ministryProjects.
-  - "Sheet2" — a smaller data sheet with the same 13 columns (a curated
-    subset/preview of the same records). Read and reported on, but not
-    merged into data.json since "Ministries" already is the superset.
+    Partner(s), Region, Funding Date, Date Basis, Date Evidence (from
+    article), Project Period, In 2025-26?, Published Date, Description,
+    Source / Link, Enmaeya Reporting Link, Confidence, Source Feed,
+    Origin, Source Checked, Live-page Evidence, Funding Type. This is
+    the source of truth for ministryProjects.
   - "Sheet1" — manual QA notes keyed by spreadsheet row number in the
     "Ministries" tab (e.g. "wrong date 12/05/2026"). Applied as corrections
     before the records are normalized.
   - "Summary" — ministry-level rollup (records, statuses, high-confidence
     count). Exported as-is to sources/ministry-funding-summary.json.
+  - "Rand-data validation" and "Ministries (old)" — QA/reference tabs from
+    an earlier export round. Not merged into data.json.
 
 Only the ministryProjects key in data.json is touched; hero/metrics/
 scatter/heatmap/etc. are hand-curated and left alone.
@@ -25,31 +27,38 @@ Run:
     python build_data.py
 """
 
+import datetime
 import json
 import re
 from pathlib import Path
 
+import openpyxl
 import pandas as pd
 
-ODS_PATH = Path(r"C:\Users\AyaAntar\Downloads\Lebanon Ministry Funding 2026 (AI Gen).ods")
+XLSX_PATH = Path(r"C:\Users\AyaAntar\Downloads\Lebanon Ministry Funding 2026 (AI Gen).xlsx")
 ROOT = Path(__file__).resolve().parent
 DATA_JSON_PATH = ROOT / "data.json"
 SUMMARY_JSON_PATH = ROOT / "sources" / "ministry-funding-summary.json"
 
 DATA_SHEET = "Ministries"
-PREVIEW_SHEET = "Sheet2"
 QA_SHEET = "Sheet1"
 SUMMARY_SHEET = "Summary"
 
 EXPECTED_HEADER = [
     "Ministry", "Project / Initiative", "Status", "Funder(s)",
-    "Amount / Scale", "Partner(s)", "Region", "Date", "Description",
-    "Source / Link", "Confidence", "Source Feed", "Note",
+    "Amount / Scale", "Partner(s)", "Region", "Funding Date", "Date Basis",
+    "Date Evidence (from article)", "Project Period", "In 2025-26?",
+    "Published Date", "Description", "Source / Link",
+    "Enmaeya Reporting Link", "Confidence", "Source Feed", "Origin",
+    "Source Checked", "Live-page Evidence", "Funding Type",
 ]
 FIELD_NAMES = [
     "ministry", "project", "status", "funders_raw", "amountRaw",
-    "partners_raw", "region_raw", "date", "description", "sourceLink",
-    "confidence", "sourceFeed", "note",
+    "partners_raw", "region_raw", "fundingDateRaw", "dateBasis",
+    "dateEvidence", "projectPeriod", "in2025_26", "publishedDateRaw",
+    "description", "sourceLink", "enmaeyaReportingLink", "confidence",
+    "sourceFeed", "origin", "sourceChecked", "livePageEvidence",
+    "fundingType",
 ]
 
 # ministry -> (short code, dashboard sector). Carried over from the current
@@ -168,13 +177,36 @@ def split_list(raw):
     return [p.strip() for p in text.split(",") if p.strip()]
 
 
+def clean_text(raw):
+    """Strips stray non-breaking spaces (used as blank-cell filler in the
+    export) and normalizes missing values to ''."""
+    if raw is None:
+        return ""
+    text = str(raw).replace("\xa0", "").strip()
+    return "" if text.lower() in ("nan", "nat") else text
+
+
 def normalize_date(raw):
-    """Zero-pads the odd 'YYYY-M-D' cell (source has one: '2025-03-6')."""
-    m = re.match(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", str(raw).strip())
-    if not m:
-        return str(raw).strip() or None
-    y, mo, d = m.groups()
-    return f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
+    """Dates arrive as real datetimes (from Excel), 'M/D/YYYY' strings, the
+    zero-padded 'YYYY-M-D' QA-corrected form, or blank/nbsp for unknown."""
+    if isinstance(raw, (pd.Timestamp, datetime.datetime, datetime.date)):
+        return None if pd.isna(raw) else raw.strftime("%Y-%m-%d")
+
+    text = clean_text(raw)
+    if not text or text.lower() in ("not specified", "unknown"):
+        return None
+
+    m = re.match(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", text)
+    if m:
+        y, mo, d = m.groups()
+        return f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
+
+    m = re.match(r"^(\d{1,2})/(\d{1,2})/(\d{4})$", text)
+    if m:
+        mo, d, y = m.groups()
+        return f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
+
+    return text
 
 
 def slugify_code(ministry):
@@ -204,6 +236,19 @@ def load_sheet_rows(xl, sheet_name):
     return raw, header_idx, data.reset_index(drop=True)
 
 
+def extract_hyperlink_map(ws, column_1based):
+    """"Source / Link" cells hold clickable article URLs as an Excel
+    hyperlink, not as cell text (the text is just a static 'Open source ▸'
+    label) — pandas' reader drops hyperlinks entirely, so this reads them
+    straight from the sheet via openpyxl. Returns {excel_row: url}."""
+    links = {}
+    for row in ws.iter_rows(min_col=column_1based, max_col=column_1based):
+        cell = row[0]
+        if cell.hyperlink and cell.hyperlink.target:
+            links[cell.row] = cell.hyperlink.target
+    return links
+
+
 def apply_qa_corrections(xl, raw_ministries):
     """Sheet1 flags a handful of rows (by spreadsheet row number) as having
     the wrong date, e.g. '9 Ministry of Agriculture ... wrong date 12/05/2026'.
@@ -227,37 +272,54 @@ def apply_qa_corrections(xl, raw_ministries):
     return raw_ministries
 
 
-def build_records(data_rows):
+def build_records(data_rows, source_link_map):
     records = []
     unmapped = set()
-    for row in data_rows.itertuples(index=False, name=None):
+    for excel_row, row in zip(data_rows.index, data_rows.itertuples(index=False, name=None)):
         rec = dict(zip(FIELD_NAMES, row))
-        ministry = str(rec["ministry"]).strip()
+        ministry = clean_text(rec["ministry"])
 
         code, sector = MINISTRY_MAP.get(ministry, (None, None))
         if code is None:
             code, sector = slugify_code(ministry), DEFAULT_SECTOR
             unmapped.add(ministry)
 
-        amount_raw = str(rec["amountRaw"]).strip() or "Not specified"
+        amount_raw = clean_text(rec["amountRaw"]) or "Not specified"
+        funding_date = normalize_date(rec["fundingDateRaw"])
+        published_date = normalize_date(rec["publishedDateRaw"])
+        # excel_row is the 0-based position in the untrimmed sheet (row 0 ==
+        # spreadsheet row 1), so the 1-based row openpyxl reports is +1.
+        source_link = source_link_map.get(excel_row + 1, "")
 
         records.append({
             "ministry": ministry,
             "ministryCode": code,
             "sector": sector,
-            "project": str(rec["project"]).strip(),
-            "status": str(rec["status"]).strip(),
+            "project": clean_text(rec["project"]),
+            "status": clean_text(rec["status"]),
             "funders": split_list(rec["funders_raw"]),
             "amountRaw": amount_raw,
             "amountUSDm": parse_amount_usd_millions(amount_raw),
             "partners": split_list(rec["partners_raw"]),
             "region": classify_region(rec["region_raw"]),
-            "date": normalize_date(rec["date"]),
-            "confidence": str(rec["confidence"]).strip(),
-            "sourceFeed": str(rec["sourceFeed"]).strip(),
-            "description": str(rec["description"]).strip(),
-            "sourceLink": str(rec["sourceLink"]).strip(),
-            "note": str(rec["note"]).strip() if rec["note"] and str(rec["note"]).lower() != "nan" else "",
+            # "date" is kept as a back-compat alias (funding date, falling
+            # back to published date) for any date-based feature added later.
+            "date": funding_date or published_date,
+            "fundingDate": funding_date,
+            "dateBasis": clean_text(rec["dateBasis"]),
+            "dateEvidence": clean_text(rec["dateEvidence"]),
+            "projectPeriod": clean_text(rec["projectPeriod"]),
+            "in2025_26": clean_text(rec["in2025_26"]),
+            "publishedDate": published_date,
+            "confidence": clean_text(rec["confidence"]),
+            "sourceFeed": clean_text(rec["sourceFeed"]),
+            "description": clean_text(rec["description"]),
+            "sourceLink": source_link,
+            "enmaeyaReportingLink": clean_text(rec["enmaeyaReportingLink"]),
+            "origin": clean_text(rec["origin"]),
+            "sourceChecked": clean_text(rec["sourceChecked"]),
+            "livePageEvidence": clean_text(rec["livePageEvidence"]),
+            "fundingType": clean_text(rec["fundingType"]),
         })
 
     if unmapped:
@@ -295,19 +357,22 @@ def build_summary(xl):
 
 
 def main():
-    print(f"Reading {ODS_PATH}")
-    xl = pd.ExcelFile(ODS_PATH, engine="odf")
+    print(f"Reading {XLSX_PATH}")
+    xl = pd.ExcelFile(XLSX_PATH, engine="openpyxl")
     print(f"  sheets found: {xl.sheet_names}")
+
+    wb = openpyxl.load_workbook(XLSX_PATH, data_only=True)
+    source_link_map = extract_hyperlink_map(wb[DATA_SHEET], EXPECTED_HEADER.index("Source / Link") + 1)
+    print(f"  extracted {len(source_link_map)} source hyperlink(s) from '{DATA_SHEET}'")
 
     raw_ministries, header_idx, _ = load_sheet_rows(xl, DATA_SHEET)
     raw_ministries = apply_qa_corrections(xl, raw_ministries)
-    data_rows = raw_ministries.iloc[header_idx + 1:].reset_index(drop=True)
+    # Keep the original row index here (no reset_index) so it still lines up
+    # with the 1-based Excel rows used as keys in source_link_map.
+    data_rows = raw_ministries.iloc[header_idx + 1:]
     data_rows = data_rows[data_rows[0].notna() & (data_rows[0].astype(str).str.strip() != "")]
-    records = build_records(data_rows)
+    records = build_records(data_rows, source_link_map)
     print(f"  '{DATA_SHEET}': {len(records)} records normalized")
-
-    _, _, preview_rows = load_sheet_rows(xl, PREVIEW_SHEET)
-    print(f"  '{PREVIEW_SHEET}': {len(preview_rows)} rows (preview sheet, not merged into data.json)")
 
     summary = build_summary(xl)
     print(f"  '{SUMMARY_SHEET}': {len(summary)} ministry rollup rows")
