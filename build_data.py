@@ -2,47 +2,48 @@
 build_data.py
 
 Rebuilds the `ministryProjects` array in data.json from the Lebanon
-Ministry Funding 2026 workbook.
+Ministry Funding workbook (new format: one sheet, 22 columns, 526 records).
 
-The workbook has five tabs:
-  - "Ministries" — the master data sheet (526 records), 22 columns:
-    Ministry, Project / Initiative, Status, Funder(s), Amount / Scale,
-    Partner(s), Region, Funding Date, Date Basis, Date Evidence (from
-    article), Project Period, In 2025-26?, Published Date, Description,
-    Source / Link, Enmaeya Reporting Link, Confidence, Source Feed,
-    Origin, Source Checked, Live-page Evidence, Funding Type. This is
-    the source of truth for ministryProjects.
-  - "Sheet1" — manual QA notes keyed by spreadsheet row number in the
-    "Ministries" tab (e.g. "wrong date 12/05/2026"). Applied as corrections
-    before the records are normalized.
-  - "Summary" — ministry-level rollup (records, statuses, high-confidence
-    count). Exported as-is to sources/ministry-funding-summary.json.
-  - "Rand-data validation" and "Ministries (old)" — QA/reference tabs from
-    an earlier export round. Not merged into data.json.
+Column layout (in order):
+  Ministry, Project / Initiative, Status, Funder(s), Amount / Scale,
+  Partner(s), Region, Funding Date, Date Basis, Date Evidence (from
+  article), Project Period, In 2025-26?, Published Date, Description,
+  Source / Link, Enmaeya Reporting Link, Confidence, Source Feed,
+  Origin, Source Checked, Live-page Evidence, Funding Type.
 
-Only the ministryProjects key in data.json is touched; hero/metrics/
-scatter/heatmap/etc. are hand-curated and left alone.
+The site (index.html / lebanon-funding-map.html) only reads these keys
+off each ministryProjects record: ministry, ministryCode, sector,
+project, status, funders, amountRaw, amountUSDm, partners, region.
+Everything else (date, description, sourceLink, confidence, sourceFeed,
+and the new extra columns) is carried through for reference/future use
+but isn't required for the charts to render.
+
+"date" is populated from the "Published Date" column (per project
+decision), not "Funding Date" — many rows don't have a confirmed
+funding date, but every row has a published date.
+
+The "Source / Link" column displays as a placeholder label ("Open
+source \u25b8") with the real URL stored as a hyperlink on the cell, not
+as visible text. This script reads content.xml directly to pull out the
+actual href for each row instead of using the display text.
 
 Run:
     python build_data.py
 """
 
-import datetime
 import json
 import re
+import zipfile
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
-import openpyxl
 import pandas as pd
 
-XLSX_PATH = Path(r"C:\Users\AyaAntar\Downloads\Lebanon Ministry Funding 2026 (AI Gen).xlsx")
+ODS_PATH = Path(__file__).resolve().parent / "funding_updated.ods"
 ROOT = Path(__file__).resolve().parent
 DATA_JSON_PATH = ROOT / "data.json"
-SUMMARY_JSON_PATH = ROOT / "sources" / "ministry-funding-summary.json"
 
-DATA_SHEET = "Ministries"
-QA_SHEET = "Sheet1"
-SUMMARY_SHEET = "Summary"
+SHEET_NAME = "Sheet1"
 
 EXPECTED_HEADER = [
     "Ministry", "Project / Initiative", "Status", "Funder(s)",
@@ -54,18 +55,17 @@ EXPECTED_HEADER = [
 ]
 FIELD_NAMES = [
     "ministry", "project", "status", "funders_raw", "amountRaw",
-    "partners_raw", "region_raw", "fundingDateRaw", "dateBasis",
-    "dateEvidence", "projectPeriod", "in2025_26", "publishedDateRaw",
-    "description", "sourceLink", "enmaeyaReportingLink", "confidence",
-    "sourceFeed", "origin", "sourceChecked", "livePageEvidence",
-    "fundingType",
+    "partners_raw", "region_raw", "funding_date_raw", "date_basis",
+    "date_evidence", "project_period", "in_2025_26", "published_date_raw",
+    "description", "sourceLink_display", "enmaeya_link", "confidence",
+    "sourceFeed", "origin", "source_checked", "live_page_evidence",
+    "funding_type",
 ]
+SOURCE_LINK_COL_IDX = EXPECTED_HEADER.index("Source / Link")
 
-# ministry -> (short code, dashboard sector). Carried over from the current
-# data.json so the refreshed export slots into the same sectors used by
-# index.html / lebanon-funding-map.html. Ministries not listed here fall
-# back to sector "development" and get an auto-generated code; a warning
-# is printed so they can be reviewed and added above.
+# ministry -> (short code, dashboard sector). Ministries not listed here
+# fall back to sector "development" and get an auto-generated code; a
+# warning is printed so they can be reviewed and added above.
 MINISTRY_MAP = {
     "Ministry of Agriculture": ("MoA", "environment"),
     "Ministry of Culture": ("MoC", "development"),
@@ -93,16 +93,24 @@ MINISTRY_MAP = {
 DEFAULT_SECTOR = "development"
 
 # --- amount parsing --------------------------------------------------
-# "Amount / Scale" is free text (e.g. "EUR 5 million", "USD 1,515,000
-# (about USD 1,515,000)"). We take the first figure in whichever currency
-# is most directly USD (USD > EUR > GBP > JPY), convert with a fixed
-# approximate rate, and round to 2dp — a headline-figure, not an attempt
-# to sum every number mentioned in a record.
 CURRENCY_RATES_TO_USD = {"USD": 1.0, "EUR": 1.08, "GBP": 1.27, "JPY": 0.0067}
 CURRENCY_PRIORITY = ["USD", "EUR", "GBP", "JPY"]
 MULTIPLIERS = {"thousand": 0.001, "million": 1.0, "billion": 1000.0}
 AMOUNT_RE = re.compile(
     r"(USD|US\s*\$|EUR|GBP|JPY)\s*\$?\s*((?:\d[\d,.\s]*\d)|\d)(?:\s*(thousand|million|billion))?",
+    re.IGNORECASE,
+)
+# Fallback for "20 million euros" / "600,000 US dollars" style phrasing,
+# where the currency word trails the number instead of leading it.
+CURRENCY_WORDS = {
+    "dollars": "USD", "us dollars": "USD", "usd": "USD",
+    "euros": "EUR", "eur": "EUR",
+    "pounds sterling": "GBP", "gbp": "GBP",
+    "yen": "JPY", "jpy": "JPY",
+}
+TRAILING_AMOUNT_RE = re.compile(
+    r"((?:\d[\d,.\s]*\d)|\d)\s*(thousand|million|billion)?\s*"
+    r"(dollars|us dollars|usd|euros|eur|pounds sterling|gbp|yen|jpy)",
     re.IGNORECASE,
 )
 
@@ -115,14 +123,24 @@ def parse_amount_usd_millions(raw):
     for m in AMOUNT_RE.finditer(raw):
         cur = m.group(1).upper().replace(" ", "")
         cur = "USD" if cur.startswith("US") else cur
-        by_currency.setdefault(cur, m)
+        by_currency.setdefault(cur, ("code_first", m))
+
+    for m in TRAILING_AMOUNT_RE.finditer(raw):
+        cur = CURRENCY_WORDS.get(m.group(3).lower())
+        if cur:
+            by_currency.setdefault(cur, ("word_after", m))
 
     for cur in CURRENCY_PRIORITY:
-        m = by_currency.get(cur)
-        if not m:
+        entry = by_currency.get(cur)
+        if not entry:
             continue
-        number = float(m.group(2).replace(",", "").replace(" ", ""))
-        mult_word = (m.group(3) or "").lower()
+        kind, m = entry
+        if kind == "code_first":
+            number = float(m.group(2).replace(",", "").replace(" ", ""))
+            mult_word = (m.group(3) or "").lower()
+        else:  # word_after: group(1)=number, group(2)=multiplier
+            number = float(m.group(1).replace(",", "").replace(" ", ""))
+            mult_word = (m.group(2) or "").lower()
         millions = number * MULTIPLIERS.get(mult_word, 0.000001)
         usd_millions = round(millions * CURRENCY_RATES_TO_USD[cur], 2)
         return int(usd_millions) if usd_millions == int(usd_millions) else usd_millions
@@ -131,26 +149,24 @@ def parse_amount_usd_millions(raw):
 
 
 # --- region classification --------------------------------------------
-# The sheet's "Region" column is free-text (towns, districts, comma lists).
-# data.json only ever uses Lebanon's governorates + "National". We match
-# known district/town keywords to a governorate; anything that matches
-# zero or more-than-one distinct governorate falls back to "National"
-# rather than guessing.
 REGION_PATTERNS = [
-    (re.compile(r"north lebanon|\btripoli\b|\bakkar\b|\bbatroun\b|\bzgharta\b|\bkoura\b|"
-                r"\bbsharri\b|\bminieh\b|\bdinniyeh\b|\bdanniyeh\b|\bdouma\b|deir ammar|\bkleyate\b", re.I),
+    (re.compile(r"\bakkar\b|\bhalba\b|\bakroum\b|\bmhammara\b|\bkleyate\b", re.I),
+     "Akkar"),
+    (re.compile(r"north lebanon|\btripoli\b|\bbatroun\b|\bzgharta\b|\bkoura\b|"
+                r"\bbsharri\b|\bminieh\b|\bdinniyeh\b|\bdanniyeh\b|\bdouma\b|deir ammar", re.I),
      "North Lebanon"),
     (re.compile(r"south lebanon|southern lebanon|\bsaida\b|\bsidon\b|\btyre\b|\bsour\b|"
                 r"\bzahrani\b|\bjezzine\b|\bghazieh\b|\bqana\b", re.I),
      "South Lebanon"),
     (re.compile(r"baalbek|baalbeck|\bhermel\b", re.I), "Baalbek-Hermel"),
-    (re.compile(r"nabat(i|ie)yeh|\bbint jbeil\b|\bmarjeyoun\b|\bhasbaya\b|\bhabboush\b", re.I), "Nabatieh"),
+    (re.compile(r"\bnabatiyeh\b|\bnabatieh\b|\bbint jbeil\b|\bmarjeyoun\b|\bmarjayoun\b|\bhasbaya\b|\bhabboush\b", re.I), "Nabatieh"),
     (re.compile(r"\bbekaa\b|\bbeqaa\b|\bzahle\b|\brachaya\b|\brashaya\b|\brashayya\b|\banjar\b|west bekaa", re.I),
      "Bekaa"),
-    (re.compile(r"\bbeirut\b|\bkarantina\b|\bverdun\b", re.I), "Beirut"),
+    (re.compile(r"\bbeirut\b|\bkarantina\b|\bverdun\b|burj al-barajneh|bourj hammoud", re.I), "Beirut"),
     (re.compile(r"mount lebanon|\bchouf\b|\baley\b|\bbaabda\b|\bkeserwan\b|\bmetn\b|\bjbeil\b|"
-                r"\bbyblos\b|jal el dib|\bhadath\b|sin el fil|bourj hammoud|\bzouk\b|\bsibline\b", re.I),
+                r"\bbyblos\b|jal el dib|\bhadath\b|sin el fil|\bzouk\b|\bsibline\b|\bjounieh\b", re.I),
      "Mount Lebanon"),
+    (re.compile(r"\bsouth governorate\b", re.I), "South Lebanon"),
 ]
 
 
@@ -158,7 +174,7 @@ def classify_region(raw):
     if not raw or not isinstance(raw, str):
         return "National"
     text = raw.strip()
-    if not text or text.lower() in ("lebanon", "national"):
+    if not text or text.lower() in ("lebanon", "national", "not specified"):
         return "National"
     matched = {gov for pattern, gov in REGION_PATTERNS if pattern.search(text)}
     return matched.pop() if len(matched) == 1 else "National"
@@ -166,46 +182,47 @@ def classify_region(raw):
 
 # --- small helpers -------------------------------------------------------
 
+def clean(v):
+    """Normalize NaN/NaT/None/lone-NBSP cells to None."""
+    if v is None:
+        return None
+    if isinstance(v, float) and pd.isna(v):
+        return None
+    if isinstance(v, pd.Timestamp):
+        if pd.isna(v):
+            return None
+        return v.strftime("%Y-%m-%d")
+    text = str(v).replace("\xa0", " ").strip()
+    if not text or text.lower() == "nan" or text.lower() == "nat":
+        return None
+    return text
+
+
 def split_list(raw):
     """'FAO, WFP' -> ['FAO', 'WFP']; strips explanatory parentheticals."""
-    if not raw or not isinstance(raw, str):
-        return []
-    text = raw.strip()
-    if text.lower() in ("not specified", "none", ""):
+    text = clean(raw)
+    if not text or text.lower() in ("not specified", "none"):
         return []
     text = re.sub(r"\([^)]*\)", "", text)
     return [p.strip() for p in text.split(",") if p.strip()]
 
 
-def clean_text(raw):
-    """Strips stray non-breaking spaces (used as blank-cell filler in the
-    export) and normalizes missing values to ''."""
-    if raw is None:
-        return ""
-    text = str(raw).replace("\xa0", "").strip()
-    return "" if text.lower() in ("nan", "nat") else text
-
-
 def normalize_date(raw):
-    """Dates arrive as real datetimes (from Excel), 'M/D/YYYY' strings, the
-    zero-padded 'YYYY-M-D' QA-corrected form, or blank/nbsp for unknown."""
-    if isinstance(raw, (pd.Timestamp, datetime.datetime, datetime.date)):
-        return None if pd.isna(raw) else raw.strftime("%Y-%m-%d")
-
-    text = clean_text(raw)
-    if not text or text.lower() in ("not specified", "unknown"):
+    """Accepts a pandas Timestamp (from the Published Date column) or a
+    plain string, returns YYYY-MM-DD or None."""
+    if raw is None:
         return None
-
+    if isinstance(raw, pd.Timestamp):
+        if pd.isna(raw):
+            return None
+        return raw.strftime("%Y-%m-%d")
+    text = clean(raw)
+    if not text:
+        return None
     m = re.match(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", text)
     if m:
         y, mo, d = m.groups()
         return f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
-
-    m = re.match(r"^(\d{1,2})/(\d{1,2})/(\d{4})$", text)
-    if m:
-        mo, d, y = m.groups()
-        return f"{int(y):04d}-{int(mo):02d}-{int(d):02d}"
-
     return text
 
 
@@ -214,10 +231,48 @@ def slugify_code(ministry):
     return "".join(w[0].upper() for w in words) or "N/A"
 
 
+# --- hyperlink extraction (the "Source / Link" column shows a display
+# label, not the real URL - the URL is a hyperlink on the cell) --------
+
+TABLE_NS = {
+    "table": "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
+    "text": "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
+}
+XLINK_HREF = "{http://www.w3.org/1999/xlink}href"
+
+
+def extract_column_hrefs(ods_path, col_idx, num_header_rows):
+    """Returns a list of hrefs (or display text if no link), one per data
+    row, aligned with pandas' row order for the given column index."""
+    with zipfile.ZipFile(ods_path) as z:
+        content = z.read("content.xml")
+    root = ET.fromstring(content)
+    table = root.find(".//table:table", TABLE_NS)
+    rows = table.findall("table:table-row", TABLE_NS)
+    data_rows = rows[num_header_rows:]
+
+    results = []
+    for row in data_rows:
+        cells = row.findall("table:table-cell", TABLE_NS)
+        if len(cells) <= col_idx:
+            results.append(None)
+            continue
+        cell = cells[col_idx]
+        href, texts = None, []
+        for p in cell.findall("text:p", TABLE_NS):
+            texts.append("".join(p.itertext()))
+            a = p.find("text:a", TABLE_NS)
+            if a is not None:
+                href = a.get(XLINK_HREF)
+        results.append(href or (" ".join(texts).strip() or None))
+    return results
+
+
 # --- workbook loading ------------------------------------------------
 
 def load_sheet_rows(xl, sheet_name):
-    """Locate the header row (col 0 == 'Ministry') and return data rows below it."""
+    """Locate the header row (col 0 == 'Ministry') and return the header
+    row index plus data rows below it."""
     raw = xl.parse(sheet_name, header=None)
     header_idx = None
     for i in range(len(raw)):
@@ -233,93 +288,58 @@ def load_sheet_rows(xl, sheet_name):
 
     data = raw.iloc[header_idx + 1:].reset_index(drop=True)
     data = data[data[0].notna() & (data[0].astype(str).str.strip() != "")]
-    return raw, header_idx, data.reset_index(drop=True)
+    return header_idx, data.reset_index(drop=True)
 
 
-def extract_hyperlink_map(ws, column_1based):
-    """"Source / Link" cells hold clickable article URLs as an Excel
-    hyperlink, not as cell text (the text is just a static 'Open source ▸'
-    label) — pandas' reader drops hyperlinks entirely, so this reads them
-    straight from the sheet via openpyxl. Returns {excel_row: url}."""
-    links = {}
-    for row in ws.iter_rows(min_col=column_1based, max_col=column_1based):
-        cell = row[0]
-        if cell.hyperlink and cell.hyperlink.target:
-            links[cell.row] = cell.hyperlink.target
-    return links
-
-
-def apply_qa_corrections(xl, raw_ministries):
-    """Sheet1 flags a handful of rows (by spreadsheet row number) as having
-    the wrong date, e.g. '9 Ministry of Agriculture ... wrong date 12/05/2026'.
-    Row numbers are 1-indexed against the raw (untrimmed) 'Ministries' sheet."""
-    qa = xl.parse(QA_SHEET, header=None)
-    fixed = 0
-    for _, row in qa.iterrows():
-        cell0, note = str(row[0]).strip(), str(row[2]).strip()
-        m_row = re.match(r"^(\d+)\s+", cell0)
-        m_fix = re.match(r"wrong date\s+(\d{1,2})/(\d{1,2})/(\d{4})", note, re.IGNORECASE)
-        if not (m_row and m_fix):
-            continue
-        row_idx = int(m_row.group(1)) - 1  # spreadsheet row N -> raw.iloc[N-1]
-        dd, mm, yyyy = m_fix.groups()
-        corrected = f"{int(yyyy):04d}-{int(mm):02d}-{int(dd):02d}"
-        old = raw_ministries.iat[row_idx, 7]
-        raw_ministries.iat[row_idx, 7] = corrected
-        fixed += 1
-        print(f"  QA fix: row {row_idx + 1} date {old!r} -> {corrected!r}")
-    print(f"  applied {fixed} QA date correction(s) from '{QA_SHEET}'")
-    return raw_ministries
-
-
-def build_records(data_rows, source_link_map):
+def build_records(data_rows, real_links):
     records = []
     unmapped = set()
-    for excel_row, row in zip(data_rows.index, data_rows.itertuples(index=False, name=None)):
+    dupes_seen = {}
+
+    for i, row in enumerate(data_rows.itertuples(index=False, name=None)):
         rec = dict(zip(FIELD_NAMES, row))
-        ministry = clean_text(rec["ministry"])
+        ministry = clean(rec["ministry"]) or "Not specified"
 
         code, sector = MINISTRY_MAP.get(ministry, (None, None))
         if code is None:
             code, sector = slugify_code(ministry), DEFAULT_SECTOR
             unmapped.add(ministry)
 
-        amount_raw = clean_text(rec["amountRaw"]) or "Not specified"
-        funding_date = normalize_date(rec["fundingDateRaw"])
-        published_date = normalize_date(rec["publishedDateRaw"])
-        # excel_row is the 0-based position in the untrimmed sheet (row 0 ==
-        # spreadsheet row 1), so the 1-based row openpyxl reports is +1.
-        source_link = source_link_map.get(excel_row + 1, "")
+        amount_raw = clean(rec["amountRaw"]) or "Not specified"
+        project = clean(rec["project"]) or ""
+
+        key = (ministry, project)
+        dupes_seen[key] = dupes_seen.get(key, 0) + 1
 
         records.append({
             "ministry": ministry,
             "ministryCode": code,
             "sector": sector,
-            "project": clean_text(rec["project"]),
-            "status": clean_text(rec["status"]),
+            "project": project,
+            "status": clean(rec["status"]) or "Unknown",
             "funders": split_list(rec["funders_raw"]),
             "amountRaw": amount_raw,
             "amountUSDm": parse_amount_usd_millions(amount_raw),
             "partners": split_list(rec["partners_raw"]),
             "region": classify_region(rec["region_raw"]),
-            # "date" is kept as a back-compat alias (funding date, falling
-            # back to published date) for any date-based feature added later.
-            "date": funding_date or published_date,
-            "fundingDate": funding_date,
-            "dateBasis": clean_text(rec["dateBasis"]),
-            "dateEvidence": clean_text(rec["dateEvidence"]),
-            "projectPeriod": clean_text(rec["projectPeriod"]),
-            "in2025_26": clean_text(rec["in2025_26"]),
-            "publishedDate": published_date,
-            "confidence": clean_text(rec["confidence"]),
-            "sourceFeed": clean_text(rec["sourceFeed"]),
-            "description": clean_text(rec["description"]),
-            "sourceLink": source_link,
-            "enmaeyaReportingLink": clean_text(rec["enmaeyaReportingLink"]),
-            "origin": clean_text(rec["origin"]),
-            "sourceChecked": clean_text(rec["sourceChecked"]),
-            "livePageEvidence": clean_text(rec["livePageEvidence"]),
-            "fundingType": clean_text(rec["fundingType"]),
+            "date": normalize_date(rec["published_date_raw"]),
+            "confidence": clean(rec["confidence"]) or "Unknown",
+            "sourceFeed": clean(rec["sourceFeed"]) or "",
+            "description": clean(rec["description"]) or "",
+            "sourceLink": real_links[i] if i < len(real_links) else clean(rec["sourceLink_display"]) or "",
+            "note": "",
+            # extra columns from the new sheet, kept for reference even
+            # though the current charts don't read them yet
+            "fundingDate": normalize_date(rec["funding_date_raw"]),
+            "dateBasis": clean(rec["date_basis"]) or "",
+            "dateEvidence": clean(rec["date_evidence"]) or "",
+            "projectPeriod": clean(rec["project_period"]) or "",
+            "in2025_26": clean(rec["in_2025_26"]) or "",
+            "enmaeyaLink": clean(rec["enmaeya_link"]) or "",
+            "origin": clean(rec["origin"]) or "",
+            "sourceChecked": clean(rec["source_checked"]) or "",
+            "livePageEvidence": clean(rec["live_page_evidence"]) or "",
+            "fundingType": clean(rec["funding_type"]) or "",
         })
 
     if unmapped:
@@ -328,54 +348,28 @@ def build_records(data_rows, source_link_map):
         for m in sorted(unmapped):
             print(f"    - {m}")
 
+    dupes = {k: v for k, v in dupes_seen.items() if v > 1}
+    if dupes:
+        print(f"  note: {len(dupes)} ministry+project pair(s) appear more than once "
+              f"(kept as separate records, not merged):")
+        for (m, p), n in sorted(dupes.items()):
+            print(f"    - [{n}x] {m} — {p}")
+
     return records
 
 
-def build_summary(xl):
-    raw = xl.parse(SUMMARY_SHEET, header=None)
-    header_idx = None
-    for i in range(len(raw)):
-        if str(raw.iat[i, 0]).strip() == "Ministry":
-            header_idx = i
-            break
-    if header_idx is None:
-        raise ValueError("Could not find header row in Summary sheet")
-
-    columns = [str(v).strip() for v in raw.iloc[header_idx].tolist()]
-    rows = raw.iloc[header_idx + 1:]
-    rows = rows[rows[0].notna() & (rows[0].astype(str).str.strip() != "")]
-
-    summary = []
-    for row in rows.itertuples(index=False, name=None):
-        label = str(row[0]).strip()
-        if label.upper() in ("TOTAL", "NOTES") or label.startswith("•"):
-            continue
-        entry = dict(zip(columns, row))
-        entry = {k: (int(v) if isinstance(v, float) and v.is_integer() else v) for k, v in entry.items()}
-        summary.append(entry)
-    return summary
-
-
 def main():
-    print(f"Reading {XLSX_PATH}")
-    xl = pd.ExcelFile(XLSX_PATH, engine="openpyxl")
+    print(f"Reading {ODS_PATH}")
+    xl = pd.ExcelFile(ODS_PATH, engine="odf")
     print(f"  sheets found: {xl.sheet_names}")
 
-    wb = openpyxl.load_workbook(XLSX_PATH, data_only=True)
-    source_link_map = extract_hyperlink_map(wb[DATA_SHEET], EXPECTED_HEADER.index("Source / Link") + 1)
-    print(f"  extracted {len(source_link_map)} source hyperlink(s) from '{DATA_SHEET}'")
+    header_idx, data_rows = load_sheet_rows(xl, SHEET_NAME)
+    print(f"  '{SHEET_NAME}': {len(data_rows)} records found")
 
-    raw_ministries, header_idx, _ = load_sheet_rows(xl, DATA_SHEET)
-    raw_ministries = apply_qa_corrections(xl, raw_ministries)
-    # Keep the original row index here (no reset_index) so it still lines up
-    # with the 1-based Excel rows used as keys in source_link_map.
-    data_rows = raw_ministries.iloc[header_idx + 1:]
-    data_rows = data_rows[data_rows[0].notna() & (data_rows[0].astype(str).str.strip() != "")]
-    records = build_records(data_rows, source_link_map)
-    print(f"  '{DATA_SHEET}': {len(records)} records normalized")
+    real_links = extract_column_hrefs(ODS_PATH, SOURCE_LINK_COL_IDX, header_idx + 1)
 
-    summary = build_summary(xl)
-    print(f"  '{SUMMARY_SHEET}': {len(summary)} ministry rollup rows")
+    records = build_records(data_rows, real_links)
+    print(f"  built {len(records)} records")
 
     print(f"Updating {DATA_JSON_PATH}")
     with open(DATA_JSON_PATH, "r", encoding="utf-8") as f:
@@ -386,12 +380,6 @@ def main():
         json.dump(data, f, indent=2, ensure_ascii=False)
         f.write("\n")
     print(f"  ministryProjects: {before} -> {len(records)} records")
-
-    SUMMARY_JSON_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with open(SUMMARY_JSON_PATH, "w", encoding="utf-8") as f:
-        json.dump(summary, f, indent=2, ensure_ascii=False)
-        f.write("\n")
-    print(f"Wrote {SUMMARY_JSON_PATH}")
 
     print("\nSample record:")
     print(json.dumps(records[0], indent=2, ensure_ascii=False))

@@ -23,21 +23,20 @@
   .pmeta{font-size:12px;color:var(--muted);margin:14px 0 8px}
   .pmeta .tag{background:#eef2f6;color:#42576a;border-radius:6px;padding:3px 10px;margin-right:6px}
   .pbody{font-size:14px;line-height:1.55;color:#33404d}
-  .readmore{display:inline-block;margin-top:14px;font-weight:700;font-size:14px;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--ring);padding-bottom:2px}
-  .pactions{display:flex;gap:26px;margin:20px 0 6px;color:var(--muted);font-size:12px}
-  .pactions div{text-align:center;cursor:pointer}
-  .pactions .ic{font-size:18px;color:var(--ink)}
   .browse{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
   .browse h3{margin:0 0 12px;font-size:16px}
-  .toggle{display:flex;background:#eef2f6;border-radius:8px;padding:5px;gap:5px;max-width:340px}
-  .toggle button{flex:1;border:0;border-radius:6px;padding:9px;font-size:14px;background:transparent;cursor:pointer;color:#42576a}
-  .toggle button.on{background:#fff;font-weight:700;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
-  .list{margin-top:14px}
-  .item{display:flex;gap:10px;padding:10px 4px;border-bottom:1px solid #eef2f6;text-decoration:none;color:inherit;cursor:pointer}
-  .item:hover{background:#f8fafc}
-  .item .dot{width:9px;height:9px;border-radius:2px;margin-top:6px;flex:0 0 auto}
-  .item .t{font-size:13px;font-weight:600;line-height:1.3}
-  .item .s{font-size:11.5px;color:var(--muted);margin-top:2px}
+  .carousel{margin-top:14px;display:flex;align-items:center;gap:6px}
+  .list{display:flex;flex-wrap:nowrap;gap:12px;flex:1;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
+  .list::-webkit-scrollbar{display:none}
+  .cnav{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:15px;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .cnav:hover{background:#eef2f6}
+  .cnav:disabled{opacity:.3;cursor:default}
+  .cnav.hide{visibility:hidden}
+  .card{position:relative;display:block;flex:0 0 calc((100% - 24px)/3);border-radius:10px;overflow:hidden;text-decoration:none;color:#fff;aspect-ratio:4/3;background:#26344c}
+  .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .25s}
+  .card:hover img{transform:scale(1.06)}
+  .card .src{position:absolute;top:8px;left:8px;background:rgba(20,27,34,.62);color:#fff;font-size:10px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:5px}
+  .card .overlay{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,0));font-size:12.5px;font-weight:700;line-height:1.28}
   .link{fill:none;stroke:#b7c1cb;stroke-width:1;opacity:0}
   .olabel{font-size:10.5px;fill:var(--ink);pointer-events:none}
   .slabel{font-weight:700;font-size:13px;pointer-events:none}
@@ -60,38 +59,345 @@
   </div>
   <div class="right">
     <div class="phead" id="phead"><div><h2 id="ptitle">Lebanon Funding Network</h2>
-      <div class="curation" id="pcuration">Curation: Enmaeya</div></div></div>
+      <div class="curation" id="pcuration">Enmaeya</div></div></div>
     <div class="pmeta" id="pmeta"></div>
     <div class="pbody" id="pbody"></div>
-    <a class="readmore" id="preadmore" href="https://enmaeya.com/en/hub" target="_blank" rel="noopener">Read more</a>
-    <div class="pactions">
-      <div><div class="ic">&#10548;</div>Share</div>
-      <div><div class="ic">&lt;/&gt;</div>Embed</div>
+    <div class="browse" id="newsBrowse">
+      <h3 id="plisttitle">News</h3>
+      <div class="carousel">
+        <button class="cnav prev" id="pPrev" aria-label="Scroll news left">&#8249;</button>
+        <div class="list" id="plist"></div>
+        <button class="cnav next" id="pNext" aria-label="Scroll news right">&#8250;</button>
+      </div>
     </div>
-    <div class="browse">
-      <h3>Browse</h3>
-      <div class="toggle"><button class="on" id="tBrowse">Browse</button><button id="tLatest">Latest</button></div>
-      <div class="list" id="plist"></div>
+    <div class="browse" id="resourcesBrowse">
+      <h3>Resources</h3>
+      <div class="carousel">
+        <button class="cnav prev" id="rPrev" aria-label="Scroll resources left">&#8249;</button>
+        <div class="list" id="rlist"></div>
+        <button class="cnav next" id="rNext" aria-label="Scroll resources right">&#8250;</button>
+      </div>
+    </div>
+    <div class="browse" id="studioBrowse">
+      <h3>Studio</h3>
+      <div class="carousel">
+        <button class="cnav prev" id="sPrev" aria-label="Scroll studio left">&#8249;</button>
+        <div class="list" id="slist"></div>
+        <button class="cnav next" id="sNext" aria-label="Scroll studio right">&#8250;</button>
+      </div>
     </div>
   </div>
 </div>
 <script>
-function R(title,src,date,url,blurb){return {title:title,src:src,date:date,url:url,blurb:blurb};}
-
-// "Funding" is the one real, working link — this dashboard IS Enmaeya's
-// funding data, so it opens index.html with the sector pre-selected. The
-// rest of each sector's ring is thematic subtopics, not a site-navigation
-// menu — there's no dedicated Enmaeya page per subtopic, so those just
-// point at the sector's general news feed as a "related coverage" catch-all.
-const NEWS_URL = "https://enmaeya.com/en/news";
+function R(title,src,date,url,blurb,img){return {title:title,src:src,date:date,url:url,blurb:blurb,img:img};}
 
 const SUBTOPICS = {
-  education:   ["Culture", "Literacy", "Curriculum", "Higher Education", "Vocational Training"],
-  economy:     ["Trade", "Employment", "Entrepreneurship", "Investment", "Industry"],
-  health:      ["Primary Care", "Nutrition", "Maternal Health", "Mental Health", "Vaccination"],
-  environment: ["Nature", "Climate", "Water", "Biodiversity", "Waste"],
-  ai:          ["Automation", "Data", "Innovation", "Digital Skills", "Research"],
-  development: ["Infrastructure", "Housing", "Governance", "Urban Planning", "Resilience"]
+  education:   ["Access", "Crisis Education", "Future Skills", "Higher Education", "Citizenship"],
+  economy:     ["Recovery", "Employment", "Entrepreneurship", "Inflation", "Investment"],
+  health:      ["Health Systems", "Public Health", "Mental Health", "Community Health", "Digital Health"],
+  environment: ["Climate", "Water", "Waste", "Biodiversity", "Clean Energy"],
+  ai:          ["AI Skills", "AI Governance", "Digital Government", "Social Impact", "Innovation"],
+  development: ["Governance", "Youth", "Social Inclusion", "Digital Transformation", "Recovery"]
+};
+
+// Development's subtopics are grouped subsectors, each backed by several
+// specific Enmaeya articles rather than a single generic news link.
+const SUBTOPIC_ARTICLES = {
+  development: {
+    "Governance": [
+      { title: "Lebanon, UNDP Sign MoU to Support Institutional Reform and Sustainable Infrastructure", url: "https://enmaeya.com/en/news/6a7d86703bb91c526e4292fd", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/DvkKdKn36HNG4vULysV3VOC0_1786611236988_ksVef.jpg" },
+      { title: "Social Affairs Ministry Launches Lebanon's First Ministry-Level Citizen Budget", url: "https://www.enmaeya.com/en/news/6a573ee2fc074b43430af870", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/NM4hLsU7WR3wfywIl63WGFzyk_1784102449647_bqcpb.webp" },
+      { title: "Beirut Port, World Bank Launch Study on Economic and Urban Integration", url: "https://enmaeya.com/en/news/6a88362a35a6a17ea6dedb3e", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/jk2QUhmSyYPhOz4yzIPMIjDJ_1787311569511_ECTpZ.jpg" }
+    ],
+    "Youth": [
+      { title: "Lebanon to Launch Early Childhood Development Strategy", url: "https://enmaeya.com/en/news/696f42053d23c23e9ea30420-lebanon-to-launch-early-childhood-development-strategy", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/SYlOt0hS7JRLLBJEZLKserty_1768898624633_sUrju.webp" },
+      { title: "Lebanon Moves Forward with National Youth Strategy Planning", url: "https://enmaeya.com/en/news/698dcf5e6b5d92c96c75da49-lebanon-moves-forward-with-national-youth-strategy-planning", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZltFXX0FBsIWejdnLImQQ744z_1770901006190_aNeFE.jpg" }
+    ],
+    "Social Inclusion": [
+      { title: "Lebanon Launches Academic Support Program for Public School Baccalaureate Students", url: "https://enmaeya.com/en/news/6a295a8bfdce764d781e8bbd", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/QBJLhFIUPSEWIrIkk4OakED3i_1781095205599_NDFzD.webp" },
+      { title: "Lebanon Launches National Economic Inclusion Strategy to Boost Jobs and Social Protection", url: "https://enmaeya.com/en/news/6a6073dcf615b04db0413cef", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/QCxxWl3sQ98UF9SWinSGbe3Z_1784706002481_fGNxI.jpg" }
+    ],
+    "Digital Transformation": [
+      { title: "Lebanon Moves Ahead With $150 Million World Bank-Funded Digital Transformation Project", url: "https://enmaeya.com/en/news/6a7ad350352026867915e292", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Prv6972CeVA8GSwwAz4OhzH_1786434191598_AskAH.jpg" },
+      { title: "World Bank Approves $350 Million for Lebanon's Recovery Efforts", url: "https://enmaeya.com/en/news/6979c77e6b5d92c96c1427e1-world-bank-approves-350-million-for-recovery-efforts-in-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/hVEOviSob1ofKvnNHJAruKHjo_1769588357211_iHZJr.jpg" }
+    ],
+    "Recovery": [
+      { title: "Lebanon Launches $18.5 Million Agricultural Grants Program to Support Farmers and Recovery", url: "https://enmaeya.com/en/news/6a8bf5575fcd2eec245d11be", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/t0kWaD2YlHL59KD2N8iAqDvu_1787557239116_BVMXI.jpg" },
+      { title: "World Bank Approves $350 Million for Lebanon's Recovery Efforts", url: "https://enmaeya.com/en/news/6979c77e6b5d92c96c1427e1-world-bank-approves-350-million-for-recovery-efforts-in-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/hVEOviSob1ofKvnNHJAruKHjo_1769588357211_iHZJr.jpg" }
+    ]
+  },
+  economy: {
+    "Recovery": [
+      { title: "World Bank Approves $350 Million for Lebanon's Recovery Efforts", url: "https://enmaeya.com/en/news/6979c77e6b5d92c96c1427e1-world-bank-approves-350-million-for-recovery-efforts-in-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/hVEOviSob1ofKvnNHJAruKHjo_1769588357211_iHZJr.jpg" },
+      { title: "Lebanon's Ministry of Economy Unveils Ambitious Reform Plan", url: "https://enmaeya.com/en/news/6870f02e3fdcdb342c4dd283-lebanons-ministry-of-economy-unveils-ambitious-reform-plan-to-boost-economic-stability", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Rsd56MexzKRL3cXwvxEU8Si3_1752231950483_BYPAf.jpg" }
+    ],
+    "Employment": [
+      { title: "Lebanon Launches National Economic Inclusion Strategy to Boost Jobs and Social Protection", url: "https://enmaeya.com/en/news/6a6073dcf615b04db0413cef", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/QCxxWl3sQ98UF9SWinSGbe3Z_1784706002481_fGNxI.jpg" }
+    ],
+    "Inflation": [
+      { title: "IIF: Lebanon's Economy Set to Contract 12% in 2026", url: "https://enmaeya.com/en/news/6a7d8b973520268679172d5d", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/oROwDuqCfE6p65DFymnIwBmz_1786612480760_SrGIq.webp" },
+      { title: "Steps by the Ministry of Economy to Keep Prices Stable", url: "https://enmaeya.com/en/news/69afe1366b5d92c96cf07662-what-the-ministry-of-economy-is-doing-to-keep-prices-stable", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/j9EMDiBxiy8QE36txR6q1hM_1773133833247_SGKOx.jpg" }
+    ],
+    "Investment": [
+      { title: "IIF: Lebanon's Economy Set to Contract 12% in 2026", url: "https://enmaeya.com/en/news/6a7d8b973520268679172d5d", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/oROwDuqCfE6p65DFymnIwBmz_1786612480760_SrGIq.webp" }
+    ]
+  },
+  education: {
+    "Access": [
+      { title: "Lebanon Launches National Learning Continuity Plan for 2026-2027 School Year", url: "https://enmaeya.com/en/news/6a6c8e9403e0f12641b56b58", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/oQ0T0lR6kH6z7FVV56IgsmsX_1785499133554_iUrPG.jpg" },
+      { title: "Lebanon Launches Academic Support Program for Public School Baccalaureate Students", url: "https://enmaeya.com/en/news/6a295a8bfdce764d781e8bbd", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/QBJLhFIUPSEWIrIkk4OakED3i_1781095205599_NDFzD.webp" },
+      { title: "UNESCO: 113 Countries Spend More on Debt Servicing Than on Education", url: "https://enmaeya.com/en/news/6a509fb9b3720945fe26fea9", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/nP3KHW5bPQaGtanwnrDLAvpg_1783669265423_vuGon.webp" }
+    ],
+    "Crisis Education": [
+      { title: "How Lebanon Keeps Over 1 Million Students Learning Amid War and Displacement", url: "https://enmaeya.com/en/news/69d60ea53ac211857edc36fb", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/yvqyaA9gZolu2pQvyi4fpddpx_1775635932392_bxnVV.webp" },
+      { title: "UN and Partners Support Continued Learning for Displaced Children in Lebanon", url: "https://enmaeya.com/en/news/69de22a73ac211857ef131c6", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/f7gtbS0UuMfIHv3oxAn1dpTVd_1776165397521_mwEFz.jpg" },
+      { title: "UNESCO Warns of Deepening Education Crisis Across the Arab Region", url: "https://enmaeya.com/en/news/69fc5accbdb342b7f4f2bf17", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/a4ia8wm94AQiohVNSm8qzgzbp_1778145922281_lRpdh.jpg" },
+      { title: "More Than 100,000 Children in Lebanon Might Miss School, Education Ministry Warns", url: "https://enmaeya.com/en/news/6a479afe71cd2c83c51f4a1b", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9F5Ml2unjvpqr9hJ9ATS6ma7a_1783077508878_NWycu.jpg" }
+    ],
+    "Higher Education": [
+      { title: "New MEHE–AUB MoU to Modernize Lebanon's Education System", url: "https://enmaeya.com/en/news/69318496b03917dbe095e4bb-new-meheaub-mou-to-modernize-lebanons-education-system", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/iCp5W0JUjjbYTQTtqYBfryr_1764852626019_QPyqd.jpg" }
+    ],
+    "Citizenship": [
+      { title: "Lebanon Launches Citizenship Education Alliance", url: "https://enmaeya.com/en/news/6996c5606b5d92c96c93f568-lebanon-launches-citizenship-education-alliance", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/mZx8IxtV2Pu0s23daYYVDN0_1771488568398_VxquQ.jpg" }
+    ]
+  },
+  health: {
+    "Health Systems": [
+      { title: "Lebanese Health Ministry Launches Emergency Response Plan", url: "https://enmaeya.com/en/news/69ca3c466b5d92c96c499c99-lebanese-health-ministry-launches-emergency-response-plan", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/uBFNqACPpdJ6cnSUDev8sfc_1774860927912_SxHVD.jpg" },
+      { title: "WHO and UNICEF Deliver 3.5 Tons of Emergency Supplies to Lebanon", url: "https://enmaeya.com/en/news/69c3ada66b5d92c96c3393d7-who-and-unicef-deliver-35-tons-of-emergency-supplies-to-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/kemzwWTvVab3XwYE9G6t4WfqB_1774431449866_uLTaw.jpg" },
+      { title: "Lebanon's Health System Near Collapse as WHO Declares Emergency Response", url: "https://enmaeya.com/en/news/6a201596667f1524945e07be", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/hAW23y6zc5uWzodtfrYg579i_1780487565653_ojbIW.jpg" }
+    ],
+    "Public Health": [
+      { title: "Lebanon Launches National Plan to Expand Childhood Vaccination Coverage", url: "https://enmaeya.com/en/news/69e9e9123ac211857e1229b3", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/oobstvROM0GVFJZIpwXgNOg_1776942060429_DXhuh.webp" },
+      { title: "Is Lebanon Headed for a Waterborne Disease Crisis?", url: "https://enmaeya.com/en/news/69c8ef0e6b5d92c96c453384-is-lebanon-headed-for-a-waterborne-disease-crisis", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/aUKo7Ik1qexz0IepGvT8QqNG_1773704890845_xtLgO.jpg" },
+      { title: "Lebanon's Health Sector: How Many Attacks Recorded?", url: "https://enmaeya.com/en/news/69f85c4245dafd6423ed0901", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/rOmuFosoOgefE7jeg4E5GDEvi_1777884144172_eThlO.webp" }
+    ],
+    "Community Health": [
+      { title: "Ministry of Public Health and UNICEF Launch National Breastfeeding Campaign in Lebanon", url: "https://enmaeya.com/en/news/6a708ece8bae5480f8d6cb36", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/H84lGeSDBXE9RL7hZHtZ1r1a_1785761471416_BiFgY.jpg" },
+      { title: "Empowered Nurses, Safer Patients: A Conversation on Lebanon's Nursing Workforce", url: "https://enmaeya.com/en/news/6a02fc7d8971bba67bcc8f5e", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/L457R6zYnl92jt41QOdPKtPY_1778588590144_Dekxv.jpg" }
+    ],
+    "Digital Health": [
+      { title: "Lebanon Launches \"Sohatona\" Vaccination App to Support Child Health", url: "https://enmaeya.com/en/news/69f5b0575777ece87837079e", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/DAL1sitBe5fgpHUio8eanhyC_1777708896594_WvcfH.webp" },
+      { title: "This Platform Tracks Lebanon's Health Response in Real Time During the War", url: "https://enmaeya.com/en/news/6a06f0f0fb198c3a4b517eff", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/rGsNYI1sfYCwgISJQS0kSVMXh_1778840251772_LzsAH.webp" }
+    ]
+  },
+  environment: {
+    "Climate": [
+      { title: "Lebanon Strengthens Wildfire Prevention Plan After Thousands of Forest Fires", url: "https://enmaeya.com/en/news/6a4e0d4479e1a60797f3fd15", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9FmbVWuUc7MXByUDwj3tbUsrE_1783500070993_AfyJL.jpg" },
+      { title: "New Report Maps Environmental Toll of Attacks on Lebanon", url: "https://enmaeya.com/en/news/69ef0d5545dafd6423e74d7a", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/MLEPwVYVhaEUxz7WIMYCNsHK_1777274100038_yVdpH.jpg" },
+      { title: "Lebanon's Quarries: Between Reconstruction Needs and Environmental Limits", url: "https://enmaeya.com/en/news/6a674c38e9d71e8cc56cc8b6", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/C7SrJOSvn95D4o5zS18ObL9bm_1785154697220_WFtEz.jpg" }
+    ],
+    "Water": [
+      { title: "UNICEF and EU Support Rehabilitation of Tripoli Wastewater Treatment Plant", url: "https://enmaeya.com/en/news/6a3bacf507dbe973c5af6fb4", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/XYHWDGxTBta7l2YUy04blUR_1782295789434_ZJaPV.jpg" },
+      { title: "CNRS Presents 2026 Study on Environmental State of Lebanon's Coast", url: "https://enmaeya.com/en/news/6a44f6090a610606799e540c", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/DJWcOIqFug8gvqnKq3aYOoEik_1782904190483_IhVuR.jpg" }
+    ],
+    "Waste": [
+      { title: "Lebanon Launches National Planning Package to Strengthen Waste Management", url: "https://enmaeya.com/en/news/6a6206e6e9cac2134b9c1f0d", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WBz2Mh9n8c7H9ZxWv9DRAFw_1784809065295_BdtmS.jpg" },
+      { title: "EU and UNDP Support Lebanon's Efforts to Enhance Solid Waste Management Governance", url: "https://enmaeya.com/en/news/6a747ecb05656f6716643c42", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/iAchmzKG0lnyLddFZqEL3Rf1S_1786019523191_gZBek.jpg" },
+      { title: "Minister of Environment Discusses Beirut Waste Strategy", url: "https://enmaeya.com/en/news/69787af26b5d92c96c0ccf1d-minister-of-environment-discusses-beirut-waste-strategy", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/FIuSkgDMBKKrxwWlQhDFWgZdZ_1769503283857_FiyfK.jpg" },
+      { title: "New Initiative to Improve Waste Management in Lebanon's Shelters", url: "https://enmaeya.com/en/news/69fda6fbd25710b128343c5f", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/4SjHgq2VlK5qFUGjdIrzX4wkU_1778230852498_DtUCv.jpg" }
+    ],
+    "Biodiversity": [
+      { title: "Lebanon Launches Initiative to Tackle Marine Waste and Abandoned Fishing Nets", url: "https://enmaeya.com/en/news/6a4f94a779e1a60797f4de7b", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/qqOndnKvRuxQEVS42dwjZsUth_1783600187660_NoDUm.webp" }
+    ]
+  },
+  ai: {
+    "AI Skills": [
+      { title: "Hariri Foundation and Technology Ministry Sign MoU to Boost AI Awareness and Skills", url: "https://enmaeya.com/en/news/6a2a861efdce764d781ef6bc", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/gDip4yy342VKWMnQwjZU1iM_1781172553310_ApFqL.jpg" },
+      { title: "First AI Training Hub Launched in Nabatieh", url: "https://enmaeya.com/en/news/696e007e3d23c23e9e6ecfd6-first-ai-training-hub-launched-in-nabatieh", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/StuPNwx4P472O6pcLTj71Vdw_1768816463316_Hvofg.jpg" },
+      { title: "Hariri Foundation Launches \"Empowering Sectors with AI\"", url: "https://enmaeya.com/en/news/699466426b5d92c96c8caf65-hariri-foundation-launches-empowering-sectors-with-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9X73HOLO5CxnAWpE6UE6Mi5Ez_1771328240094_HkZfe.jpg" }
+    ],
+    "AI Governance": [
+      { title: "Technology Ministry Signs MoU with Berytech to Boost Digital Transformation", url: "https://enmaeya.com/en/news/6a0707227d55012969239d58", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Exa2ryL5zcVRWnRfO8ITQYyeN_1778845345373_RGkBQ.webp" }
+    ],
+    "Digital Government": [
+      { title: "Lebanon Moves Ahead With $150 Million World Bank-Funded Digital Transformation Project", url: "https://enmaeya.com/en/news/6a7ad350352026867915e292", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Prv6972CeVA8GSwwAz4OhzH_1786434191598_AskAH.jpg" },
+      { title: "Lebanon Advances National Digital Transformation", url: "https://enmaeya.com/en/news/6990b2036b5d92c96c8160fc-lebanon-advances-national-digital-transformation", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tYVfaBdXHMGDpEnSkalkUKcGJ_1771230721866_aBgUM.webp" }
+    ],
+    "Social Impact": [
+      { title: "AUB Secures €400K EU Grant for AI Urban Planning", url: "https://enmaeya.com/en/news/699812bc6b5d92c96c97e259-aub-secures-400k-eu-grant-for-ai-urban-planning", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/31E7SCAocntjhClURIf0UT1v_1771573904903_RQOWS.jpg" },
+      { title: "Lebanon Launches Second Phase of \"Numu\" Program", url: "https://enmaeya.com/en/news/69c4f9ab6b5d92c96c37b78d-lebanon-launches-second-phase-of-numu-program", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Tf5dbQlbs7xNFWg2SADItcUk0_1774516467478_BGvtb.jpg" }
+    ],
+    "Innovation": [
+      { title: "Lebanon and Saudi Arabia Partner on AI Hackathon Setting Guinness World Record", url: "https://enmaeya.com/en/news/6a7efbce0a3379c28b470a28", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/fpX57vN7lbjLPL49IegxE3k_1786711355422_mauhp.jpg" },
+      { title: "Lebanon Set to Announce Gulf-Backed Investment in Digital Sector", url: "https://enmaeya.com/en/news/69865a1c6b5d92c96c45c45c-lebanon-set-to-announce-gulf-backed-investment-in-digital-sector", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/VLvj4IKGrr66T1pixoVk1BX_1770412405527_kBYyx.jpg" }
+    ]
+  }
+};
+
+// Curated Enmaeya Hub resources (reports/toolkits) per Development subsector,
+// shown in their own "Resources" carousel below each subsector's News list.
+const SUBTOPIC_RESOURCES = {
+  development: {
+    "Governance": [
+      { title: "New Tech, New Partners: Transforming Development in the Digital Era", url: "https://enmaeya.com/en/hub/resources/697a16376b5d92c96c160a96-new-tech-new-partners-transforming-development-in-the-digital-era", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/3mXL6fJnyjHsRsdOTT2Mfjy3g_1769608718053_dxsjE.jpg", blurb: "Public-purpose digital transformation and institutional reform." },
+      { title: "Toolkit: Building Responsible Smart Cities", url: "https://enmaeya.com/en/hub/resources/687772fb5e506b240adadc43-building-responsible-smart-cities-a-toolkit-for-public-and-private-sector-actors", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ynqyX1CDj8OXEew1yl0Y4rR3a_1752221532069_CeXPO.jpg", blurb: "Accountable, people-centered governance for smart cities." }
+    ],
+    "Youth": [
+      { title: "World Employment and Social Outlook: Trends 2025", url: "https://enmaeya.com/en/hub/resources/685a5368d643526485c26f92-world-employment-and-social-outlook-trends-2025", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/i7ioMY2X4BkAnSWYAM7FBy93G_1750747291653_LIhtk.png", blurb: "Spotlights persistent youth unemployment." }
+    ],
+    "Social Inclusion": [
+      { title: "World Employment and Social Outlook: Trends 2025", url: "https://enmaeya.com/en/hub/resources/685a5368d643526485c26f92-world-employment-and-social-outlook-trends-2025", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/i7ioMY2X4BkAnSWYAM7FBy93G_1750747291653_LIhtk.png", blurb: "Gender disparities and structural labour-market challenges." },
+      { title: "Toolkit: Building Responsible Smart Cities", url: "https://enmaeya.com/en/hub/resources/687772fb5e506b240adadc43-building-responsible-smart-cities-a-toolkit-for-public-and-private-sector-actors", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ynqyX1CDj8OXEew1yl0Y4rR3a_1752221532069_CeXPO.jpg", blurb: "Inclusive, people-centered smart city design." }
+    ],
+    "Digital Transformation": [
+      { title: "New Tech, New Partners: Transforming Development in the Digital Era", url: "https://enmaeya.com/en/hub/resources/697a16376b5d92c96c160a96-new-tech-new-partners-transforming-development-in-the-digital-era", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/3mXL6fJnyjHsRsdOTT2Mfjy3g_1769608718053_dxsjE.jpg", blurb: "Blockchain and digital transformation." },
+      { title: "Toolkit: Building Responsible Smart Cities", url: "https://enmaeya.com/en/hub/resources/687772fb5e506b240adadc43-building-responsible-smart-cities-a-toolkit-for-public-and-private-sector-actors", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ynqyX1CDj8OXEew1yl0Y4rR3a_1752221532069_CeXPO.jpg", blurb: "Smart cities and digital tools." },
+      { title: "Science, Technology and Innovation Outlook 2025: Driving Change in a Shifting Landscape", url: "https://enmaeya.com/en/hub/resources/6938070fb03917dbe0ce4aa1-science-technology-and-innovation-outlook-2025-driving-change-in-a-shifting-landscape", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/zotVWJ3Bdc2SpnypfnLNKxfl_1764752349934_dWOOl.jpg", blurb: "AI, tech, and innovation policy." }
+    ],
+    "Recovery": [
+      { title: "ADFD Annual Report 2024", url: "https://enmaeya.com/en/hub/resources/686790353fdcdb342c3752d1-adfd-annual-report-2024", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/bvSb0sI5tWv3Y4rDpzTsq48Fp_1751617461598_jXKId.jpg", blurb: "Development finance, infrastructure and economic progress across partner countries." }
+    ]
+  },
+  economy: {
+    "Recovery": [
+      { title: "Lebanon Economic Monitor (Spring 2025)", url: "https://enmaeya.com/en/hub/resources/6858f6f6d643526485bcc02e-lebanon-economic-monitor-spring-2025", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/V6I0QwaVgCk38fxeHB3InoJr_1750404346162_OjXsY.png", blurb: "Recovery-focused monitoring of Lebanon's economy." }
+    ],
+    "Inflation": [
+      { title: "Global Economic Prospects Report 2026", url: "https://enmaeya.com/en/hub/resources/696752103d23c23e9e4f271b-global-economic-prospects-report-2026", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/kZCO4Eb7mfP4H1ovN1ywRQZYi_1768378791161_yifly.jpg", blurb: "Growth and inflation forecasts." },
+      { title: "World Economic Outlook: Global Economy in the Shadow of War", url: "https://enmaeya.com/en/hub/resources/69f890875777ece8783873c0", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/CBosZLj9mqTOpu4DZ0ZQ14mh_1777897508592_IgyiM.jpg", blurb: "Global economic conditions shaping inflation and growth." }
+    ],
+    "Investment": [
+      { title: "The Business Ready 2025", url: "https://enmaeya.com/en/hub/resources/69a57dcd6b5d92c96ccc3c6a-the-business-ready-2025", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/JpwYP5U1Jw6fq0gFTRm0dqBF_1772453238356_IjUpM.jpg", blurb: "Business climate and investment readiness index." }
+    ]
+  },
+  education: {
+    "Access": [
+      { title: "Global Education Monitoring Report 2026: Access and Equity – Countdown to 2030", url: "https://enmaeya.com/en/hub/resources/6a801eb23bb91c526e448ed4", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/s0qPItw6O0dcgfuBa7FTkkQvN_1786781232862_PrVaa.jpg", blurb: "Access and equity in education, countdown to 2030." }
+    ],
+    "Crisis Education": [
+      { title: "Impact of Escalating Conflict on Education Systems in the Arab States", url: "https://enmaeya.com/en/hub/resources/69f9abc045dafd6423edeea7", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/zwQ8HAUCTDu6zLk7tP8mMrCrP_1777970008458_qwvAQ.jpg", blurb: "UNESCO rapid overview and response, April 2026." }
+    ],
+    "Higher Education": [
+      { title: "Artificial Intelligence Revolution in Higher Education", url: "https://enmaeya.com/en/hub/resources/686e22ae3fdcdb342c49675f-artificial-intelligence-revolution-in-higher-education", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/cQoxtUzeV4beox4Qlc363mMk_1751966956000_cwfKP.jpg", blurb: "AI's transformation of higher education." }
+    ]
+  },
+  health: {
+    "Health Systems": [
+      { title: "Country Cooperation Strategy for WHO and Lebanon 2026–2029", url: "https://enmaeya.com/en/hub/resources/693fd77cb03917dbe0eb758e-country-cooperation-strategy-for-who-and-lebanon-20262029", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/1nqmmN7qHVXBxDvKGhVckxFJs_1765790127816_mlvfq.jpg", blurb: "WHO's cooperation strategy with Lebanon's health system." }
+    ],
+    "Public Health": [
+      { title: "UNICEF Lebanon Humanitarian Situation Report No. 5", url: "https://enmaeya.com/en/hub/resources/69970ffb6b5d92c96c9522db-unicef-lebanon-humanitarian-situation-report-no-5", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dv3jm2a8MrniWsIirubjnM8V0_1771413942777_DDMOO.jpg", blurb: "UNICEF's humanitarian situation reporting for Lebanon." }
+    ],
+    "Mental Health": [
+      { title: "Mental Health Atlas 2024", url: "https://enmaeya.com/en/hub/resources/68d10959b1d8a9ca64569ba6-mental-health-atlas-2024", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/opoDrSuW9C2DxVl5kZtcCp8vc_1757670177867_XHzns.jpg", blurb: "Global mapping of mental health systems and resources." }
+    ],
+    "Community Health": [
+      { title: "Nurturing Care for Children with Developmental Delays and Disabilities: Thematic Brief", url: "https://enmaeya.com/en/hub/resources/69b2c8636b5d92c96cfb9749-nurturing-care-for-children-with-developmental-delays-and-disabilities-thematic-brief", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/uKXBkXYFQsEMKvG0riw25ao8V_1773323768038_bFxzB.jpg", blurb: "Community-based care for children with developmental delays." }
+    ],
+    "Digital Health": [
+      { title: "Digital Health Transformation Strategy", url: "https://enmaeya.com/en/hub/resources/698efb896b5d92c96c7bb2ba-digital-health-transformation-strategy", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/QT1v3ongHMmqqJ1vaX3k3bak_1770978180349_VYaCK.jpg", blurb: "Strategy for digitizing Lebanon's health sector." }
+    ]
+  },
+  environment: {
+    "Climate": [
+      { title: "Lebanon's Long-Term Low-Emission Development Strategy: A Pathway to a Climate-Resilient Economy", url: "https://enmaeya.com/en/hub/resources/68b7f25552d33bafc3d125dc-lebanon-s-long-term-low-emission-development-strategy-a-pathway-to-a-climate-resilient-economy", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/AGurNCvIt5l9r8wH0sIgdZ6X_1756372423408_sumXR.jpg", blurb: "Lebanon's pathway to a climate-resilient, low-emission economy." },
+      { title: "Public Perceptions of Climate Change Risks in Lebanon", url: "https://enmaeya.com/en/hub/resources/697879976b5d92c96c0cbed8-public-perceptions-of-climate-change-risks-in-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/hHYmFrz9vH3ov7edrPRufuFV1_1769502747482_XhhKm.jpg", blurb: "How Lebanese perceive climate change risk." }
+    ],
+    "Clean Energy": [
+      { title: "Lebanon: Derisking Renewable Energy Investment 2025", url: "https://enmaeya.com/en/hub/resources/697880126b5d92c96c0d04bf-lebanon-derisking-renewable-energy-investment-2025", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/15UmkBRtJwZJB9JxXHH75zBLb_1769504550942_zSbop.jpg", blurb: "Reducing risk for renewable energy investment in Lebanon." }
+    ]
+  },
+  ai: {
+    "AI Governance": [
+      { title: "International Scientific Report on the Safety of Advanced AI", url: "https://enmaeya.com/en/hub/resources/67d811837a16f8e0ef65a5e7-international-scientific-report-on-the-safety-of-advanced-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/8920af869a3bde0a30d12c8f4074d34874d8850115a5371432.png", blurb: "Scientific consensus on the safety of advanced AI systems." },
+      { title: "Rethinking AI Sovereignty", url: "https://enmaeya.com/en/hub/resources/69a589a86b5d92c96ccc7349-rethinking-ai-sovereignty", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dbyOlALN7DGaSBpulAAdFdSN_1772456217851_ZZtSQ.jpg", blurb: "AI sovereignty and governance policy." }
+    ],
+    "Social Impact": [
+      { title: "Annual SDG Review 2026: Artificial Intelligence Policies for Social Inclusion in the Arab Region", url: "https://enmaeya.com/en/hub/resources/6a3954903b72adb3be7dff36", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/R4V4xTRYRiiGr3xI6Rv35J5u_1782141856199_HNovX.jpg", blurb: "AI policy's role in social inclusion across the Arab region." }
+    ],
+    "Innovation": [
+      { title: "Artificial Intelligence Futures for the Arab Region", url: "https://enmaeya.com/en/hub/resources/685a86bcd643526485c3bdca-artificial-intelligence-futures-for-the-arab-region", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WCFFS8W12gQ884j0P3FIuu7j1_1750761326337_kslYb.png", blurb: "Regional outlook on AI innovation and its future trajectory." },
+      { title: "Digital Progress and Trends Report 2025: Strengthening AI Foundations", url: "https://enmaeya.com/en/hub/resources/69380586b03917dbe0ce2b88-digital-progress-and-trends-report-2025-strengthening-ai-foundations", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/irbNBbBJVVrF3GfhunzGKUU_1764763299308_Unmhr.jpg", blurb: "Global digital progress and AI foundation-building." }
+    ]
+  }
+};
+
+// Curated Enmaeya Studio interviews per subsector, shown in their own
+// "Studio" carousel below each subsector's Resources list. Subsectors
+// without a clean match (e.g. Development's Recovery) simply omit the key.
+const SUBTOPIC_STUDIO = {
+  development: {
+    "Governance": [
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "The Gap Between Law and Reality with Khouloud Al-Khatib", url: "https://enmaeya.com/en/studio/interviews/693c1d1bb03917dbe0e02f2f-the-gap-between-law-and-reality-with-khouloud-al-khatib", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/pCOQaYz3o39QVbuWSaxThrftp_1784617135031_nVzUT.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Who Controls the Narrative? Media and Human Rights with Gretchen King", url: "https://enmaeya.com/en/studio/interviews/694b9eaab03917dbe0bddec7-palestine-beyond-the-headlines-beyond-the-headlines-palestine-palestine-and-information-warfare-palestine-and-manufactured-consent-palestine-media-framing-palestine-in-mainstream-media-palestine-media-and-propaganda", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZbcOyC9760NoetcNnqLboWD_1783424793541_IiHUe.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Youth": [
+      { title: "Youth at the Decision-Making Table", url: "https://enmaeya.com/en/studio/interviews/69e229e43ac211857efcc9c7-youth-in-decision-making-lebanon-why-youth-should-lead-decisions-youth-voice-policy-change-lebanon-young-leaders-shaping-the-future-youth-leadership-change-making-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/OEqyNPGQny26x1yuRd9RpbjQp_1784616967585_bbZCw.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "A Social Experiment Disguised as a TV Show", url: "https://enmaeya.com/en/studio/interviews/69f9c287381a4fd6e1f82f25-joe-maaluf-on-msh-masrahiye-the-unscripted-unfiltered-social-experiment-giving-lebanese-youth-a-voice-breaking-taboos-challenging-coexistence-and-reshaping-how-a-generation-talks-to-itself-and-to-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/sO8rzIuwgKq2Vr3wvqHq97ZpI_1783338614469_ploFE.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Social Inclusion": [
+      { title: "Beyond Limits for an Inclusive Lebanon with Michael Haddad", url: "https://enmaeya.com/en/studio/interviews/696a6edf3d23c23e9ed66f3b-beyond-limits-inclusive-sustainable-lebanon-beyond-limits-inclusive-lebanon-beyond-limits-sustainable-lebanon-beyond-limits-inclusion-beyond-limits-sustainability", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tLN2tWfK46ozzKpB9NWfsA4h_1783424822573_wqsNm.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Digital Transformation": [
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  },
+  economy: {
+    "Entrepreneurship": [
+      { title: "Beyond Shark Tank: Inside the Mind of an Entrepreneur with Alain Bejjani", url: "https://enmaeya.com/en/studio/interviews/68fb64287d9c6f548703be79-alain-bejjani-shark-tank-lebanon-lebanese-entrepreneurs-entrepreneurship-investment-gen-z-burnout", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/4fq9JBoK5jQzepdy0ehDP7Om_1785490682467_mgSmz.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Beyond Shark Tank: Georges Karam on Entrepreneurship in Lebanon", url: "https://enmaeya.com/en/studio/interviews/68f62aa299ef424d7f6a33d4-shark-tank-sharktank-entrepreneurship-business-economy-innovation", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/E2GZOmFQqX5HlWI4GFtRNP_1785490726034_iLhYT.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Beyond Shark Tank: Maroun Chammas Reflects on a Lifetime of Entrepreneurship", url: "https://enmaeya.com/en/studio/interviews/6911f1f6b60244fe5bf72dcb-shark-tank-maroun-chammas-entrepreneurship-human-capital-maroun-chammas-berytech-shark-tank-lebanon-judge-lebanon-business", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Yzdi8FrraRMtMqZGFLMXgkICP_1784617159701_QuLhk.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Investment": [
+      { title: "Insights from the Power X Summit", url: "https://enmaeya.com/en/studio/interviews/682f339712dad92571a8cb7c-insights-from-the-power-x-summit", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/bnMka7jp9wuY4HLb0HndiZH_1783338892241_afKMl.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  },
+  education: {
+    "Access": [
+      { title: "A Conversation with IB Senior Manager, Mary Tadros", url: "https://enmaeya.com/en/studio/interviews/683c3450a0ffcfafd9bfec53-a-conversation-with-ib-senior-manager-mary-tadros", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xp8T1VVnE2CYXsR83F89q9vUj_1783338915063_gFdEB.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Crisis Education": [
+      { title: "When Education Competes With Survival", url: "https://enmaeya.com/en/studio/interviews/69f32eab381a4fd6e1f4260a-education-for-refugees-lebanon-learning-in-crisis-lebanon-refugee-education-lebanon-alsama-project-lebanon-education-vs-survival-refugees-g12plusplus-lebanon-child-labour-lebanon-education-access-to-education-lebanon-refugee-youth-opportunity-lebanon-camps-to-classrooms-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ENIqWC2BaM50N7JAcm0lDdi6z_1784616894274_MCpBW.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Future Skills": [
+      { title: "AI and the Future of Learning with Dr. Hatem Sleem", url: "https://enmaeya.com/en/studio/interviews/688ca64752d33bafc3ac5ac6-ai-skills-and-the-future-of-learning-with-dr-hatem-sleem", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/lRW6yRPYPMGiOGbP6TqJp0FVI_1785490866770_FiyLm.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "What It Takes to Build an Idea with Jennifer Aouad", url: "https://enmaeya.com/en/studio/interviews/69173e8eb60244fe5b09f68f-ata3allam-app-arabic-education-digital-learning-lebanese-entrepreneurs-women-in-business-startup-lessons-founder-story-innovation-in-education", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cZQU1VaHVgOCV8MXWZt8057_1783424602455_TWpTF.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  },
+  health: {
+    "Mental Health": [
+      { title: "Mental Health in Times of Crisis with Dima Ayass", url: "https://enmaeya.com/en/studio/interviews/697c6d4b6b5d92c96c1f5760-mental-health-in-times-of-crisis-with-dima-ayass", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dawTc2FeepmipXxAKHr08MsLo_1783338818881_yplpb.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Education That Cares for the Mind with Dr. Jeanine Ziade", url: "https://enmaeya.com/en/studio/interviews/697386e86b5d92c96caf29e1-international-day-of-education-education-and-mental-health-education-and-mental-wellbeing-with-dr-jeanine-ziadeh-the-link-between-education-and-mental-health-education-mental-health-and-resilience-how-education-shapes-mental-wellbeing", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/slhXf0WyPVxx9RSGF2E3l6kQ_1783338833582_fBBDc.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Community Health": [
+      { title: "On Autism and Leading With Purpose with Aline Karam", url: "https://enmaeya.com/en/studio/interviews/69ce80493ac211857ec9709d-on-autism-and-leading-with-purpose-with-aline-karam", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WBgipvT2IkoiEFiW2HNV4gq_1783338699590_ExAjb.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Recognizing Alzheimer's Early: Why Diagnosis Matters", url: "https://enmaeya.com/en/studio/interviews/6a3a7ff13b72adb3be7e99b5-recognizing-alzheimers-early-why-diagnosis-matters-recommended-early-alzheimers-diagnosis-why-it-matters-understanding-alzheimers-early-diagnosis-alzheimers-early-signs-and-diagnosis-recognizing-alzheimers-symptoms-and-care-alzheimers-disease-early-detection-and-support-the-importance-of-early-alzheimers-diagnosis-understanding-alzheimers-with-dr-georges-karam-alzheimers-awareness-symptoms-diagnosis-and-care-recognizing-memory-loss-and-alzheimers-early", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9WAAgEwdwh7MgB2bjPhjK4s_1782218542371_AgPUR.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Health Systems": [
+      { title: "Bridging Tourism and Healthcare with Dr. Viana Hassan", url: "https://enmaeya.com/en/studio/interviews/694a4c91b03917dbe0b2faf9-tourism-meets-healthcare-where-tourism-meets-healthcare-tourism-and-healthcare-intersection-tourism-healthcare-medical-tourism-healthcare-beyond-borders-medical-tourism-where-healthcare-meets-travel-tourism-healthcare-lebanon-medical-tourism-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tHXq9JB5eSnZKTlZpy1Vhld_1783424777811_kXITb.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  },
+  environment: {
+    "Water": [
+      { title: "Sustaining Lebanon's Water Resources with Dr. Georges Gharios", url: "https://enmaeya.com/en/studio/interviews/699874a96b5d92c96c997f5a-lebanons-water-future-rethinking-water-sustainability-in-lebanon-water-governance-in-lebanon-lebanon-water-crisis-and-climate-change-sustaining-water-resources-in-lebanon-water-management-and-reform-lebanon-securing-lebanons-water-future-lebanon-water-policy-and-resilience", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/gAqzaXLic58HyrjwAZQxaFzOx_1784616990480_geRFW.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Biodiversity": [
+      { title: "Learning to Live With Lebanon's Wildlife", url: "https://enmaeya.com/en/studio/interviews/6a82e8bbdedad4e8efc88da3-protecting-lebanons-wildlife-in-times-of-crisis-saving-lebanons-wildlife-against-the-odds-war-wildfires-and-wildlife-in-lebanon-snakes-sea-turtles-and-lebanons-wildlife-who-protects-lebanons-wildlife-what-happens-to-wildlife-during-war-protecting-lebanons-biodiversity-rami-khashab-lebanon-wildlife-from-sea-turtles-to-snakes-living-alongside-lebanons-wildlife", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xK3B953eDNutz05dw1ScEi8ah_1786964004383_BGQEV.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Saving Lebanon's Coastal Biodiversity", url: "https://enmaeya.com/en/studio/interviews/6a143be3a7d759db17cd773f-biodiversity-in-lebanons-coastline-protecting-lebanons-biodiversity-lebanons-coastal-biodiversity-crisis-public-spaces-and-biodiversity-in-lebanon-saving-lebanons-coastline-biodiversity-and-public-access-to-the-sea-mohammad-ayoub-nahnoo-interview-protecting-public-maritime-properties-lebanon-biodiversity-under-threat-in-lebanon-the-fight-for-lebanons-coast-coastal-violations-in-lebanon-preserving-lebanons-natural-coastline-biodiversity-and-coastal-protection-lebanons-shores-under-threat-international-day-for-biological-diversity-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZgRmjpw9NIycZ0q5n7wiT0tz_1783338524212_MQfiF.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Climate": [
+      { title: "Who Tells the Story of the Environment?", url: "https://enmaeya.com/en/studio/interviews/6a22c0f211d96626392a33b3-who-tells-the-story-of-the-environment-environmental-journalism-in-lebanon-covering-the-environment-in-lebanon-why-environmental-journalism-matters-the-future-of-environmental-reporting-beyond-environmental-crises-media-climate-and-public-awareness-environmental-storytelling-in-lebanon-reporting-on-the-environment-environment-and-the-media", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cJUVzrgVJ99ZQ6xD61b9GxM_1780662234953_oEaLU.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Governance for Sustainability with Dr. Nasser Yassine", url: "https://enmaeya.com/en/studio/interviews/69a19d906b5d92c96cbc834e-governance-for-sustainability-with-dr-nasser-yassine-embedding-sustainability-into-governance-lebanon-from-policy-to-practice-sustainability-in-lebanon-environmental-governance-and-recovery-in-lebanon-building-institutions-for-sustainable-lebanon-climate-policy-and-governance-reform-lebanon-sustainability-beyond-strategy-papers-institutional-reform-for-environmental-resilience-governance-accountability-and-climate-action-long-term-planning-for-lebanons-environment", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/7GTsXNYGPdYRyW51ExxGqPIu_1783338713732_Jgrif.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  },
+  ai: {
+    "Social Impact": [
+      { title: "AI and Social Impact in Lebanon with Jack Jendo", url: "https://enmaeya.com/en/studio/interviews/69947e4f6b5d92c96c8d2b6e-ai-and-social-impact-in-lebanon-lebanons-digital-future-and-ai-ai-beyond-hype-and-innovation-technology-with-purpose-lebanon-brain-gain-or-brain-drain-human-centered-ai-in-lebanon-rethinking-innovation-in-lebanon-ai-entrepreneurship-and-policy-building-lebanons-digital-economy-innovation-leadership-in-the-age-of-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/azJo6o18gfgwtiAYPUlugr0w_1784617013719_KlrYF.jpg", blurb: "Studio interview from Enmaeya." },
+      { title: "Can AI Help NGOs Secure More Funding?", url: "https://enmaeya.com/en/studio/interviews/6a633b600fa04f9804078dcf-ai-transforming-ngo-funding-the-future-of-ngo-grant-funding-how-ai-is-changing-social-impact-novai-reinventing-grant-management-bridging-the-funding-gap-for-ngos-making-international-funding-more-accessible-inside-novai-the-ai-platform-for-ngos-empowering-ngos-through-artificial-intelligence-from-grant-search-to-funded-projects-democratizing-access-to-global-funding-solving-the-biggest-problem-in-ngo-funding-artificial-intelligence-for-development-organizations-building-a-smarter-funding-ecosystem-simplifying-the-entire-grant-application-process-how-lebanese-innovation-is-helping-ngos-worldwide", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/HzZ4NLQZkHBU1xaMTaYCZOG_1784887946729_JSJci.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Digital Government": [
+      { title: "Reinventing Governance in the Digital Age with Ihab Hallab", url: "https://enmaeya.com/en/studio/interviews/699d97466b5d92c96cb04c9a-rethinking-digital-governance-reinventing-governance-in-the-digital-age-governance-beyond-technology-building-smarter-public-systems-digital-transformation-done-right-innovation-inside-government-future-of-governance-smart-governance-lebanon-digital-governance-lebanon-tech-and-public-policy-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/VORozyGDfYXFdw4sZxiL6YPmW_1783339096997_nJeCo.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "Innovation": [
+      { title: "LEBTECH 2026: Connecting Lebanon to the Future of Tech", url: "https://enmaeya.com/en/studio/interviews/6a8c08c4ebab4304982c70ec-lebtech-2026-lebanon-tech-future-maya-zgheib-lebtech-2026-lebtech-ai-startups-lebanon-lebanon-technology-ecosystem-lebtech-lebtech-2026-ai-innovation-building-lebanon-tech-future-technology-for-resilience-lebanon-lebtech-startup-world-cup-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Y94belKPVHSUT0M2bByLC6ij_1787562097262_uFDdc.jpg", blurb: "Studio interview from Enmaeya." }
+    ],
+    "AI Skills": [
+      { title: "Can Schools Keep Up With Artificial Intelligence?", url: "https://enmaeya.com/en/studio/interviews/6a6c6c3903e0f12641b552ce-ai-future-of-education-mike-harb-mike-harb-ai-education-artificial-intelligence-in-education-ai-in-education-and-healthcare-how-ai-is-changing-education-chatgpt-and-the-future-of-learning-can-ai-save-education-future-of-learning-with-ai-education-in-the-age-of-ai-ai-education-lebanon-mike-harb-on-ai-the-future-of-ai-in-schools-ai-teachers-chatgpt-and-learning-artificial-intelligence-podcast-mike-harb-education-healthcare-and-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WTRzETWf7HDzdUrJfQ6c1FuKc_1785490270884_YVWdw.jpg", blurb: "Studio interview from Enmaeya." }
+    ]
+  }
 };
 
 // This page's sector naming is the canonical one enmaeya.com itself uses;
@@ -140,30 +446,45 @@ function buildTree(data) {
 
   return {
     id: "root", label: "Lebanon Funding", sub: "sectors · funding · news",
-    report: R("Lebanon Funding Network", "Curation: Enmaeya", lastRecord, "https://enmaeya.com/en/hub",
+    report: R("Lebanon Funding Network", "Enmaeya", lastRecord, undefined,
       "A live map of where funding flows across Lebanon's sectors — education, economy, health, environment, artificial intelligence, and development. Click any sector to open its funding data, news, and the latest Enmaeya coverage."),
     children: sectors.map(function (s) {
       const label = LABEL_OVERRIDE[s.id] || s.label;
-      const fundingUrl = "index.html?sector=" + s.id;
       const subtopics = SUBTOPICS[s.id] || [];
+      const subtopicArticles = SUBTOPIC_ARTICLES[s.id] || {};
+      const subtopicResources = SUBTOPIC_RESOURCES[s.id] || {};
+      const subtopicStudio = SUBTOPIC_STUDIO[s.id] || {};
 
-      const fundingNode = {
-        id: s.id + "-funding", label: "Funding", value: 26, hot: true,
-        report: R(label + " — Funding", "Enmaeya", lastRecord, fundingUrl,
-          "Explore tracked " + label + " funding data on the dashboard.")
-      };
+      // Only real, ID-specific Enmaeya links are ever shown as cards — a
+      // subtopic with no curated article/resource/interview just leaves that
+      // carousel empty (hidden) rather than falling back to a generic,
+      // non-specific link like enmaeya.com/en/news.
       const subtopicNodes = subtopics.map(function (word, i) {
+        const arts = subtopicArticles[word];
+        const articleReports = arts
+          ? arts.map(function (a) { return R(a.title, "Enmaeya", lastRecord, a.url, a.blurb || (word + " coverage from Enmaeya."), a.img); })
+          : [];
+        const res = subtopicResources[word];
+        const resourceReports = res
+          ? res.map(function (r) { return R(r.title, "Enmaeya Hub", lastRecord, r.url, r.blurb || (word + " resource from Enmaeya Hub."), r.img); })
+          : [];
+        const stu = subtopicStudio[word];
+        const studioReports = stu
+          ? stu.map(function (r) { return R(r.title, "Enmaeya Studio", lastRecord, r.url, r.blurb || (word + " interview from Enmaeya Studio."), r.img); })
+          : [];
         return {
           id: s.id + "-sub" + i, label: word, value: 17, hot: false,
-          report: R(label + " — " + word, "Enmaeya", lastRecord, NEWS_URL,
-            word + " is a tracked subtopic within " + label + " — explore related Enmaeya coverage.")
+          articles: articleReports,
+          resources: resourceReports,
+          studio: studioReports,
+          report: articleReports[0] || R(label + " — " + word, "Enmaeya", lastRecord, undefined, word + " is a tracked subtopic within " + label + ".")
         };
       });
 
       return {
         id: s.id, label: label, color: s.color,
-        report: R(label, "Curation: Enmaeya", lastRecord, NEWS_URL, summarizeSector(s.id, projects)),
-        children: [fundingNode].concat(subtopicNodes)
+        report: R(label, "Enmaeya", lastRecord, undefined, summarizeSector(s.id, projects)),
+        children: subtopicNodes
       };
     })
   };
@@ -259,7 +580,9 @@ function toggleSector(sec){
   }
   selectedId=sec.id;
   setPanel(sec);
-  buildList(false);
+  buildList();
+  buildResourceList();
+  buildStudioList();
   refreshSelection();
   updateCrumbBack();
   animateOuter();
@@ -269,7 +592,9 @@ function closeAll(){
   openSectors.clear();
   selectedId=null;
   setPanel(TREE);
-  buildList(false);
+  buildList();
+  buildResourceList();
+  buildStudioList();
   refreshSelection();
   updateCrumbBack();
   animateOuter();
@@ -331,7 +656,7 @@ function animateOuter(){
     .attr("r",0)
     .attr("fill",function(d){return d.id===selectedId?"#141b22":"#fff";})
     .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";}).attr("stroke-width",1.4)
-    .on("click",function(e,d){ e.stopPropagation(); selectedId=d.id; setPanel(d); refreshSelection(); });
+    .on("click",function(e,d){ e.stopPropagation(); selectedId=d.id; setPanel(d); refreshSelection(); buildList(); buildResourceList(); buildStudioList(); });
   nodeEnter.append("text").attr("class","olabel").style("opacity",0).each(function(d){
     var a=leafLabelAttrs(d);
     d3.select(this).attr("transform",a.transform).attr("text-anchor",a.anchor).attr("dy","0.32em").text(d.label);
@@ -402,7 +727,9 @@ function render(){
 
   openSectors=new Set(); selectedId=null;
   setPanel(TREE);
-  buildList(false);
+  buildList();
+  buildResourceList();
+  buildStudioList();
   updateCrumbBack();
 }
 
@@ -410,33 +737,93 @@ function setPanel(node){
   var rep=node.report||node, color=node.color||sectorColorOf(node);
   d3.select("#phead").style("background","linear-gradient(135deg,#26344c,"+color+")");
   d3.select("#ptitle").text(rep.title);
-  d3.select("#pcuration").text(rep.src||"Curation: Enmaeya");
+  d3.select("#pcuration").text(rep.src||"Enmaeya");
   d3.select("#pmeta").html(rep.date?"<span class='tag'>"+(node.label||"Report")+"</span> "+rep.date:"");
   d3.select("#pbody").text(rep.blurb||"");
-  d3.select("#preadmore").attr("href",rep.url||"https://enmaeya.com/en/hub");
 }
 
-function buildList(latest){
+// Only real, ID-specific articles ever become cards — a subsector or sector
+// with none just leaves the News carousel empty (hidden), same as the
+// Resources/Studio carousels.
+function buildList(){
   var open=openList();
-  var items;
-  if(open.length){
-    items=[];
+  var items=[];
+  var sel = selectedId && BYID[selectedId];
+  var selIsLeaf = sel && PARENT[sel.id] && PARENT[sel.id] !== TREE;
+  if(selIsLeaf){
+    items = (sel.articles && sel.articles.length) ? sel.articles.map(function(rep){return {node:sel,rep:rep};}) : [];
+  } else if(open.length){
     open.forEach(function(sec){
-      items.push({node:sec,rep:sec.report});
-      sec.children.forEach(function(c){items.push({node:c,rep:c.report});});
+      sec.children.forEach(function(c){
+        if(c.articles && c.articles.length){
+          c.articles.forEach(function(rep){items.push({node:c,rep:rep});});
+        }
+      });
     });
-  } else {
-    items=TREE.children.map(function(s){return {node:s,rep:s.report};});
   }
-  if(latest) items=items.slice().sort(function(a,b){return new Date(b.rep.date)-new Date(a.rep.date);});
-  d3.select("#plist").html(items.map(function(it){
-    var c=it.node.color||sectorColorOf(it.node);
-    return "<a class='item' href='"+it.rep.url+"' target='_blank' rel='noopener'><span class='dot' style='background:"+c+"'></span><span><span class='t'>"+it.rep.title+"</span><span class='s'>"+it.rep.src+" · "+it.rep.date+"</span></span></a>";
-  }).join(""));
+  var block = document.getElementById("newsBrowse");
+  if(!items.length){ block.style.display="none"; d3.select("#plist").html(""); return; }
+  block.style.display="";
+  d3.select("#plist").html(items.map(cardHTML).join(""));
+  refreshCarouselNav("plist","pPrev","pNext");
 }
 
-document.getElementById("tBrowse").onclick=function(){this.classList.add("on");document.getElementById("tLatest").classList.remove("on");buildList(false);};
-document.getElementById("tLatest").onclick=function(){this.classList.add("on");document.getElementById("tBrowse").classList.remove("on");buildList(true);};
+function cardHTML(it){
+  var c=it.node.color||sectorColorOf(it.node);
+  var img=it.rep.img ? "<img src='"+it.rep.img+"' alt='' loading='lazy' onerror=\"this.remove()\">" : "";
+  var bg=it.rep.img ? "" : " style='background:"+c+"'";
+  return "<a class='card' href='"+it.rep.url+"' target='_blank' rel='noopener'"+bg+">"+img+
+    "<span class='src'>"+it.rep.src+"</span>"+
+    "<span class='overlay'>"+it.rep.title+"</span></a>";
+}
+
+// Resources and Studio carousels both mirror the News one: a selected
+// subsector shows its own items, and a selected sector (no subsector picked)
+// shows every item pooled from all of that sector's subsectors. Each is
+// hidden entirely when the current selection has nothing for that field.
+function buildFieldList(field, blockId, listId, prevId, nextId){
+  var open=openList();
+  var sel = selectedId && BYID[selectedId];
+  var selIsLeaf = sel && PARENT[sel.id] && PARENT[sel.id] !== TREE;
+  var items=[];
+  if(selIsLeaf){
+    items = (sel[field] && sel[field].length) ? sel[field].map(function(rep){return {node:sel,rep:rep};}) : [];
+  } else if(open.length){
+    open.forEach(function(sec){
+      sec.children.forEach(function(c){
+        if(c[field] && c[field].length){
+          c[field].forEach(function(rep){items.push({node:c,rep:rep});});
+        }
+      });
+    });
+  }
+  var block = document.getElementById(blockId);
+  if(!items.length){ block.style.display="none"; d3.select("#"+listId).html(""); return; }
+  block.style.display="";
+  d3.select("#"+listId).html(items.map(cardHTML).join(""));
+  refreshCarouselNav(listId,prevId,nextId);
+}
+function buildResourceList(){ buildFieldList("resources","resourcesBrowse","rlist","rPrev","rNext"); }
+function buildStudioList(){ buildFieldList("studio","studioBrowse","slist","sPrev","sNext"); }
+
+function refreshCarouselNav(listId,prevId,nextId){
+  var list=document.getElementById(listId), prev=document.getElementById(prevId), next=document.getElementById(nextId);
+  var overflow = list.scrollWidth > list.clientWidth+2;
+  prev.classList.toggle("hide", !overflow);
+  next.classList.toggle("hide", !overflow);
+  prev.disabled = list.scrollLeft<=2;
+  next.disabled = list.scrollLeft + list.clientWidth >= list.scrollWidth-2;
+}
+
+function wireCarousel(listId,prevId,nextId){
+  var list=document.getElementById(listId), prev=document.getElementById(prevId), next=document.getElementById(nextId);
+  prev.onclick=function(){ list.scrollBy({left:-list.clientWidth,behavior:"smooth"}); };
+  next.onclick=function(){ list.scrollBy({left:list.clientWidth,behavior:"smooth"}); };
+  list.onscroll=function(){ refreshCarouselNav(listId,prevId,nextId); };
+}
+wireCarousel("plist","pPrev","pNext");
+wireCarousel("rlist","rPrev","rNext");
+wireCarousel("slist","sPrev","sNext");
 
 async function init(){
   const res = await fetch("data.json");

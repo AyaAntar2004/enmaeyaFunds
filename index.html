@@ -83,6 +83,16 @@
     color: #fff;
   }
 
+  /* The "All sectors" pill's own --pc is raw black — striking as its filled/active
+     state, so it gets the app's light card gray instead, with dark text (the
+     base white would be unreadable against it). Its unselected border/text stay
+     black, matching every other pill's own-color outline when not the active
+     selection. */
+  .pill[data-sector="all"].active {
+    background: #f4f5f4;
+    color: #1b1b1b;
+  }
+
   /* ---------- Header card ---------- */
   .header-card {
     background: var(--card-bg);
@@ -173,54 +183,10 @@
     pointer-events: none;
   }
 
-  .insight-box {
-    position: relative;
-    background: color-mix(in srgb, var(--pc, var(--insight-accent)) 6%, #fffdf6);
-    border: 1.5px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 30%, transparent);
-    border-radius: 14px;
-    padding: 24px 26px 20px;
-    box-shadow: 0 10px 26px rgba(15, 76, 92, 0.1);
-    transition: border-color 0.2s ease, background 0.2s ease;
-  }
-
-  .insight-box::before {
-    content: "";
-    position: absolute;
-    top: -8px;
-    left: 24px;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: var(--pc, var(--insight-accent));
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-    transition: background 0.2s ease;
-  }
-
-  .insight-kicker {
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--pc, var(--insight-accent));
-    margin: 4px 0 8px;
-    transition: color 0.2s ease;
-  }
-
-  .insight-text {
-    font-size: 15.5px;
-    line-height: 1.6;
-    color: #33393c;
-  }
-
-  .insight-text strong {
-    color: #1b1b1b;
-    font-weight: 600;
-  }
-
   /* ---------- About strip (What is this? / Why it matters / Mission & Vision) ---------- */
   /* The content here is static (unrelated to the sector filter), but the color theme
      isn't: --pc is set on #aboutGrid by selectSector(), same convention as .pill and
-     .insight-box, so all three steps re-tint together with whichever sector is active. */
+     .sidebar-insight-card, so all three re-tint together with whichever sector is active. */
   .about-grid {
     --pc: var(--insight-accent);
     display: flex;
@@ -266,13 +232,25 @@
     transition: background 0.2s ease;
   }
 
-  /* On "All sectors" every card re-tints to plain black instead of any one
-     sector's color — set on .about-card (not .about-head directly) so it cascades
-     to the head bar, its badge, and the icon ring below, all of which read off
-     the inherited --pc. The head's own h3 stays the default white from its base
-     rule below, which is exactly what black calls for. */
+  /* On "All sectors" every card re-tints to the app's own light card gray
+     (#f4f5f4) instead of any one sector's color — set on .about-card (not
+     .about-head directly) so it cascades to the head bar, its badge, and the
+     icon ring below, all of which read off the inherited --pc. Unlike the old
+     black tint, a pale head bar can't carry the default white h3 text or the
+     badge/icon's own --pc-colored border, so both get an explicit override
+     below to stay readable. */
   .about-grid.is-all .about-card {
-    --pc: #1b1b1b;
+    --pc: #f4f5f4;
+  }
+
+  .about-grid.is-all .about-head h3 {
+    color: #1b1b1b;
+  }
+
+  .about-grid.is-all .about-badge,
+  .about-grid.is-all .about-icon {
+    border-color: #c7ccd1;
+    color: #5c6b6f;
   }
 
   .about-head h3 {
@@ -385,6 +363,8 @@
     background: var(--card-bg);
     border-radius: 24px;
     padding: 26px 30px;
+    display: flex;
+    flex-direction: column;
   }
 
   .chart-title {
@@ -429,21 +409,60 @@
      static .chart-sub caption above the chart, which just says what the chart is.
      Styled like a little callout card (tinted background, colored kicker label,
      left accent bar) so it reads as a highlight, not another line of gray caption
-     text — same sector-color convention as .insight-box up top. */
+     text — same sector-color convention as .sidebar-insight-card. Every instance
+     (one per chart, plus the map's) shares the same min-height so the row of
+     callout boxes lines up instead of each hugging its own text length. */
+  .chart-insight-wrap {
+    position: relative;
+    margin-top: auto;
+  }
+
   .chart-insight {
     position: relative;
     margin: 22px 0 0;
-    padding: 16px 18px 14px;
-    font-size: 13.5px;
-    line-height: 1.55;
+    padding: 18px 66px 16px 18px;
+    font-size: 15px;
+    line-height: 1.6;
     font-weight: 500;
     color: #1b1b1b;
     background: color-mix(in srgb, var(--pc, var(--insight-accent)) 10%, #fff8f1);
     border: 1px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 35%, transparent);
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(15, 76, 92, 0.08);
-    min-height: 0;
+    min-height: 104px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  /* Bare icon (no circle badge) sitting inside the box's top-right corner,
+     re-tinting with --pc. Sits on the wrapper (not the box itself) so it
+     isn't wiped out when the box's text content is replaced. */
+  .chart-insight-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    color: var(--pc, var(--insight-accent));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    transition: color 0.2s ease;
+  }
+
+  .chart-insight-icon svg {
+    width: 38px;
+    height: 36.5px;
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .chart-insight-wrap:has(.chart-insight:empty) .chart-insight-icon {
+    display: none;
   }
 
   .chart-insight::before {
@@ -477,14 +496,19 @@
     display: none;
   }
 
+  /* Same size and type scale as every other Enmaeya Insight box — the map's
+     callout used to run smaller/compact on its own, but it's now unified so
+     the whole set of boxes reads as one consistent family. */
   .map-description.chart-insight {
-    margin: 20px 0 18px;
+    margin: 10px 0 10px;
   }
 
   /* On "All sectors" the shared --pc is the medium grey used for the pill itself —
      fine as a border/background tint, but this panel reads calmer in the lighter
-     grey already used for "National/unspecified" elsewhere. */
-  .charts-grid.is-all .chart-insight {
+     grey already used for "National/unspecified" elsewhere. Set on the wrap (not
+     just .chart-insight) so the icon badge — a sibling, not a descendant — re-tints
+     along with the box instead of staying the darker grey. */
+  .charts-grid.is-all .chart-insight-wrap {
     --pc: #c7ccd1;
   }
 
@@ -664,7 +688,7 @@
   .map-layout {
     display: grid;
     grid-template-columns: 1fr 1.3fr;
-    gap: 40px;
+    gap: 20px;
     align-items: center;
   }
 
@@ -677,7 +701,7 @@
   .map-pane svg {
     width: 100%;
     height: auto;
-    max-height: 520px;
+    max-height: 380px;
     display: block;
     overflow: visible;
   }
@@ -700,20 +724,23 @@
 
   .map-card.is-all .map-pane svg {
     width: auto;
-    /* 270px reserves the title, subtitle, chip-row rank list, legend and card
+    /* 190px reserves the title, subtitle, chip-row rank list, legend and card
        padding around the map (with room for the rank chips to wrap an extra
        line on narrower screens), so the whole card — not just the map — fits
        one viewport instead of the map alone fitting while its own card overflows. */
-    height: calc(100vh - 270px);
-    max-height: calc(100vh - 270px);
-    min-height: 320px;
+    height: calc(100vh - 190px);
+    max-height: calc(100vh - 190px);
+    min-height: 280px;
     max-width: 100%;
     margin: 0 auto;
   }
 
+  /* The gradient bar explains a single color's shade-by-count intensity — with
+     every region now tinted by whichever sector leads it instead, that reading
+     no longer applies, so the legend drops for "All sectors" (single-sector
+     view keeps it; its fill is still one color ramped by count). */
   .map-card.is-all .map-legend {
-    width: 100%;
-    max-width: 640px;
+    display: none;
   }
 
   .lb-map .reg {
@@ -771,19 +798,56 @@
     stroke-width: 3px;
   }
 
+  /* "All sectors" external labels: name/count/amount/histogram live in the side
+     margins, connected to their shape by one leader line — large, uncluttered
+     type instead of small text overlaid on (and fighting the contrast of) the
+     shape's own fill color. */
+  .ext-leader { pointer-events: none; }
+
+  .ext-dot { pointer-events: none; }
+
+  .ext-name,
+  .ext-count,
+  .ext-amount {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .ext-name {
+    font-size: 21px;
+    font-weight: 700;
+    fill: #1b1b1b;
+    text-decoration: underline;
+    text-decoration-color: #c7ccd1;
+    text-underline-offset: 6px;
+  }
+
+  .ext-count {
+    font-size: 36px;
+    font-weight: 700;
+    fill: #1b1b1b;
+  }
+
+  .ext-amount {
+    font-size: 16px;
+    font-weight: 600;
+    fill: #5c6b6f;
+  }
+
+  .ext-row:hover .ext-leader { stroke: #1b1b1b; stroke-width: 2px; }
+
   .map-legend {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 18px;
-    font-size: 12px;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 10.5px;
     color: #5c6b6f;
   }
 
   .map-legend .bar {
     flex: 1 1 auto;
-    height: 8px;
-    border-radius: 4px;
+    height: 6px;
+    border-radius: 3px;
     background: linear-gradient(90deg, #e3e5e4, var(--pc, #0f4c5c));
   }
 
@@ -794,17 +858,17 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
   }
 
   .map-rank li {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 14px;
+    gap: 8px;
+    font-size: 12px;
     cursor: pointer;
-    padding: 10px 14px;
-    border-radius: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
     transition: background .15s;
   }
 
@@ -814,11 +878,12 @@
   }
 
   .map-rank .rk-dot {
-    width: 11px;
-    height: 11px;
+    width: 9px;
+    height: 9px;
     border-radius: 3px;
     flex: none;
   }
+
 
   .map-rank .rk-name {
     flex: 1 1 auto;
@@ -829,7 +894,7 @@
   .map-rank .rk-count {
     font-weight: 700;
     color: #1b1b1b;
-    font-size: 15px;
+    font-size: 12.5px;
   }
 
   /* ---------- Ministry bubble chart (All sectors only) ---------- */
@@ -865,8 +930,8 @@
   }
 
   .map-card.is-all .map-rank li {
-    padding: 6px 12px;
-    font-size: 13px;
+    padding: 4px 9px;
+    font-size: 11px;
   }
 
   .map-card.is-all .map-rank .rk-name {
@@ -875,31 +940,31 @@
 
   /* ---------- Coverage sidebar (enmaeya.com) ---------- */
   .coverage-sidebar {
-    flex: 0 0 270px;
+    flex: 0 0 225px;
     position: sticky;
-    top: 28px;
+    top: 14px;
     display: flex;
     flex-direction: column;
-    gap: 26px;
+    gap: 16px;
   }
 
   .coverage-panel {
     background: var(--card-bg);
-    border-radius: 24px;
-    padding: 26px 22px;
+    border-radius: 18px;
+    padding: 18px 16px;
   }
 
   .coverage-title {
-    margin: 0 0 3px;
-    font-size: 16px;
+    margin: 0 0 2px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--title-color);
   }
 
   .coverage-title small {
     display: block;
-    margin-top: 2px;
-    font-size: 11.5px;
+    margin-top: 1px;
+    font-size: 10.5px;
     font-weight: 500;
     letter-spacing: 0.03em;
     color: #5c6b6f;
@@ -908,17 +973,17 @@
   .coverage-list {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-top: 18px;
+    gap: 3px;
+    margin-top: 11px;
   }
 
   .coverage-item {
     --cc: var(--insight-accent);
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 10px;
-    border-radius: 14px;
+    gap: 10px;
+    padding: 8px 8px;
+    border-radius: 12px;
     text-decoration: none;
     color: inherit;
     transition: background 0.15s ease;
@@ -930,8 +995,8 @@
 
   .coverage-item .cov-icon {
     flex: none;
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     background: #fff;
     border: 1.5px solid var(--cc);
@@ -942,8 +1007,8 @@
   }
 
   .coverage-item .cov-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     fill: none;
     stroke: currentColor;
     stroke-width: 1.8;
@@ -958,7 +1023,7 @@
 
   .coverage-item .cov-text strong {
     display: block;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: #1b1b1b;
   }
@@ -966,14 +1031,14 @@
   .coverage-item .cov-text small {
     display: block;
     margin-top: 1px;
-    font-size: 11px;
+    font-size: 10px;
     color: #5c6b6f;
   }
 
   .coverage-item .cov-arrow {
     flex: none;
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
     color: #b7bec1;
   }
 
@@ -992,11 +1057,11 @@
   .coverage-network {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     background: var(--c-education);
     color: #fff;
-    border-radius: 18px;
-    padding: 17px 20px;
+    border-radius: 16px;
+    padding: 14px 16px;
     text-decoration: none;
     box-shadow: 0 6px 16px rgba(73, 49, 116, 0.28);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -1009,8 +1074,8 @@
 
   .coverage-network .cov-icon {
     flex: none;
-    width: 34px;
-    height: 34px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.16);
     display: flex;
@@ -1019,8 +1084,8 @@
   }
 
   .coverage-network .cov-icon svg {
-    width: 18px;
-    height: 18px;
+    width: 16px;
+    height: 16px;
     fill: none;
     stroke: #fff;
     stroke-width: 1.8;
@@ -1031,23 +1096,23 @@
   .coverage-network .cov-text {
     flex: 1 1 auto;
     min-width: 0;
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 600;
-    line-height: 1.35;
+    line-height: 1.32;
   }
 
   .coverage-network .cov-text small {
     display: block;
     margin-top: 2px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.78);
   }
 
   .coverage-network .cov-arrow {
     flex: none;
-    width: 15px;
-    height: 15px;
+    width: 13px;
+    height: 13px;
     color: #fff;
   }
 
@@ -1059,6 +1124,78 @@
     stroke-width: 2.2;
     stroke-linecap: round;
     stroke-linejoin: round;
+  }
+
+  /* Its own small card — set apart from the network link above by the sidebar's
+     usual 26px section gap, not grouped tightly under it. Sector-colored, same
+     --pc convention as .about-grid: a soft tint of the active sector rather
+     than the flat gray card used elsewhere in the sidebar, so it reads as a
+     called-out insight, not another link tile. */
+  .sidebar-insight-card {
+    --pc: var(--insight-accent);
+    position: relative;
+    background: linear-gradient(165deg, color-mix(in srgb, var(--pc) 10%, #fff), color-mix(in srgb, var(--pc) 4%, #fff));
+    border: 1px solid color-mix(in srgb, var(--pc) 22%, #e3e5e4);
+    border-radius: 15px;
+    padding: 13px 15px 14px 16px;
+    overflow: hidden;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+
+  .sidebar-insight-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--pc);
+    transition: background 0.2s ease;
+  }
+
+  .sidebar-insight-head {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 7px;
+  }
+
+  .sidebar-insight-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 19px;
+    height: 19px;
+    border-radius: 7px;
+    background: var(--pc);
+    color: #fff;
+    flex: none;
+    transition: background 0.2s ease;
+  }
+
+  .sidebar-insight-icon svg {
+    width: 11px;
+    height: 11px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .sidebar-insight-title {
+    margin: 0;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--pc);
+    transition: color 0.2s ease;
+  }
+
+  .sidebar-insight-text {
+    margin: 0;
+    font-size: 11.5px;
+    line-height: 1.5;
+    color: #33393c;
   }
 </style>
 </head>
@@ -1088,11 +1225,6 @@
           <label>Location</label>
           <div class="select-pill"><select id="locationSelect"></select></div>
         </div>
-      </div>
-
-      <div class="insight-box" id="insightBox">
-        <div class="insight-kicker">What this view suggests</div>
-        <div class="insight-text" id="insightText"></div>
       </div>
     </div>
   </div>
@@ -1158,33 +1290,48 @@
       <h2 class="chart-title">Where is the funding going?</h2>
       <p class="chart-sub" id="chart1Sub">Illustrative reported funding by ENMAEYA sector, from tracked ministry projects.</p>
       <svg id="chartFunding" viewBox="0 0 480 300"></svg>
-      <p class="chart-insight" id="fundingInsight"></p>
+      <div class="chart-insight-wrap">
+        <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+        <p class="chart-insight" id="fundingInsight"></p>
+      </div>
     </div>
     <div class="chart-card">
       <h2 class="chart-title" id="chart2Title">Who funds whom?</h2>
       <p class="chart-sub" id="chart2Sub">Leading funder &#8594; Lebanese ministry &#8594; sector</p>
       <svg id="chartFlow" viewBox="0 0 480 328"></svg>
       <svg id="chartFunderSectors" viewBox="0 0 480 300"></svg>
-      <p class="chart-insight" id="chart2Insight"></p>
+      <div class="chart-insight-wrap">
+        <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+        <p class="chart-insight" id="chart2Insight"></p>
+      </div>
     </div>
     <div class="chart-card chart-card-wide" id="bubbleCard">
       <h2 class="chart-title">How do ministries compare on projects and funding?</h2>
       <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding — bubble color follows its main sector.</p>
       <svg id="chartMinistryBubble" viewBox="0 0 980 620"></svg>
       <div class="bubble-legend" id="bubbleLegend"></div>
-      <p class="chart-insight" id="bubbleInsight"></p>
+      <div class="chart-insight-wrap">
+        <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+        <p class="chart-insight" id="bubbleInsight"></p>
+      </div>
     </div>
     <div class="chart-card" id="statusCard">
       <h2 class="chart-title">What stage are these projects at?</h2>
       <p class="chart-sub" id="chart5Sub">Project count by stage within the selected sector.</p>
       <svg id="chartStatus" viewBox="0 0 480 300"></svg>
-      <p class="chart-insight" id="statusInsight"></p>
+      <div class="chart-insight-wrap">
+        <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+        <p class="chart-insight" id="statusInsight"></p>
+      </div>
     </div>
     <div class="chart-card" id="partnersCard">
       <h2 class="chart-title">Which partners dominate each sector?</h2>
       <p class="chart-sub" id="chart4Sub">Partner frequency within the selected sector.</p>
       <svg id="chartPartners" viewBox="0 0 480 300"></svg>
-      <p class="chart-insight" id="partnersInsight"></p>
+      <div class="chart-insight-wrap">
+        <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+        <p class="chart-insight" id="partnersInsight"></p>
+      </div>
     </div>
     <div class="chart-card chart-card-wide audience-card" id="audienceCard">
       <h2 class="chart-title">Who this data helps</h2>
@@ -1237,7 +1384,10 @@
         <div class="map-info">
           <h2 class="chart-title" id="chart3Title">Where are projects concentrated?</h2>
           <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
-          <p class="map-description chart-insight" id="mapDescription"></p>
+          <div class="chart-insight-wrap">
+            <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+            <p class="map-description chart-insight" id="mapDescription"></p>
+          </div>
           <ul class="map-rank" id="mapRank"></ul>
         </div>
         <div class="map-pane">
@@ -1287,6 +1437,16 @@
     <span class="cov-text">Explore the funding network<small>Interactive map of who funds whom</small></span>
     <span class="cov-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="8 7 17 7 17 16"/></svg></span>
   </a>
+
+  <div class="sidebar-insight-card" id="sidebarInsightCard">
+    <div class="sidebar-insight-head">
+      <span class="sidebar-insight-icon">
+        <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.6c.6.55 1 1.3 1 2.4h6c0-1.1.4-1.85 1-2.4A7 7 0 0 0 12 2Z"/></svg>
+      </span>
+      <p class="sidebar-insight-title">What this view suggests</p>
+    </div>
+    <p class="sidebar-insight-text" id="sidebarInsightText">Select a sector to see insights.</p>
+  </div>
 </aside>
 
 </div>
@@ -1296,11 +1456,9 @@
 <script>
   // Real governorate boundaries (same geometry as lebanon-map.html), reused
   // here as a small choropleth instead of a standalone map page. `region`
-  // is the value as it appears on ministryProjects records; Akkar isn't
-  // tracked as its own region in the current dataset (folded into North
-  // Lebanon at build time), so its shape always renders as "no data".
+  // is the value as it appears on ministryProjects records.
   const REGION_SHAPES = [
-    { region: null, label: "Akkar",
+    { region: "Akkar", label: "Akkar",
       d: "M462.0,49.3 L470.1,63.8 L476.9,69.9 L484.9,72.6 L493.4,72.5 L501.6,69.8 L500.3,82.7 L497.8,84.6 L494.2,81.7 L489.2,80.3 L484.2,83.4 L483.5,88.3 L483.9,94.3 L482.3,100.7 L475.7,105.9 L466.4,111.0 L460.7,117.0 L464.1,123.3 L456.8,124.2 L452.6,126.0 L436.6,138.5 L434.9,140.9 L434.4,145.1 L432.9,147.3 L290.6,147.3 L285.9,139.7 L285.9,137.1 L292.2,138.8 L319.1,131.8 L346.3,107.0 L348.2,101.2 L348.5,82.0 L347.5,73.3 L345.4,66.1 L341.8,61.4 L349.1,62.1 L357.5,68.1 L364.9,70.2 L372.7,70.4 L381.6,69.1 L405.0,70.8 L412.6,67.4 L420.4,71.8 L440.9,70.7 L444.3,69.2 L447.4,65.8 L448.7,62.1 L448.8,54.0 L449.9,50.9 L457.0,46.0 L462.0,49.3 Z",
       lx: 415.7, ly: 97.5, size: 12 },
     { region: "North Lebanon", label: "North",
@@ -1914,6 +2072,8 @@
       const circle = node.append("circle")
         .attr("cx", cx).attr("cy", cy).attr("r", rad)
         .attr("fill", color).attr("opacity", 0.75).attr("stroke", "#fff").attr("stroke-width", 1.6);
+      circle.style("transform-box", "fill-box").style("transform-origin", "center")
+        .style("transition", "transform 0.15s ease");
 
       // Acronym rotated along the chart's rising trend line, anchored just past
       // the bubble's upper-right edge — same diagonal-label treatment as the
@@ -1928,7 +2088,9 @@
       }
 
       node.on("mouseenter", e => {
-        circle.attr("opacity", 0.95).attr("stroke-width", 2.4);
+        // A small pop on the exact bubble being hovered — a visible cue that
+        // ties the tooltip to that point rather than the ones around it.
+        circle.style("transform", "scale(1.22)").attr("opacity", 0.95).attr("stroke-width", 2.4);
         showTip(e, d.name, [
           d.count + " tracked project" + (d.count === 1 ? "" : "s"),
           fmtAmount(d.amount) + " reported funding",
@@ -1936,7 +2098,7 @@
         ].filter(Boolean), color);
       })
       .on("mousemove", moveTip)
-      .on("mouseleave", () => { circle.attr("opacity", 0.75).attr("stroke-width", 1.6); hideTip(); });
+      .on("mouseleave", () => { circle.style("transform", "scale(1)").attr("opacity", 0.75).attr("stroke-width", 1.6); hideTip(); });
     });
 
     const usedSectors = sectorsList.filter(s => rows.some(d => d.sector && d.sector.id === s.id));
@@ -1984,13 +2146,22 @@
 
     document.getElementById("mapLegendBar").style.setProperty("--pc", sectorObj.color);
 
+    // On "All sectors" the labels move off the shapes into side margins (see below),
+    // so the viewBox grows to give them room; a single sector keeps the tight,
+    // map-only frame.
+    const MAP_W = 603.3, MAP_H = 760, EXT_MARGIN = 380;
+    svg.attr("viewBox", isAll
+      ? (-EXT_MARGIN) + " -20 " + (MAP_W + EXT_MARGIN * 2) + " " + (MAP_H + 40)
+      : "0 0 " + MAP_W + " " + MAP_H);
+
     const ps = projectsInSector(sectorObj, projects);
     const rankList = document.getElementById("mapRank");
     const sub = document.getElementById("chart3Sub");
     const desc = document.getElementById("mapDescription");
 
     if (!ps.length) {
-      chartEmpty(svg, 603.3, 760);
+      svg.attr("viewBox", "0 0 " + MAP_W + " " + MAP_H);
+      chartEmpty(svg, MAP_W, MAP_H);
       rankList.innerHTML = "";
       sub.textContent = sectorObj.id === "all" ? "No tracked projects yet." : "No tracked " + sectorObj.label + " projects yet.";
       desc.textContent = "";
@@ -2088,60 +2259,164 @@
       .on("mousemove", e => { if (isAll) moveTip(e); })
       .on("mouseleave", () => { clearHighlight(); if (isAll) hideTip(); });
 
-    REGION_SHAPES.forEach(d => {
-      if (d.leader) {
-        g.append("line").attr("class", "reg-leader").attr("pointer-events", "none")
-          .attr("x1", d.leader.x1).attr("y1", d.leader.y1).attr("x2", d.leader.x2).attr("y2", d.leader.y2)
-          .attr("stroke", "#8a97a0").attr("stroke-width", 1);
-        g.append("circle").attr("pointer-events", "none").attr("cx", d.leader.x1).attr("cy", d.leader.y1).attr("r", 3.4)
-          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.2);
-      }
-    });
-
-    g.selectAll("text.reg-label").data(REGION_SHAPES).enter().append("text").attr("class", "reg-label")
-      .attr("x", d => d.lx).attr("y", d => (d.region && stats.has(d.region)) ? d.ly - 13 : d.ly)
-      .attr("font-size", d => d.size)
-      .attr("text-anchor", d => d.leader ? "end" : "middle")
-      .text(d => d.label.toUpperCase());
-
     const withData = REGION_SHAPES.filter(d => d.region && stats.has(d.region));
 
-    g.selectAll("text.reg-count").data(withData).enter()
-      .append("text").attr("class", "reg-count")
-      .attr("x", d => d.lx).attr("y", d => d.ly + 1)
-      .attr("text-anchor", d => d.leader ? "end" : "middle")
-      .text(d => stats.get(d.region).count);
-
-    g.selectAll("text.reg-amount").data(withData).enter()
-      .append("text").attr("class", "reg-amount")
-      .attr("x", d => d.lx).attr("y", d => d.ly + 14)
-      .attr("text-anchor", d => d.leader ? "end" : "middle")
-      .text(d => fmtAmount(stats.get(d.region).amount));
-
-    // With no single sector selected, the region's fill already flags its leading
-    // sector — so drop one small colored point per *other* sector that also has a
-    // tracked project there, a quick read on the rest of the mix behind that headline color.
-    if (isAll) {
-      withData.forEach(d => {
-        const dom = dominantSector(d.region);
-        const entries = sectorBreakdown(d.region).filter(e => !dom || e.s.id !== dom.id);
-        if (!entries.length) return;
-        const pitch = 12, dotY = d.ly + 28;
-        const startX = d.leader ? d.lx - (entries.length - 1) * pitch : d.lx - (entries.length - 1) * pitch / 2;
-        entries.forEach((e, i) => {
-          g.append("circle")
-            .attr("class", "hoverable reg-dot")
-            .attr("cx", startX + i * pitch).attr("cy", dotY)
-            .attr("r", Math.min(7.5, 3 + Math.sqrt(e.c) * 1.15))
-            .attr("fill", e.s.color).attr("stroke", "#fff").attr("stroke-width", 1.2)
-            .on("mouseenter", ev => {
-              highlight(d.region);
-              showTip(ev, d.label + " — " + e.s.label, [e.c + " tracked project" + (e.c === 1 ? "" : "s")], e.s.color);
-            })
-            .on("mousemove", moveTip)
-            .on("mouseleave", () => { clearHighlight(); hideTip(); });
-        });
+    if (!isAll) {
+      // Single sector: small overlay labels directly on each shape (Beirut's tiny
+      // enclave gets its one hand-placed leader line so its label doesn't sit on
+      // top of Mount Lebanon).
+      REGION_SHAPES.forEach(d => {
+        if (d.leader) {
+          g.append("line").attr("class", "reg-leader").attr("pointer-events", "none")
+            .attr("x1", d.leader.x1).attr("y1", d.leader.y1).attr("x2", d.leader.x2).attr("y2", d.leader.y2)
+            .attr("stroke", "#8a97a0").attr("stroke-width", 1);
+          g.append("circle").attr("pointer-events", "none").attr("cx", d.leader.x1).attr("cy", d.leader.y1).attr("r", 3.4)
+            .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.2);
+        }
       });
+
+      g.selectAll("text.reg-label").data(REGION_SHAPES).enter().append("text").attr("class", "reg-label")
+        .attr("x", d => d.lx).attr("y", d => (d.region && stats.has(d.region)) ? d.ly - 13 : d.ly)
+        .attr("font-size", d => d.size)
+        .attr("text-anchor", d => d.leader ? "end" : "middle")
+        .text(d => d.label.toUpperCase());
+
+      g.selectAll("text.reg-count").data(withData).enter()
+        .append("text").attr("class", "reg-count")
+        .attr("x", d => d.lx).attr("y", d => d.ly + 1)
+        .attr("text-anchor", d => d.leader ? "end" : "middle")
+        .text(d => stats.get(d.region).count);
+
+      g.selectAll("text.reg-amount").data(withData).enter()
+        .append("text").attr("class", "reg-amount")
+        .attr("x", d => d.lx).attr("y", d => d.ly + 14)
+        .attr("text-anchor", d => d.leader ? "end" : "middle")
+        .text(d => fmtAmount(stats.get(d.region).amount));
+    } else {
+      // All sectors: every label moves off the map into the side margins — name,
+      // count, amount in large clear type, plus the region's full sector-count
+      // histogram — each connected back to its shape by one leader line, instead
+      // of small text crowded onto (and fighting the fill color of) the shape itself.
+      const LEFT_ORDER = ["Akkar", "North Lebanon", "Beirut", "Mount Lebanon", "South Lebanon"];
+      const RIGHT_ORDER = ["Baalbek-Hermel", "Bekaa", "Nabatieh"];
+      function rowYFor(region) {
+        const l = LEFT_ORDER.indexOf(region);
+        if (l !== -1) return LEFT_ORDER.length > 1 ? 60 + l * (MAP_H - 120) / (LEFT_ORDER.length - 1) : MAP_H / 2;
+        const r = RIGHT_ORDER.indexOf(region);
+        if (r !== -1) return RIGHT_ORDER.length > 1 ? 60 + r * (MAP_H - 120) / (RIGHT_ORDER.length - 1) : MAP_H / 2;
+        return MAP_H / 2;
+      }
+
+      withData.forEach(d => {
+        const side = LEFT_ORDER.includes(d.region) ? "left" : "right";
+        const y = rowYFor(d.region);
+        // The histogram anchors at the outer margin edge; the text block stays a
+        // fixed distance from the map itself regardless of margin width, so the
+        // (now much larger) bars have their own dedicated space between the two.
+        const edgeX = side === "left" ? -EXT_MARGIN + 18 : MAP_W + EXT_MARGIN - 18;
+        const textX = side === "left" ? -170 : MAP_W + 170;
+        const anchor = side === "left" ? "start" : "end";
+        const s = stats.get(d.region);
+        // Biggest sector first, smallest last — sectorBreakdown() is already
+        // sorted by count descending.
+        const breakdown = sectorBreakdown(d.region);
+
+        const row = g.append("g").attr("class", "hoverable ext-row")
+          .on("mouseenter", ev => {
+            highlight(d.region);
+            if (breakdown.length) showRegionPieTip(ev, d.label, breakdown);
+          })
+          .on("mousemove", ev => moveTip(ev))
+          .on("mouseleave", () => { clearHighlight(); hideTip(); });
+
+        // Invisible hit area behind the text block — text glyphs alone leave gaps
+        // (between/around letters) that wouldn't otherwise register hover.
+        row.append("rect").attr("class", "ext-hitarea")
+          .attr("x", side === "left" ? textX : textX - 190).attr("y", y - 46)
+          .attr("width", 190).attr("height", 76)
+          .attr("fill", "transparent").attr("pointer-events", "all");
+
+        const nameY = y - 34;
+        const nameText = row.append("text").attr("class", "ext-name")
+          .attr("x", textX).attr("y", nameY).attr("text-anchor", anchor)
+          .text(d.label);
+
+        // One straight line, dot to label — no bends. It stops right at the
+        // edge of the region name closest to the map: on the left side that's
+        // where the name ends (its rightmost letter, reading toward the
+        // map); on the right side that's where the name starts (its
+        // leftmost letter, reading toward the map) — never past the whole
+        // word.
+        const nameBox = nameText.node().getBBox();
+        const leaderEndX = side === "left" ? nameBox.x + nameBox.width + 6 : nameBox.x - 6;
+
+        row.insert("line", ".ext-name").attr("class", "ext-leader")
+          .attr("x1", d.lx).attr("y1", d.ly).attr("x2", leaderEndX).attr("y2", nameY)
+          .attr("stroke", "#b7bec2").attr("stroke-width", 1.4);
+        row.insert("circle", ".ext-name").attr("class", "ext-dot")
+          .attr("cx", d.lx).attr("cy", d.ly).attr("r", 4.5)
+          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.5);
+        // Matching marker at the label end, right where the line actually
+        // stops — same treatment as the dot on the map side.
+        row.insert("circle", ".ext-name").attr("class", "ext-dot")
+          .attr("cx", leaderEndX).attr("cy", nameY).attr("r", 3.5)
+          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.5);
+
+        row.append("text").attr("class", "ext-count")
+          .attr("x", textX).attr("y", y - 2).attr("text-anchor", anchor)
+          .text(s.count);
+        row.append("text").attr("class", "ext-amount")
+          .attr("x", textX).attr("y", y + 20).attr("text-anchor", anchor)
+          .text(fmtAmount(s.amount));
+
+        // Full sector-mix histogram, anchored at the outer edge of the margin —
+        // every sector tracked in the region, ordered biggest to smallest.
+        // Bars share one baseline and sit flush against each other (no gap),
+        // so the row reads as a single histogram silhouette and the step
+        // between sector counts is what shows, not the gaps between bars.
+        if (breakdown.length) {
+          const maxC = d3.max(breakdown, e => e.c);
+          const barW = 18, maxBarH = 52;
+          const totalW = breakdown.length * barW;
+          const startX = side === "left" ? edgeX : edgeX - totalW;
+          const baseline = y + maxBarH / 2;
+
+          row.append("line").attr("class", "ext-hist-base")
+            .attr("x1", startX).attr("x2", startX + totalW)
+            .attr("y1", baseline).attr("y2", baseline)
+            .attr("stroke", "#c7ccd1").attr("stroke-width", 1);
+
+          breakdown.forEach((e, i) => {
+            const h = Math.max(5, Math.round((e.c / maxC) * maxBarH));
+            row.append("rect").attr("class", "hoverable ext-hist-bar")
+              .attr("x", startX + i * barW).attr("y", baseline - h)
+              .attr("width", barW).attr("height", h)
+              .attr("fill", e.s.color)
+              .attr("stroke", "#fff").attr("stroke-width", 1)
+              .on("mouseenter", ev => {
+                highlight(d.region);
+                showTip(ev, d.label + " — " + e.s.label, [e.c + " tracked project" + (e.c === 1 ? "" : "s")], e.s.color);
+              })
+              .on("mousemove", moveTip)
+              .on("mouseleave", () => { clearHighlight(); hideTip(); });
+          });
+        }
+      });
+    }
+
+    rankList.innerHTML = "";
+
+    if (isAll) {
+      // Region name/count/amount/histogram now live directly on the map itself
+      // (see the external labels above), so this row no longer repeats them —
+      // it's just the key to the histogram colors: which sector each bar is.
+      sectorsList.forEach(s => {
+        const li = document.createElement("li");
+        li.innerHTML = '<span class="rk-dot" style="background:' + s.color + '"></span>' +
+          '<span class="rk-name">' + s.label + '</span>';
+        rankList.appendChild(li);
+      });
+      return;
     }
 
     // Ranked list mirrors the map 1:1; National/unspecified pinned last since it has no shape.
@@ -2150,27 +2425,14 @@
       .sort((a, b) => b[1].count - a[1].count);
     if (nationalCount) ranked.push(["National", stats.get("National")]);
 
-    rankList.innerHTML = "";
     ranked.forEach(([region, s]) => {
       const li = document.createElement("li");
       li.dataset.region = region;
-      const dom = isAll && region !== "National" ? dominantSector(region) : null;
-      const dotColor = region === "National" ? "#c7ccd1" : (dom ? dom.color : sectorObj.color);
-      li.innerHTML = '<span class="rk-dot" style="background:' + dotColor + '"></span>' +
+      li.innerHTML = '<span class="rk-dot" style="background:' +
+        (region === "National" ? "#c7ccd1" : sectorObj.color) + '"></span>' +
         '<span class="rk-name">' + region + '</span><span class="rk-count">' + s.count + "</span>";
       li.addEventListener("mouseenter", () => region !== "National" && highlight(region));
       li.addEventListener("mouseleave", clearHighlight);
-      // On "All sectors" every region blends several sectors — surface that mix as a
-      // small pie chart right where the cursor is, the same way the map's own hover
-      // tooltips work, instead of making it a separate always-visible breakdown.
-      if (isAll) {
-        const breakdown = sectorBreakdown(region);
-        if (breakdown.length) {
-          li.addEventListener("mouseenter", e => showRegionPieTip(e, region, breakdown));
-          li.addEventListener("mousemove", moveTip);
-          li.addEventListener("mouseleave", hideTip);
-        }
-      }
       rankList.appendChild(li);
     });
   }
@@ -2247,36 +2509,43 @@
       const i = PROJECT_STAGES.indexOf(st);
       return d3.interpolateRgb(lightTint, sectorObj.color)(i / Math.max(1, PROJECT_STAGES.length - 1));
     };
-    // Every label is black except "Completed" — its band is the fullest, darkest
-    // sector color, so it's the one stage that needs white instead.
-    const textColorFor = status => status === "Completed" ? "#fff" : "#1b1b1b";
-
     // A fixed geometric triangle — same true-point apex, base and level count on
     // every sector page, in a constant lifecycle order that's never resorted by
     // count — so only the numbers change from one sector to the next, not the
     // shape. Band width is purely geometric (distance from the apex), not scaled
-    // to the data. The outline is a single straight-sided triangle to a sharp
-    // point, but the horizontal dividers aren't evenly spaced: the tip band gets
-    // extra height (and its label sits low, near its own wider edge) so a real
-    // point apex still leaves room to fit "Announced" and its count.
+    // to the data. Right-aligned: the right edge is a single straight vertical
+    // line (the apex sits on it) and only the left edge slants outward going
+    // down, so the labels can line up in a clean column outside the shape.
+    // Sized a bit larger than a plain even split, and the tip band gets extra
+    // height (0.38 vs an even 0.2), so the narrow apex band still has enough
+    // width where its number sits to fit a 2-digit count without crowding.
     const N = PROJECT_STAGES.length;
-    const cx = W / 2, apexY = 10, baseY = 274, baseHalfW = 215, gapY = 3;
-    const boundaryFrac = [0, 0.32, 0.495, 0.655, 0.81, 1];
-    const halfWidthAt = y => baseHalfW * (y - apexY) / (baseY - apexY);
+    const apexY = 10, baseY = 280, rightX = 230, baseLeftX = 8, gapY = 3;
+    const boundaryFrac = [0, 0.38, 0.54, 0.685, 0.827, 1];
+    const leftXAt = y => rightX - (rightX - baseLeftX) * (y - apexY) / (baseY - apexY);
 
     PROJECT_STAGES.forEach((status, i) => {
       const y0 = apexY + boundaryFrac[i] * (baseY - apexY);
       const y1 = apexY + boundaryFrac[i + 1] * (baseY - apexY) - (i < N - 1 ? gapY : 0);
-      const topHalf = halfWidthAt(y0);
-      const botHalf = halfWidthAt(y1);
-      const textY = y0 + (y1 - y0) * 0.78;
+      const leftX0 = leftXAt(y0);
+      const leftX1 = leftXAt(y1);
+      // Biased toward the band's wider (bottom) edge, not its true vertical
+      // center — the tip band is narrow near y0, and a centered number can
+      // reach past the slanted left edge into the white background above it.
+      const textY = y0 + (y1 - y0) * 0.72;
       const count = counts.get(status) || 0;
       const pct = Math.round((count / total) * 100);
       const bandColor = stageColor(status);
 
-      const path = "M" + (cx - topHalf) + "," + y0 + " L" + (cx + topHalf) + "," + y0 +
-        " L" + (cx + botHalf) + "," + y1 +
-        " L" + (cx - botHalf) + "," + y1 + " Z";
+      const path = "M" + rightX + "," + y0 + " L" + leftX0 + "," + y0 +
+        " L" + leftX1 + "," + y1 +
+        " L" + rightX + "," + y1 + " Z";
+
+      // Clip the count number to its own band's exact shape as a hard backstop:
+      // even a wide/tall number in the narrow tip band can never render past
+      // the slanted edge, whatever the bias above leaves uncovered.
+      const clipId = "stageClip-" + i;
+      svg.append("clipPath").attr("id", clipId).append("path").attr("d", path);
 
       const g = svg.append("g").attr("class", "hoverable");
       const band = g.append("path")
@@ -2294,11 +2563,19 @@
         .on("mouseleave", () => { band.attr("opacity", 1); hideTip(); });
 
       g.append("text")
-        .attr("x", cx).attr("y", textY).attr("dy", "0.32em")
-        .attr("text-anchor", "middle").attr("pointer-events", "none")
-        .attr("font-size", 13).attr("font-weight", 700)
-        .attr("fill", textColorFor(status))
-        .text(status + "   " + count);
+        .attr("clip-path", "url(#" + clipId + ")")
+        .attr("x", rightX - 14).attr("y", textY).attr("dy", "0.32em")
+        .attr("text-anchor", "end").attr("pointer-events", "none")
+        .attr("font-size", 24).attr("font-weight", 800)
+        .attr("fill", "#fff")
+        .text(count);
+
+      g.append("text")
+        .attr("x", rightX + 18).attr("y", textY).attr("dy", "0.32em")
+        .attr("text-anchor", "start").attr("pointer-events", "none")
+        .attr("font-size", 19).attr("font-weight", 800)
+        .attr("fill", bandColor)
+        .text(status);
     });
 
     const rows = PROJECT_STAGES.map(st => ({ status: st, count: counts.get(st) || 0 })).filter(r => r.count > 0);
@@ -2400,7 +2677,6 @@
       });
       const sectorObj = sectors.find(s => s.id === id);
       const sd = data.sectorData[id];
-      document.getElementById('insightBox').style.setProperty('--pc', sectorObj.color);
       const aboutGrid = document.getElementById('aboutGrid');
       aboutGrid.style.setProperty('--pc', sectorObj.color);
       aboutGrid.classList.toggle('is-all', id === 'all');
@@ -2416,7 +2692,8 @@
       const audienceCard = document.getElementById('audienceCard');
       const anchorCard = document.getElementById(id === 'all' ? 'bubbleCard' : 'partnersCard');
       anchorCard.after(audienceCard);
-      document.getElementById('insightText').textContent = sd ? sd.main : 'Data coming soon.';
+      document.getElementById('sidebarInsightCard').style.setProperty('--pc', sectorObj.color);
+      document.getElementById('sidebarInsightText').textContent = sd ? sd.main : 'Data coming soon.';
       renderMinistryCharts(id, sectors, filteredProjects());
     }
 

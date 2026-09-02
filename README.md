@@ -27,7 +27,7 @@ and never has to touch code or design.
    ```json
    { "label": "Highest funding", "value": "$52M", "sub": "Ministry of Public Health" }
    ```
-   Just edit the text inside the quotes.
+   Just edit the text   de the quotes.
 3. Update the reporting period at the top:
    ```json
    "reportingPeriod": "1 January–21 July 2026",
