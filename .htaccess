@@ -1,0 +1,13 @@
+DirectoryIndex index.html
+
+RewriteEngine On
+
+# /index.html or /lebanon-funding-map.html typed directly -> redirect to
+# the clean URL (no .html) so it never shows in the address bar
+RewriteCond %{THE_REQUEST} \s/+(.+)\.html[\s?] [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# Serve the .html file for the clean URL internally (browser URL stays clean)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.html -f
+RewriteRule ^(.*)$ $1.html [L]
