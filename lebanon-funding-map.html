@@ -521,11 +521,23 @@ function layoutPositions(sectors){
 // spread its words across a wide, roomy arc; with several open at once each
 // one's fan narrows back down, capped so neighboring fans can never cross.
 function layoutOuterPositions(open){
-  const n = open.length || 1;
-  const baseArc = (2*Math.PI - 6*0.06) / 6;
   const maxArc = 100 * Math.PI / 180;
-  const arc = Math.min(baseArc * (6 / n), maxArc);
+  const TAU = 2 * Math.PI;
+  // Each open sector's fan is capped by how close its nearest OPEN
+  // neighbor actually is on the ring (always 60deg apart, whether or not
+  // the sectors between them are open) — not just by how many sectors are
+  // open in total. Two adjacent open sectors get narrow fans that can't
+  // cross; two open sectors on opposite sides of the hub still get to
+  // spread wide, however many others are open elsewhere.
   open.forEach(function(s){
+    let minGap = TAU;
+    open.forEach(function(o){
+      if (o === s) return;
+      let d = Math.abs(s._a - o._a) % TAU;
+      if (d > Math.PI) d = TAU - d;
+      if (d < minGap) minGap = d;
+    });
+    const arc = open.length > 1 ? Math.min(maxArc, minGap * 0.8) : maxArc;
     const per = arc / s.children.length;
     const start = s._a - arc / 2 + per / 2;
     s.children.forEach(function(c,i){
