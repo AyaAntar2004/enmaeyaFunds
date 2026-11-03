@@ -18537,6 +18537,38 @@
       "sourceChecked": "Scraped text",
       "livePageEvidence": "",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "Emergency assistance in Lebanon",
+      "status": "Ongoing",
+      "funders": [
+        "United States of America"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "WFP"
+      ],
+      "region": "National",
+      "date": "2026-06-17",
+      "confidence": "Medium",
+      "sourceFeed": "WFP",
+      "description": "The U.S. contribution will support WFP's operations to address acute hunger in Lebanon, enabling emergency assistance and nutrition activities.",
+      "sourceLink": "https://www.wfp.org/index.php/news/wfp-welcomes-announcement-major-us-contribution-global-hunger-reaches-record-levels",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
     }
   ]
 }
