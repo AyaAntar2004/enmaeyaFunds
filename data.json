@@ -17520,6 +17520,105 @@
       "fundingType": "Unknown"
     },
     {
+      "ministry": "Ministry of Environment",
+      "ministryCode": "MoEnv",
+      "sector": "environment",
+      "project": "National Planning Package for Waste Management",
+      "status": "Announced",
+      "funders": [
+        "European Union"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "United Nations Development Programme"
+      ],
+      "region": "National",
+      "date": "2026-07-22",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The European Union funds a comprehensive national planning package to strengthen waste management in Lebanon, implemented by UNDP in partnership with the Ministry of Environment.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/lebanon-launches-new-national-planning-package-strengthen-waste-management",
+      "note": "",
+      "fundingDate": "2026-07-22",
+      "dateBasis": "In-text date",
+      "dateEvidence": "Today, Lebanon launched a comprehensive package of national studies and a Geographic Information System (GIS) platform* designed to strengthen waste management across the country.",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "Capacity-building program for shelter coordination",
+      "status": "Completed",
+      "funders": [
+        "European Union",
+        "UNDP",
+        "Permanent Peace Movement"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Lebanese Red Cross – Disaster Risk Management Unit",
+        "Lebanese University Task Force"
+      ],
+      "region": "Beirut",
+      "date": "2026-08-11",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The European Union and UNDP funded a capacity-building program for the Ministry of Social Affairs to improve shelter coordination and preparedness for emergencies, supporting 120 coordinators and volunteers managing collective shelters for displaced families in Beirut.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/lebanon-recognizes-120-ministry-social-affairs-coordinators-and-volunteers-supporting-displaced-families-during-conflict",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Not specified",
+      "ministryCode": "N/A",
+      "sector": "development",
+      "project": "Empowering Public Services with Solar Energy – Lebanon",
+      "status": "Signed",
+      "funders": [
+        "Kuwait Fund for Development"
+      ],
+      "amountRaw": "USD 3 million",
+      "amountUSDm": 3,
+      "partners": [
+        "UNDP"
+      ],
+      "region": "National",
+      "date": "2026-07-21",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The Kuwait Fund for Development signed a US$3 million partnership with UNDP to implement the \"Empowering Public Services with Solar Energy – Lebanon\" initiative, which aims to provide renewable energy solutions to seven public institutions in Lebanon.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/undp-and-kuwait-fund-sign-us3-million-partnership-strengthen-public-services-lebanon",
+      "note": "",
+      "fundingDate": "2026-07-21",
+      "dateBasis": "In-text: Signed",
+      "dateEvidence": "The United Nations Development Programme (UNDP) and the Kuwait Fund for Development (KFAED) today signed an agreement to implement the \"Empowering Public Services with Solar Energy – Lebanon\" initiative, a US$3 million partnership",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
       "ministry": "Ministry of Agriculture",
       "ministryCode": "MoA",
       "sector": "environment",
