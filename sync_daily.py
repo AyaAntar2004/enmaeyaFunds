@@ -7,6 +7,8 @@ Rebuilds data.json from:
      daily news scraper (fatimaelkhishen/Funds-Enmaeya) copies in every morning.
 
 Daily records are added on top of the base. A daily record is skipped when its
+ministry is not one of the Lebanese ministries in build_data.MINISTRY_MAP (this
+drops "Not specified", foreign ministries and misspelled names), or when its
 source link, or its ministry + project name, is already in the data (from the
 base or from an earlier day), so re-running this script never duplicates
 anything. Running it again with the same files gives the same data.json.
@@ -121,7 +123,7 @@ def main():
     # 2. daily AI records, oldest day first
     files = sorted(DAILY_DIR.glob("Funding_*.xlsx")) if DAILY_DIR.is_dir() else []
     print(f"Reading {len(files)} daily file(s) from {DAILY_DIR.name}/")
-    added = skipped = 0
+    added = skipped = dropped = 0
     for path in files:
         df, links = read_daily_file(path)
         if df is None or df.empty:
@@ -129,6 +131,9 @@ def main():
         day_records = bd.build_records(df, links)
         day_added = 0
         for rec in day_records:
+            if rec["ministry"] not in bd.MINISTRY_MAP or rec["ministry"] == "Not specified":
+                dropped += 1
+                continue
             link = norm_key(rec["sourceLink"])
             pair = (norm_key(rec["ministry"]), norm_key(rec["project"]))
             if (link and link in seen_links) or pair in seen_pairs:
@@ -140,7 +145,8 @@ def main():
             day_added += 1
         added += day_added
         print(f"  {path.name}: {len(day_records)} record(s), {day_added} new")
-    print(f"  daily: {added} added, {skipped} skipped as already present")
+    print(f"  daily: {added} added, {skipped} skipped as already present, "
+          f"{dropped} dropped (no Lebanese ministry from the dashboard's list)")
 
     # 3. write data.json, keeping everything else in it as it was
     data_path = bd.DATA_JSON_PATH
