@@ -2,8 +2,8 @@
   "meta": {
     "title": "ENMAEYA Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
-    "reportingPeriod": "1 January–31 October 2026",
-    "lastRecord": "31 October 2026",
+    "reportingPeriod": "1 January–3 November 2026",
+    "lastRecord": "3 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -18564,6 +18564,37 @@
       "dateEvidence": "",
       "projectPeriod": "",
       "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "Mixed modality assistance pilot for displaced Syrian households",
+      "status": "Planned",
+      "funders": [],
+      "amountRaw": "USD 125.3 million",
+      "amountUSDm": 125.3,
+      "partners": [
+        "WFP",
+        "UNHCR"
+      ],
+      "region": "North Lebanon",
+      "date": "2026-11-03",
+      "confidence": "Medium",
+      "sourceFeed": "ReliefWeb OCHA",
+      "description": "WFP is preparing to launch a two-month mixed modality assistance pilot for recently displaced Syrian households in Tripoli, with a total funding requirement of USD 125.3 million for the next six months.",
+      "sourceLink": "https://reliefweb.int/report/lebanon/wfp-lebanon-country-brief-october-2026",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "2026-10 -> 2027-03",
+      "in2025_26": "Yes",
       "enmaeyaLink": "",
       "origin": "Daily run",
       "sourceChecked": "Scraped text",
