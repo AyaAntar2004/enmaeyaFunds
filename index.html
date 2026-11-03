@@ -19,7 +19,7 @@
     --page-bg: #e6e6e7;
     --card-bg: #f4f5f4;
     --field-bg: #eceeed;
-    --title-color: #0f4c5c;
+    --title-color: #08323d;
     --insight-accent: #493174;
   }
 
@@ -55,6 +55,42 @@
     .coverage-sidebar { position: static; width: 100%; flex: none; }
   }
 
+  /* ---------- Download button (floating, bottom-left) ---------- */
+  .download-btn {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 20px 12px 16px;
+    border-radius: 999px;
+    background: #1d7a46;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 3px 4px 14px rgba(29, 122, 70, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 6px 18px rgba(29, 122, 70, 0.45);
+  }
+
+  .download-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
   /* ---------- Sector pill filters ---------- */
   .sector-filters {
     display: flex;
@@ -65,13 +101,13 @@
   .pill {
     flex: 1 1 0;
     font-family: inherit;
-    font-size: 16px;
+    font-size: 18.5px;
     font-weight: 500;
     padding: 12px 10px;
     border-radius: 8px;
-    border: 2px solid var(--pc, #1b1b1b);
+    border: 2px solid var(--pc, #000);
     background: #fff;
-    color: var(--pc, #1b1b1b);
+    color: var(--pc, #000);
     cursor: pointer;
     white-space: nowrap;
     text-align: center;
@@ -79,7 +115,7 @@
   }
 
   .pill.active {
-    background: var(--pc, #1b1b1b);
+    background: var(--pc, #000);
     color: #fff;
   }
 
@@ -89,8 +125,8 @@
      black, matching every other pill's own-color outline when not the active
      selection. */
   .pill[data-sector="all"].active {
-    background: #f4f5f4;
-    color: #1b1b1b;
+    background: #d6d9db;
+    color: #000;
   }
 
   /* ---------- Header card ---------- */
@@ -115,7 +151,7 @@
   }
 
   .header-title {
-    font-size: 34px;
+    font-size: 36.5px;
     line-height: 1.18;
     font-weight: 700;
     color: var(--title-color);
@@ -145,15 +181,15 @@
 
   .filter-group label {
     display: block;
-    font-size: 15px;
-    color: #2b2b2b;
+    font-size: 17.5px;
+    color: #000;
     margin-bottom: 8px;
   }
 
   .select-pill {
     position: relative;
     background: #fff;
-    border: 1.5px solid #1b1b1b;
+    border: 1.5px solid #000;
     border-radius: 8px;
     padding: 0;
   }
@@ -166,8 +202,8 @@
     border: none;
     background: transparent;
     font: inherit;
-    font-size: 15px;
-    color: #1b1b1b;
+    font-size: 17.5px;
+    color: #000;
     padding: 8px 32px 8px 16px;
     cursor: pointer;
     outline: none;
@@ -179,11 +215,11 @@
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 12px;
+    font-size: 14.5px;
     pointer-events: none;
   }
 
-  /* ---------- About strip (What is this? / Why it matters / Mission & Vision) ---------- */
+  /* ---------- About strip (What is this? / Why it matters) ---------- */
   /* The content here is static (unrelated to the sector filter), but the color theme
      isn't: --pc is set on #aboutGrid by selectSector(), same convention as .pill and
      .sidebar-insight-card, so all three re-tint together with whichever sector is active. */
@@ -193,6 +229,7 @@
     align-items: stretch;
     gap: 0;
     margin-top: 28px;
+    min-height: 360px;
   }
 
   .about-card {
@@ -205,8 +242,8 @@
 
   .about-arrow {
     flex: 0 0 auto;
-    width: 34px;
-    padding-top: 18px;
+    width: 44px;
+    padding-top: 26px;
     display: flex;
     justify-content: center;
     color: #c7ccd1;
@@ -227,7 +264,7 @@
     width: 100%;
     background: var(--pc);
     border-radius: 14px 14px 0 0;
-    padding: 13px 22px 32px;
+    padding: 20px 26px 40px;
     text-align: center;
     transition: background 0.2s ease;
   }
@@ -240,22 +277,22 @@
      badge/icon's own --pc-colored border, so both get an explicit override
      below to stay readable. */
   .about-grid.is-all .about-card {
-    --pc: #f4f5f4;
+    --pc: #d6d9db;
   }
 
   .about-grid.is-all .about-head h3 {
-    color: #1b1b1b;
+    color: #000;
   }
 
   .about-grid.is-all .about-badge,
   .about-grid.is-all .about-icon {
     border-color: #c7ccd1;
-    color: #5c6b6f;
+    color: #0a0d0f;
   }
 
   .about-head h3 {
     margin: 0;
-    font-size: 15px;
+    font-size: 21.5px;
     font-weight: 700;
     color: #fff;
   }
@@ -273,7 +310,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 15.5px;
     font-weight: 700;
     box-shadow: 0 2px 6px rgba(15, 76, 92, 0.16);
     transition: border-color 0.2s ease, color 0.2s ease;
@@ -314,16 +351,16 @@
     border: 1.5px solid var(--pc);
     border-top: none;
     border-radius: 0 0 14px 14px;
-    padding: 32px 20px 18px;
+    padding: 42px 30px 30px;
     box-sizing: border-box;
     transition: border-color 0.2s ease;
   }
 
   .about-body p {
     margin: 0 0 10px;
-    font-size: 13.5px;
+    font-size: 16px;
     line-height: 1.6;
-    color: #33393c;
+    color: #000;
   }
 
   .about-body p:last-child {
@@ -333,9 +370,9 @@
   .about-body ul {
     margin: 0;
     padding-left: 18px;
-    font-size: 13.5px;
+    font-size: 16px;
     line-height: 1.6;
-    color: #33393c;
+    color: #000;
   }
 
   .about-body li {
@@ -347,7 +384,7 @@
   }
 
   .about-body strong {
-    color: #1b1b1b;
+    color: #000;
     font-weight: 600;
   }
 
@@ -369,15 +406,15 @@
 
   .chart-title {
     margin: 0 0 4px;
-    font-size: 19px;
+    font-size: 21.5px;
     font-weight: 700;
     color: var(--title-color);
   }
 
   .chart-sub {
     margin: 0 0 14px;
-    font-size: 12.5px;
-    color: #5c6b6f;
+    font-size: 15px;
+    color: #0a0d0f;
     min-height: 32px;
   }
 
@@ -401,8 +438,8 @@
   }
 
   .chart-empty {
-    font-size: 13px;
-    fill: #8a97a0;
+    font-size: 15.5px;
+    fill: #0a0d0f;
   }
 
   /* Small, data-driven takeaway sentence under each graph — separate from the
@@ -421,10 +458,10 @@
     position: relative;
     margin: 22px 0 0;
     padding: 18px 66px 16px 18px;
-    font-size: 15px;
+    font-size: 17.5px;
     line-height: 1.6;
     font-weight: 500;
-    color: #1b1b1b;
+    color: #000;
     background: color-mix(in srgb, var(--pc, var(--insight-accent)) 10%, #fff8f1);
     border: 1px solid color-mix(in srgb, var(--pc, var(--insight-accent)) 35%, transparent);
     border-radius: 12px;
@@ -468,7 +505,7 @@
   .chart-insight::before {
     content: "Enmaeya's Insight";
     display: block;
-    font-size: 10px;
+    font-size: 12.5px;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -567,7 +604,7 @@
 
   .audience-box h3 {
     margin: 0 0 8px;
-    font-size: 14px;
+    font-size: 16.5px;
     font-weight: 700;
     text-align: center;
     color: var(--title-color);
@@ -575,9 +612,9 @@
 
   .audience-box p {
     margin: 0 0 8px;
-    font-size: 12.5px;
+    font-size: 15px;
     line-height: 1.55;
-    color: #33393c;
+    color: #000;
   }
 
   .audience-box p:last-child {
@@ -607,20 +644,20 @@
   }
 
   .chart-tooltip .tt-title {
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 700;
-    color: #1b1b1b;
+    color: #000;
     margin-bottom: 4px;
   }
 
   .chart-tooltip .tt-row {
-    font-size: 12px;
+    font-size: 14.5px;
     line-height: 1.5;
-    color: #45505a;
+    color: #0a0d0f;
   }
 
   .chart-tooltip .tt-row strong {
-    color: #1b1b1b;
+    color: #000;
     font-weight: 600;
   }
 
@@ -653,15 +690,15 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 11.5px;
-    color: #45505a;
+    font-size: 14px;
+    color: #0a0d0f;
     white-space: nowrap;
   }
 
   .tt-pie-legend li b {
     margin-left: auto;
     padding-left: 8px;
-    color: #1b1b1b;
+    color: #000;
     font-weight: 700;
   }
 
@@ -754,7 +791,7 @@
 
   .lb-map .reg:hover,
   .lb-map .reg.active {
-    stroke: #1b1b1b;
+    stroke: #000;
     filter: brightness(1.05);
   }
 
@@ -767,7 +804,7 @@
   .lb-map .reg-label {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16.5px;
     fill: #233;
     text-anchor: middle;
     paint-order: stroke;
@@ -779,7 +816,7 @@
   .lb-map .reg-count {
     font-family: 'Poppins', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 18.5px;
     fill: #fff;
     text-anchor: middle;
     paint-order: stroke;
@@ -790,7 +827,7 @@
   .lb-map .reg-amount {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 11px;
+    font-size: 13.5px;
     fill: rgba(255,255,255,.94);
     text-anchor: middle;
     paint-order: stroke;
@@ -813,42 +850,42 @@
   }
 
   .ext-name {
-    font-size: 21px;
+    font-size: 23.5px;
     font-weight: 700;
-    fill: #1b1b1b;
+    fill: #000;
     text-decoration: underline;
     text-decoration-color: #c7ccd1;
     text-underline-offset: 6px;
   }
 
   .ext-count {
-    font-size: 36px;
+    font-size: 38.5px;
     font-weight: 700;
-    fill: #1b1b1b;
+    fill: #000;
   }
 
   .ext-amount {
-    font-size: 16px;
+    font-size: 18.5px;
     font-weight: 600;
-    fill: #5c6b6f;
+    fill: #0a0d0f;
   }
 
-  .ext-row:hover .ext-leader { stroke: #1b1b1b; stroke-width: 2px; }
+  .ext-row:hover .ext-leader { stroke: #000; stroke-width: 2px; }
 
   .map-legend {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 8px;
-    font-size: 10.5px;
-    color: #5c6b6f;
+    font-size: 13px;
+    color: #0a0d0f;
   }
 
   .map-legend .bar {
     flex: 1 1 auto;
     height: 6px;
     border-radius: 3px;
-    background: linear-gradient(90deg, #e3e5e4, var(--pc, #0f4c5c));
+    background: linear-gradient(90deg, #e3e5e4, var(--pc, #08323d));
   }
 
   /* One simple ranked list: name + count, same numbers already on the map. */
@@ -865,7 +902,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12px;
+    font-size: 14.5px;
     cursor: pointer;
     padding: 6px 10px;
     border-radius: 8px;
@@ -893,8 +930,8 @@
 
   .map-rank .rk-count {
     font-weight: 700;
-    color: #1b1b1b;
-    font-size: 12.5px;
+    color: #000;
+    font-size: 15px;
   }
 
   /* ---------- Ministry bubble chart (All sectors only) ---------- */
@@ -903,8 +940,8 @@
     flex-wrap: wrap;
     gap: 7px 16px;
     margin-top: 18px;
-    font-size: 12px;
-    color: #45505a;
+    font-size: 14.5px;
+    color: #0a0d0f;
   }
 
   .bubble-legend .bl-item {
@@ -931,7 +968,7 @@
 
   .map-card.is-all .map-rank li {
     padding: 4px 9px;
-    font-size: 11px;
+    font-size: 13.5px;
   }
 
   .map-card.is-all .map-rank .rk-name {
@@ -951,12 +988,12 @@
   .coverage-panel {
     background: var(--card-bg);
     border-radius: 18px;
-    padding: 18px 16px;
+    padding: 22px 16px;
   }
 
   .coverage-title {
     margin: 0 0 2px;
-    font-size: 14px;
+    font-size: 16.5px;
     font-weight: 700;
     color: var(--title-color);
   }
@@ -964,17 +1001,17 @@
   .coverage-title small {
     display: block;
     margin-top: 1px;
-    font-size: 10.5px;
+    font-size: 13px;
     font-weight: 500;
     letter-spacing: 0.03em;
-    color: #5c6b6f;
+    color: #0a0d0f;
   }
 
   .coverage-list {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    margin-top: 11px;
+    gap: 5px;
+    margin-top: 14px;
   }
 
   .coverage-item {
@@ -982,7 +1019,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 8px 8px;
+    padding: 18px 8px;
     border-radius: 12px;
     text-decoration: none;
     color: inherit;
@@ -1023,16 +1060,16 @@
 
   .coverage-item .cov-text strong {
     display: block;
-    font-size: 12px;
+    font-size: 14.5px;
     font-weight: 600;
-    color: #1b1b1b;
+    color: #000;
   }
 
   .coverage-item .cov-text small {
     display: block;
     margin-top: 1px;
-    font-size: 10px;
-    color: #5c6b6f;
+    font-size: 12.5px;
+    color: #0a0d0f;
   }
 
   .coverage-item .cov-arrow {
@@ -1061,7 +1098,7 @@
     background: var(--c-education);
     color: #fff;
     border-radius: 16px;
-    padding: 14px 16px;
+    padding: 26px 16px;
     text-decoration: none;
     box-shadow: 0 6px 16px rgba(73, 49, 116, 0.28);
     transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -1096,7 +1133,7 @@
   .coverage-network .cov-text {
     flex: 1 1 auto;
     min-width: 0;
-    font-size: 12.5px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 1.32;
   }
@@ -1104,7 +1141,7 @@
   .coverage-network .cov-text small {
     display: block;
     margin-top: 2px;
-    font-size: 10.5px;
+    font-size: 13px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.78);
   }
@@ -1137,7 +1174,7 @@
     background: linear-gradient(165deg, color-mix(in srgb, var(--pc) 10%, #fff), color-mix(in srgb, var(--pc) 4%, #fff));
     border: 1px solid color-mix(in srgb, var(--pc) 22%, #e3e5e4);
     border-radius: 15px;
-    padding: 13px 15px 14px 16px;
+    padding: 26px 15px 28px 16px;
     overflow: hidden;
     transition: background 0.2s ease, border-color 0.2s ease;
   }
@@ -1183,7 +1220,7 @@
 
   .sidebar-insight-title {
     margin: 0;
-    font-size: 9.5px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.055em;
     text-transform: uppercase;
@@ -1193,13 +1230,17 @@
 
   .sidebar-insight-text {
     margin: 0;
-    font-size: 11.5px;
+    font-size: 14px;
     line-height: 1.5;
-    color: #33393c;
+    color: #000;
   }
 </style>
 </head>
 <body>
+  <a class="download-btn" href="downloads/funding-data.xlsx" download>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M4 20h16"/></svg>
+    Download Excel
+  </a>
 <div class="layout-shell">
 <div class="page">
 
@@ -1263,24 +1304,6 @@
           <li>Startups can find underserved sectors and procurement openings</li>
           <li>NGOs and researchers can track donors, gaps, and partnership openings</li>
         </ul>
-      </div>
-    </div>
-
-    <div class="about-arrow" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="14 6 20 12 14 18"/></svg>
-    </div>
-
-    <div class="about-card">
-      <div class="about-head">
-        <h3>Mission &amp; Vision</h3>
-        <span class="about-badge">3</span>
-      </div>
-      <div class="about-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.3 13.3 8.5 15.5 10.7 10.7 15.5 8.5"/></svg>
-      </div>
-      <div class="about-body">
-        <p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable — giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p>
-        <p><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>
       </div>
     </div>
   </div>
@@ -1647,7 +1670,7 @@
       .attr("transform", d => "translate(" + (x(d.id) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
       .attr("text-anchor", "end").attr("font-size", 10)
       .attr("font-weight", d => activeId !== "all" && d.id === activeId ? 700 : 400)
-      .attr("fill", "#3a4750")
+      .attr("fill", "#0a0d0f")
       .text(d => d.axisLabel)
       .append("title").text(d => d.count + " project" + (d.count === 1 ? "" : "s"));
 
@@ -1761,9 +1784,9 @@
         ], sectorObj.color))
         .on("mousemove", moveTip)
         .on("mouseleave", hideTip);
-      node.append("circle").attr("cx", colFdot).attr("cy", y).attr("r", 4.5).attr("fill", "#fff").attr("stroke", "#8a97a0").attr("stroke-width", 1.5);
+      node.append("circle").attr("cx", colFdot).attr("cy", y).attr("r", 4.5).attr("fill", "#fff").attr("stroke", "#0a0d0f").attr("stroke-width", 1.5);
       const t = node.append("text").attr("x", colFdot - 11).attr("y", y).attr("text-anchor", "end")
-        .attr("font-size", 11).attr("fill", "#2c363c");
+        .attr("font-size", 11).attr("fill", "#0a0d0f");
       wrapText(t, f, 22, 2);
     });
     ministries.forEach(m => {
@@ -1793,12 +1816,12 @@
       .on("mouseleave", hideTip);
     sectorNode.append("circle").attr("cx", colS).attr("cy", sectorYPos).attr("r", 18).attr("fill", sectorObj.color).attr("stroke", "#fff").attr("stroke-width", 2);
     const sectorLabel = sectorNode.append("text").attr("x", colS).attr("y", sectorYPos + 30).attr("text-anchor", "middle")
-      .attr("font-size", 11).attr("font-weight", 700).attr("fill", "#2c363c");
+      .attr("font-size", 11).attr("font-weight", 700).attr("fill", "#0a0d0f");
     wrapText(sectorLabel, sectorObj.label, 15, 2);
 
     if (omittedCount > 0) {
       svg.append("text").attr("x", 4).attr("y", H - 8)
-        .attr("font-size", 9.5).attr("fill", "#8a97a0")
+        .attr("font-size", 9.5).attr("fill", "#0a0d0f")
         .text("+ " + omittedCount + " more funder" + (omittedCount === 1 ? "" : "s") + " not shown");
     }
 
@@ -1882,14 +1905,14 @@
 
       const lab = g.append("text")
         .attr("transform", "translate(" + (x(d.name) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
-        .attr("text-anchor", "end").attr("font-size", 10).attr("fill", "#3a4750")
+        .attr("text-anchor", "end").attr("font-size", 10).attr("fill", "#0a0d0f")
         .text(d.name.length > 18 ? d.name.slice(0, 17) + "…" : d.name);
       lab.append("title").text(d.name);
     });
 
     if (omittedCount > 0) {
       svg.append("text").attr("x", 4).attr("y", H - 6)
-        .attr("font-size", 9.5).attr("fill", "#8a97a0")
+        .attr("font-size", 9.5).attr("fill", "#0a0d0f")
         .text("+ " + omittedCount + " more funder" + (omittedCount === 1 ? "" : "s") + " not shown");
     }
 
@@ -2028,16 +2051,16 @@
       .attr("fill", "#f4f5f4");
 
     g.append("line").attr("x1", midX).attr("x2", midX).attr("y1", marginT).attr("y2", H - marginB)
-      .attr("stroke", "#1b1b1b").attr("stroke-width", 1.3);
+      .attr("stroke", "#000").attr("stroke-width", 1.3);
     g.append("line").attr("x1", marginL).attr("x2", W - marginR).attr("y1", midY).attr("y2", midY)
-      .attr("stroke", "#1b1b1b").attr("stroke-width", 1.3);
+      .attr("stroke", "#000").attr("stroke-width", 1.3);
 
     // Two-line labels sitting right at the quadrant crossing (not the far corners),
     // second line bold — mirrors the reference chart's "Few projects / High funding"
     // stacked callouts that sit beside the cross itself.
     const quadLabel = (qx, qy, anchor, line1, line2) => {
       const t = g.append("text").attr("x", qx).attr("y", qy).attr("text-anchor", anchor)
-        .attr("font-size", 11.5).attr("fill", "#3a4750")
+        .attr("font-size", 11.5).attr("fill", "#0a0d0f")
         .attr("paint-order", "stroke").attr("stroke", "#fff").attr("stroke-width", 4).attr("stroke-linejoin", "round");
       t.append("tspan").attr("x", qx).attr("dy", 0).attr("font-weight", 500).text(line1);
       t.append("tspan").attr("x", qx).attr("dy", 18).attr("font-weight", 700).text(line2);
@@ -2053,20 +2076,20 @@
     const xTicks = x.ticks(Math.min(8, maxCount)).filter(t => Number.isInteger(t));
     g.selectAll(".bx-tick").data(xTicks).enter().append("text")
       .attr("x", d => x(d)).attr("y", H - marginB + 20).attr("text-anchor", "middle")
-      .attr("font-size", 10).attr("fill", "#5c6b6f").text(d => d);
+      .attr("font-size", 10).attr("fill", "#0a0d0f").text(d => d);
     const yTicks = y.ticks(5);
     g.selectAll(".by-tick").data(yTicks).enter().append("text")
       .attr("x", marginL - 10).attr("y", d => y(d) + 4).attr("text-anchor", "end")
-      .attr("font-size", 10).attr("fill", "#5c6b6f").text(d => fmtAmount(d));
+      .attr("font-size", 10).attr("fill", "#0a0d0f").text(d => fmtAmount(d));
 
     g.append("text").attr("x", (marginL + W - marginR) / 2).attr("y", H - 12).attr("text-anchor", "middle")
-      .attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#3a4750").text("Number of tracked projects");
+      .attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#0a0d0f").text("Number of tracked projects");
     g.append("text").attr("transform", "translate(18," + (marginT + (H - marginB - marginT) / 2) + ") rotate(-90)")
-      .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#3a4750")
+      .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 600).attr("fill", "#0a0d0f")
       .text("Reported funding");
 
     realNodes.sort((a, b) => b.amount - a.amount).forEach(d => {
-      const color = d.sector ? d.sector.color : "#8a97a0";
+      const color = d.sector ? d.sector.color : "#0a0d0f";
       const cx = d.x, cy = d.y, rad = d.rad;
       const node = g.append("g").attr("class", "hoverable");
       const circle = node.append("circle")
@@ -2226,7 +2249,7 @@
       if (!s) return "#e3e5e4";
       if (isAll && region !== "National") {
         const dom = dominantSector(region);
-        const base = dom ? dom.color : "#8a97a0";
+        const base = dom ? dom.color : "#0a0d0f";
         const regionTint = d3.interpolateRgb(base, "#ffffff")(0.78);
         return d3.interpolateRgb(regionTint, base)(intensity(s.count));
       }
@@ -2269,9 +2292,9 @@
         if (d.leader) {
           g.append("line").attr("class", "reg-leader").attr("pointer-events", "none")
             .attr("x1", d.leader.x1).attr("y1", d.leader.y1).attr("x2", d.leader.x2).attr("y2", d.leader.y2)
-            .attr("stroke", "#8a97a0").attr("stroke-width", 1);
+            .attr("stroke", "#0a0d0f").attr("stroke-width", 1);
           g.append("circle").attr("pointer-events", "none").attr("cx", d.leader.x1).attr("cy", d.leader.y1).attr("r", 3.4)
-            .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.2);
+            .attr("fill", "#000").attr("stroke", "#fff").attr("stroke-width", 1.2);
         }
       });
 
@@ -2355,12 +2378,12 @@
           .attr("stroke", "#b7bec2").attr("stroke-width", 1.4);
         row.insert("circle", ".ext-name").attr("class", "ext-dot")
           .attr("cx", d.lx).attr("cy", d.ly).attr("r", 4.5)
-          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.5);
+          .attr("fill", "#000").attr("stroke", "#fff").attr("stroke-width", 1.5);
         // Matching marker at the label end, right where the line actually
         // stops — same treatment as the dot on the map side.
         row.insert("circle", ".ext-name").attr("class", "ext-dot")
           .attr("cx", leaderEndX).attr("cy", nameY).attr("r", 3.5)
-          .attr("fill", "#1b1b1b").attr("stroke", "#fff").attr("stroke-width", 1.5);
+          .attr("fill", "#000").attr("stroke", "#fff").attr("stroke-width", 1.5);
 
         row.append("text").attr("class", "ext-count")
           .attr("x", textX).attr("y", y - 2).attr("text-anchor", anchor)

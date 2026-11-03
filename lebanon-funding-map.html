@@ -6,44 +6,50 @@
 <title>Lebanon Funding Network — Enmaeya</title>
 <script src="vendor/d3.min.js"></script>
 <style>
-  :root{--bg:#f4f6f8;--ink:#1c2733;--muted:#6b7c8d;--line:#c3ccd4;--ring:#3b6ea5;--hi:#141b22;}
+  :root{--bg:#f4f6f8;--ink:#000;--muted:#2b3640;--line:#c3ccd4;--ring:#3b6ea5;--hi:#141b22;}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
   .app{display:grid;grid-template-columns:1.35fr 1fr;gap:0;min-height:100vh}
   .left{padding:14px 10px 20px}
-  .topbar{display:flex;justify-content:space-between;align-items:center;padding:4px 14px;font-size:13px;color:var(--muted)}
+  .topbar{display:flex;justify-content:space-between;align-items:center;padding:4px 14px;font-size:14.5px;color:var(--muted)}
   .back{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;color:var(--ink)}
   .back:hover{color:var(--ring)}
   .crumb{color:var(--muted)}
   svg{width:100%;height:auto;display:block}
   .right{padding:22px 26px;border-left:1px solid var(--line);background:#fff}
   .phead{height:120px;border-radius:12px;display:flex;align-items:flex-end;padding:16px 18px;color:#fff;background:linear-gradient(135deg,#26344c,#3b6ea5);transition:background .3s}
-  .phead h2{margin:0;font-size:22px;line-height:1.15}
-  .curation{font-size:13px;opacity:.9;margin-top:4px}
-  .pmeta{font-size:12px;color:var(--muted);margin:14px 0 8px}
-  .pmeta .tag{background:#eef2f6;color:#42576a;border-radius:6px;padding:3px 10px;margin-right:6px}
-  .pbody{font-size:14px;line-height:1.55;color:#33404d}
+  .phead h2{margin:0;font-size:23.5px;line-height:1.15}
+  .curation{font-size:14.5px;opacity:.9;margin-top:4px}
+  .pmeta{font-size:13.5px;color:var(--muted);margin:14px 0 8px}
+  .pmeta .tag{background:#eef2f6;color:#1c2a36;border-radius:6px;padding:3px 10px;margin-right:6px}
+  .pbody{font-size:15.5px;line-height:1.55;color:#33404d}
   .browse{margin-top:22px;border-top:1px solid var(--line);padding-top:16px}
-  .browse h3{margin:0 0 12px;font-size:16px}
+  .browse h3{margin:0 0 12px;font-size:17.5px}
   .carousel{margin-top:14px;display:flex;align-items:center;gap:6px}
   .list{display:flex;flex-wrap:nowrap;gap:12px;flex:1;overflow-x:auto;scroll-behavior:smooth;scrollbar-width:none}
   .list::-webkit-scrollbar{display:none}
-  .cnav{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:15px;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .cnav{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:16.5px;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .cnav:hover{background:#eef2f6}
   .cnav:disabled{opacity:.3;cursor:default}
   .cnav.hide{visibility:hidden}
   .card{position:relative;display:block;flex:0 0 calc((100% - 24px)/3);border-radius:10px;overflow:hidden;text-decoration:none;color:#fff;aspect-ratio:4/3;background:#26344c}
   .card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .25s}
   .card:hover img{transform:scale(1.06)}
-  .card .src{position:absolute;top:8px;left:8px;background:rgba(20,27,34,.62);color:#fff;font-size:10px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:5px}
-  .card .overlay{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,0));font-size:12.5px;font-weight:700;line-height:1.28}
+  .card .src{position:absolute;top:8px;left:8px;background:rgba(20,27,34,.62);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:5px}
+  .card .overlay{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,0));font-size:14px;font-weight:700;line-height:1.28}
   .link{fill:none;stroke:#b7c1cb;stroke-width:1;opacity:0}
-  .olabel{font-size:10.5px;fill:var(--ink);pointer-events:none}
-  .slabel{font-weight:700;font-size:13px;pointer-events:none}
+  .olabel{font-size:12px;fill:var(--ink);pointer-events:none}
+  .slabel{font-weight:700;font-size:14.5px;pointer-events:none}
   .hublabel{fill:#fff;font-weight:700;text-anchor:middle}
-  .hubsub{fill:#aebfce;font-size:11px;text-anchor:middle}
+  .hubsub{fill:#aebfce;font-size:12.5px;text-anchor:middle}
   .node circle{cursor:pointer;transition:fill .15s,stroke .15s}
-  .foot{font-size:11px;color:var(--muted);padding:6px 16px}
+  .foot{font-size:12.5px;color:var(--muted);padding:6px 16px}
+  .insta{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--ink);background:#f4f6f8;border:1px solid var(--line);border-radius:12px;padding:10px;transition:box-shadow .2s,transform .2s}
+  .insta:hover{box-shadow:0 6px 16px rgba(20,27,34,.14);transform:translateY(-2px)}
+  .insta img{flex:0 0 96px;width:96px;height:96px;object-fit:cover;border-radius:8px;display:block}
+  .insta .itext{min-width:0}
+  .insta .itext strong{display:block;font-size:15.5px;line-height:1.3}
+  .insta .itext span{display:block;font-size:13.5px;color:var(--muted);margin-top:3px}
   @media(max-width:900px){.app{grid-template-columns:1fr}.right{border-left:0;border-top:1px solid var(--line)}}
 </style>
 </head>
@@ -85,6 +91,13 @@
         <div class="list" id="slist"></div>
         <button class="cnav next" id="sNext" aria-label="Scroll studio right">&#8250;</button>
       </div>
+    </div>
+    <div class="browse" id="instaBrowse">
+      <h3>On Instagram</h3>
+      <a class="insta" href="https://www.instagram.com/enmaeya/p/Ddoh0Z7DMb4/" target="_blank" rel="noopener">
+        <img src="images/instagram-post.jpg" alt="Enmaeya Instagram post" loading="lazy">
+        <span class="itext"><strong>Latest from @enmaeya</strong><span>View the post on Instagram &#8599;</span></span>
+      </a>
     </div>
   </div>
 </div>
@@ -717,7 +730,7 @@ function drawInner(sectors){
   // at the same ring angle — so every label sits in the same relative spot
   // no matter where around the hub that sector falls.
   gg.append("text").attr("class","slabel")
-    .attr("x",function(d){return d._x;}).attr("y",function(d){return d._y+34;})
+    .attr("x",function(d){return d._x-(d.id==="ai"?16:0);}).attr("y",function(d){return d._y+34;})
     .attr("text-anchor","middle")
     .attr("fill",function(d){return d.color;}).text(function(d){return d.label;});
 }
