@@ -19437,6 +19437,34 @@
       "sourceChecked": "Scraped text",
       "livePageEvidence": "",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Energy and Water",
+      "ministryCode": "MoEW",
+      "sector": "environment",
+      "project": "Solar Energy Project in Metn",
+      "status": "Planned",
+      "funders": [],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [],
+      "region": "Mount Lebanon",
+      "date": "2025-01-01",
+      "confidence": "Medium",
+      "sourceFeed": "Lebanese Presidency",
+      "description": "A project to produce electricity from solar energy in the Metn region, aimed at enhancing development and meeting energy needs.",
+      "sourceLink": "https://www.presidency.gov.lb/media/news/1648",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Scraped text",
+      "livePageEvidence": "",
+      "fundingType": "Unknown"
     }
   ]
 }
