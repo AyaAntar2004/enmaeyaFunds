@@ -6,12 +6,19 @@ Rebuilds data.json from:
   2. daily/Funding_YYYY-MM-DD.xlsx - the AI-extracted funding records that the
      daily news scraper (fatimaelkhishen/Funds-Enmaeya) copies in every morning.
 
+Sectors: base records take their sector from sector_overrides.csv (made once by
+classify_sectors.py, editable in Excel) and daily records from the "Sector" column
+the AI writes; anything without one falls back to build_data's ministry table.
+
 Daily records are added on top of the base. A daily record is skipped when its
 ministry is not one of the Lebanese ministries in build_data.MINISTRY_MAP (this
 drops "Not specified", foreign ministries and misspelled names), or when its
 source link, or its ministry + project name, is already in the data (from the
 base or from an earlier day), so re-running this script never duplicates
 anything. Running it again with the same files gives the same data.json.
+
+Then it applies data_fixes.py: English names for funders/partners (no Arabic
+entries in the Funder filter) and the approved rows of corrections.csv.
 
 It also regenerates downloads/funding-data.xlsx (the "Download Excel" file) from
 the same records, and moves meta.lastRecord and the end of meta.reportingPeriod forward to the
@@ -35,6 +42,8 @@ import pandas as pd
 from openpyxl import load_workbook
 
 import build_data as bd
+from classify_sectors import SECTOR_IDS, load_overrides, record_key
+import data_fixes
 
 ROOT = Path(__file__).resolve().parent
 DAILY_DIR = ROOT / "daily"
@@ -64,7 +73,7 @@ def to_iso(value):
 
 def read_daily_file(path):
     """Return (DataFrame with the 22 template columns in order, list of real
-    source URLs) for one daily Funding_*.xlsx file."""
+    source URLs, list of dashboard sector ids or None) for one daily Funding_*.xlsx file."""
     wb = load_workbook(path)
     ws = wb.active
     header_row = None
@@ -74,16 +83,18 @@ def read_daily_file(path):
             break
     if header_row is None:
         print(f"  warning: no 'Ministry' header row in {path.name}, skipped")
-        return None, []
+        return None, [], []
     header = [str(ws.cell(header_row, c).value or "").strip() for c in range(1, ws.max_column + 1)]
     missing = [h for h in bd.EXPECTED_HEADER if h not in header]
     if missing:
         print(f"  warning: {path.name} is missing column(s) {missing}, skipped")
-        return None, []
+        return None, [], []
     idx = [header.index(h) + 1 for h in bd.EXPECTED_HEADER]
     link_col = header.index("Source / Link") + 1
+    # optional extra column (newer daily files): the AI's sector for each project
+    sector_col = header.index("Sector") + 1 if "Sector" in header else None
 
-    rows, links = [], []
+    rows, links, sectors = [], [], []
     for r in range(header_row + 1, ws.max_row + 1):
         if not str(ws.cell(r, 1).value or "").strip():
             continue
@@ -96,7 +107,9 @@ def read_daily_file(path):
         rows.append(values)
         cell = ws.cell(r, link_col)
         links.append(cell.hyperlink.target if cell.hyperlink else (cell.value or ""))
-    return pd.DataFrame(rows), links
+        label = str(ws.cell(r, sector_col).value or "").strip() if sector_col else ""
+        sectors.append(SECTOR_IDS.get(label))
+    return pd.DataFrame(rows), links, sectors
 
 
 def norm_key(text):
@@ -115,6 +128,18 @@ def main():
     header_idx, data_rows = bd.load_sheet_rows(xl, bd.SHEET_NAME)
     real_links = bd.extract_column_hrefs(bd.ODS_PATH, bd.SOURCE_LINK_COL_IDX, header_idx + 1)
     records = bd.build_records(data_rows, real_links)
+
+    # sectors by project (sector_overrides.csv, made by classify_sectors.py) instead of
+    # build_data's one-sector-per-ministry table
+    overrides = load_overrides()
+    moved = 0
+    for r in records:
+        sid = overrides.get(record_key(r["ministry"], r["project"], r["sourceLink"]))
+        if sid:
+            moved += sid != r["sector"]
+            r["sector"] = sid
+    if overrides:
+        print(f"  sector_overrides.csv: {len(overrides)} row(s), {moved} base record(s) moved sector")
     print(f"  base: {len(records)} records")
 
     seen_links = {norm_key(r["sourceLink"]) for r in records if str(r["sourceLink"]).startswith("http")}
@@ -125,10 +150,13 @@ def main():
     print(f"Reading {len(files)} daily file(s) from {DAILY_DIR.name}/")
     added = skipped = dropped = 0
     for path in files:
-        df, links = read_daily_file(path)
+        df, links, day_sectors = read_daily_file(path)
         if df is None or df.empty:
             continue
         day_records = bd.build_records(df, links)
+        for rec, sid in zip(day_records, day_sectors):
+            if sid:
+                rec["sector"] = sid
         day_added = 0
         for rec in day_records:
             if rec["ministry"] not in bd.MINISTRY_MAP or rec["ministry"] == "Not specified":
@@ -148,7 +176,13 @@ def main():
     print(f"  daily: {added} added, {skipped} skipped as already present, "
           f"{dropped} dropped (no Lebanese ministry from the dashboard's list)")
 
-    # 3. write data.json, keeping everything else in it as it was
+    # 3. clean-ups on every record: English funder/partner names, approved
+    #    corrections (corrections.csv), placeholder text in date fields
+    data_fixes.apply_corrections(records)
+    data_fixes.fix_names(records)
+    data_fixes.tidy(records)
+
+    # 4. write data.json, keeping everything else in it as it was
     data_path = bd.DATA_JSON_PATH
     with open(data_path, "r", encoding="utf-8") as f:
         data = json.load(f)

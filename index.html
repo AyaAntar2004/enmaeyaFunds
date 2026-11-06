@@ -186,6 +186,33 @@
     margin-bottom: 8px;
   }
 
+  .map-rank li.clickable { cursor: pointer; }
+
+  .filters-help {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 13.5px;
+    color: #4a5056;
+  }
+
+  .clear-filters {
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0a0d0f;
+    background: #fff;
+    border: 1.5px solid #0a0d0f;
+    border-radius: 8px;
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+
+  .clear-filters[hidden] { display: none; }
+
   .select-pill {
     position: relative;
     background: #fff;
@@ -709,7 +736,14 @@
     flex: none;
   }
 
+  /* Hover shows a tooltip; only marks that actually filter the dashboard on click
+     get the hand cursor (class "clickable"), so nothing looks clickable that isn't. */
   .chart-card svg .hoverable {
+    cursor: default;
+  }
+
+  .chart-card svg .clickable,
+  .lb-map .reg.clickable {
     cursor: pointer;
   }
 
@@ -783,7 +817,7 @@
   .lb-map .reg {
     stroke: var(--card-bg);
     stroke-width: 2;
-    cursor: pointer;
+    cursor: default;
     transition: filter .15s ease;
   }
 
@@ -903,7 +937,7 @@
     align-items: center;
     gap: 8px;
     font-size: 14.5px;
-    cursor: pointer;
+    cursor: default;
     padding: 6px 10px;
     border-radius: 8px;
     transition: background .15s;
@@ -1263,9 +1297,13 @@
           <div class="select-pill"><select id="funderSelect"></select></div>
         </div>
         <div class="filter-group">
-          <label>Location</label>
+          <label>Location:</label>
           <div class="select-pill"><select id="locationSelect"></select></div>
         </div>
+      </div>
+      <div class="filters-help">
+        <span>Tip: click a sector bar, funder, ministry bubble or map region to filter by it. Other chart marks show details on hover only.</span>
+        <button type="button" class="clear-filters" id="clearFilters" hidden>Clear filters</button>
       </div>
     </div>
   </div>
@@ -1617,6 +1655,11 @@
     return /flash appeal|response plan/i.test(p.project) || /since 20\d\d/i.test(p.project + " " + p.amountRaw);
   }
 
+  // Click-to-filter shortcuts from the charts. init() replaces these with versions
+  // wired to the sector pills and the Ministry/Funder/Location dropdowns; clicking
+  // the same funder/ministry/region again clears that filter.
+  let dashFilter = { set() {}, sector() {}, has() { return false; } };
+
   function renderFundingChart(sectors, projects, activeId) {
     const svg = d3.select("#chartFunding");
     svg.selectAll("*").remove();
@@ -1644,6 +1687,8 @@
       .attr("rx", 6)
       .attr("fill", d => d.color)
       .attr("opacity", d => isActive(d) ? 1 : 0.32)
+      .classed("clickable", true)
+      .on("click", (e, d) => { hideTip(); dashFilter.sector(activeId === d.id ? "all" : d.id); })
       .on("mouseenter", (e, d) => {
         d3.select(e.currentTarget).attr("opacity", 1);
         const share = totalAmt > 0 ? Math.round((d.amount / totalAmt) * 100) : 0;
@@ -1779,6 +1824,8 @@
       const y = funderY(f);
       const total = funderTotals.get(f) || 0;
       const node = nodeG.append("g").attr("class", "hoverable")
+        .classed("clickable", dashFilter.has("funder", f))
+        .on("click", () => { if (dashFilter.has("funder", f)) { hideTip(); dashFilter.set("funder", f); } })
         .on("mouseenter", e => showTip(e, f, [
           total + " tracked project" + (total === 1 ? "" : "s") + " in " + sectorObj.label,
         ], sectorObj.color))
@@ -1796,7 +1843,10 @@
       const codeSize = Math.min(9.5, 27 / (m.length * 0.62));
       const total = ministryTotals.get(m) || 0;
       const funderCount = ministryFunderCount.get(m) || 0;
+      const mName = ministryName.get(m) || m;
       const node = nodeG.append("g").attr("class", "hoverable")
+        .classed("clickable", dashFilter.has("ministry", mName))
+        .on("click", () => { if (dashFilter.has("ministry", mName)) { hideTip(); dashFilter.set("ministry", mName); } })
         .on("mouseenter", e => showTip(e, ministryName.get(m) || m, [
           total + " tracked project" + (total === 1 ? "" : "s"),
           funderCount + " funder" + (funderCount === 1 ? "" : "s") + " shown"
@@ -1886,6 +1936,8 @@
           .attr("x", x(d.name)).attr("width", x.bandwidth())
           .attr("y", y(y1)).attr("height", Math.max(1, y(y0) - y(y1)))
           .attr("fill", s.color).attr("opacity", dim ? 0.25 : 0.88)
+          .classed("clickable", dashFilter.has("funder", d.name))
+          .on("click", () => { if (dashFilter.has("funder", d.name)) { hideTip(); dashFilter.set("funder", d.name); } })
           .on("mouseenter", e => {
             d3.select(e.currentTarget).attr("opacity", 1);
             showTip(e, d.name, [s.label + ": " + c + " tracked project" + (c === 1 ? "" : "s")], s.color);
@@ -2091,7 +2143,9 @@
     realNodes.sort((a, b) => b.amount - a.amount).forEach(d => {
       const color = d.sector ? d.sector.color : "#0a0d0f";
       const cx = d.x, cy = d.y, rad = d.rad;
-      const node = g.append("g").attr("class", "hoverable");
+      const node = g.append("g").attr("class", "hoverable")
+        .classed("clickable", dashFilter.has("ministry", d.name))
+        .on("click", () => { if (dashFilter.has("ministry", d.name)) { hideTip(); dashFilter.set("ministry", d.name); } });
       const circle = node.append("circle")
         .attr("cx", cx).attr("cy", cy).attr("r", rad)
         .attr("fill", color).attr("opacity", 0.75).attr("stroke", "#fff").attr("stroke-width", 1.6);
@@ -2265,7 +2319,8 @@
     const g = svg.append("g");
     g.selectAll("path.reg").data(REGION_SHAPES).enter().append("path")
       .attr("id", d => "reg-" + d.label.replace(/\s+/g, "_"))
-      .attr("class", d => "reg" + (d.region && stats.has(d.region) ? "" : " no-data"))
+      .attr("class", d => "reg" + (d.region && stats.has(d.region) ? " clickable" : " no-data"))
+      .on("click", (e, d) => { if (d.region && stats.has(d.region)) { hideTip(); dashFilter.set("location", d.region); } })
       .attr("d", d => d.d)
       .attr("fill", d => d.region && stats.has(d.region) ? regionFillColor(d.region) : "#e3e5e4")
       .on("mouseenter", (e, d) => {
@@ -2344,7 +2399,8 @@
         // sorted by count descending.
         const breakdown = sectorBreakdown(d.region);
 
-        const row = g.append("g").attr("class", "hoverable ext-row")
+        const row = g.append("g").attr("class", "hoverable ext-row clickable")
+          .on("click", () => { hideTip(); dashFilter.set("location", d.region); })
           .on("mouseenter", ev => {
             highlight(d.region);
             if (breakdown.length) showRegionPieTip(ev, d.label, breakdown);
@@ -2437,6 +2493,9 @@
         const li = document.createElement("li");
         li.innerHTML = '<span class="rk-dot" style="background:' + s.color + '"></span>' +
           '<span class="rk-name">' + s.label + '</span>';
+        li.className = "clickable";
+        li.title = "Show only " + s.label;
+        li.addEventListener("click", () => dashFilter.sector(s.id));
         rankList.appendChild(li);
       });
       return;
@@ -2454,6 +2513,8 @@
       li.innerHTML = '<span class="rk-dot" style="background:' +
         (region === "National" ? "#c7ccd1" : sectorObj.color) + '"></span>' +
         '<span class="rk-name">' + region + '</span><span class="rk-count">' + s.count + "</span>";
+      li.className = "clickable";
+      li.addEventListener("click", () => dashFilter.set("location", region));
       li.addEventListener("mouseenter", () => region !== "National" && highlight(region));
       li.addEventListener("mouseleave", clearHighlight);
       rankList.appendChild(li);
@@ -2718,11 +2779,36 @@
       document.getElementById('sidebarInsightCard').style.setProperty('--pc', sectorObj.color);
       document.getElementById('sidebarInsightText').textContent = sd ? sd.main : 'Data coming soon.';
       renderMinistryCharts(id, sectors, filteredProjects());
+      if (typeof updateClearButton === 'function') updateClearButton();
     }
 
     ['ministrySelect', 'funderSelect', 'locationSelect'].forEach(elId => {
       document.getElementById(elId).addEventListener('change', () => selectSector(activeSectorId));
     });
+
+    const SELECT_IDS = { ministry: 'ministrySelect', funder: 'funderSelect', location: 'locationSelect' };
+    const clearBtn = document.getElementById('clearFilters');
+    function updateClearButton() {
+      clearBtn.hidden = !Object.values(SELECT_IDS).some(id => document.getElementById(id).value) &&
+        activeSectorId === 'all';
+    }
+    clearBtn.addEventListener('click', () => {
+      Object.values(SELECT_IDS).forEach(id => { document.getElementById(id).value = ''; });
+      selectSector('all');
+    });
+    dashFilter = {
+      has(kind, value) {
+        const el = document.getElementById(SELECT_IDS[kind]);
+        return !!el && !!value && Array.from(el.options).some(o => o.value === value);
+      },
+      set(kind, value) {
+        if (!this.has(kind, value)) return;
+        const el = document.getElementById(SELECT_IDS[kind]);
+        el.value = el.value === value ? '' : value;
+        selectSector(activeSectorId);
+      },
+      sector(id) { selectSector(id); }
+    };
 
     function fillSelect(elId, placeholder, items) {
       const el = document.getElementById(elId);
