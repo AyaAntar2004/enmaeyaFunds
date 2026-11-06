@@ -179,8 +179,10 @@ def main():
     # 3. clean-ups on every record: English funder/partner names, approved
     #    corrections (corrections.csv), placeholder text in date fields
     data_fixes.apply_corrections(records)
+    records = data_fixes.drop_excluded(records)
     data_fixes.fix_names(records)
     data_fixes.tidy(records)
+    data_fixes.report_duplicates(records)
 
     # 4. write data.json, keeping everything else in it as it was
     data_path = bd.DATA_JSON_PATH
@@ -213,10 +215,14 @@ DOWNLOAD_COLUMNS = [
     ("Status", "status"), ("Funder(s)", "funders"), ("Amount / Scale", "amountRaw"),
     ("Amount (USD millions, approx.)", "amountUSDm"), ("Partner(s)", "partners"),
     ("Region", "region"), ("Published Date", "date"), ("Funding Date", "fundingDate"),
+    ("Project Period", "projectPeriod"),
     ("In 2025-26?", "in2025_26"), ("Description", "description"), ("Source", "sourceLink"),
     ("Confidence", "confidence"), ("Funding Type", "fundingType"), ("Source Feed", "sourceFeed"),
     ("Origin", "origin"),
 ]
+
+
+NUMERIC_OR_INTERNAL = {"amountUSDm", "origin", "sourceLink"}
 
 
 def write_download(records):
@@ -235,7 +241,11 @@ def write_download(records):
         row = []
         for _, key in DOWNLOAD_COLUMNS:
             v = r.get(key)
-            row.append(", ".join(v) if isinstance(v, list) else v)
+            v = ", ".join(v) if isinstance(v, list) else v
+            # make missing information visible instead of a blank cell
+            if key not in NUMERIC_OR_INTERNAL and (v is None or str(v).strip() == ""):
+                v = "Not specified"
+            row.append(v)
         ws.append(row)
         link = r.get("sourceLink") or ""
         if link.startswith("http"):

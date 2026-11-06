@@ -53,8 +53,8 @@ LOG_FIELDS = ["Source link", "Project", "Researched at", "Fields asked", "Fields
 
 FIELD_HELP = {
     "date": "publication date of the source article (YYYY-MM-DD)",
-    "fundingDate": "date the funding was signed / approved / launched / disbursed / handed over "
-                   "(YYYY-MM-DD, or YYYY-MM / YYYY if only that is known)",
+    "fundingDate": "date the FUNDING was signed / approved / disbursed / allocated / pledged - not a "
+                   "launch, inauguration, event or publication date (YYYY-MM-DD, or YYYY-MM / YYYY)",
     "funders": "donor(s) providing the money, English names, comma-separated",
     "amountRaw": "amount with currency as written, e.g. 'USD 2.5 million' or 'EUR 10 million'",
     "partners": "implementing / co-implementing organisations, English names, comma-separated",
@@ -78,7 +78,12 @@ Field rules:
   NOT damages, losses, needs, appeal targets, numbers of people/workdays/tons.
 - fundingDate and date: ONE date (YYYY-MM-DD, or YYYY-MM / YYYY if that is all that is stated).
   Not a range, not "ongoing".
-- projectPeriod: start -> end, both stated.
+- fundingDate is ONLY the date of the funding act itself (agreement signed, grant/loan approved,
+  money disbursed or allocated, amount pledged). A launch, inauguration, ceremony, workshop,
+  training, event, project start or article date is NOT a funding date - leave it out.
+- date is the publication date printed on the source article (dateline / "Published on"), not
+  an event date mentioned in it.
+- projectPeriod: start -> end, both stated for THIS project - never assumed.
 - funders: organisations or governments that PAY for the project - not implementers, not the
   ministry receiving it (unless it funds from its own budget).
 - An analysis, report launch or assessment is not funding: only report a funder or amount if

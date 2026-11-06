@@ -18,7 +18,9 @@ Clean-ups that sync_daily.py applies to every record after it rebuilds the data:
    Columns: Status, Source link, Project, Field, Current value, New value,
             Evidence URL, Evidence quote, Method, Notes
    Field is one of: date (published date), fundingDate, funders, partners,
-            amountRaw, projectPeriod, region, status
+            amountRaw, projectPeriod, region, status, description, fundingType,
+            exclude (New value "yes": remove the record - not funding, or a duplicate)
+   An empty New value clears the cell (e.g. a funding date the source does not support).
    A row matches the record with the same Source link (and the same Project,
    when Project is filled in - needed where one article covers two projects).
 """
@@ -34,7 +36,7 @@ CORRECTIONS_PATH = ROOT / "corrections.csv"
 CORRECTION_FIELDS = ["Status", "Source link", "Project", "Field", "Current value", "New value",
                      "Evidence URL", "Evidence quote", "Method", "Notes"]
 EDITABLE_FIELDS = {"date", "fundingDate", "funders", "partners", "amountRaw", "projectPeriod",
-                   "region", "status"}
+                   "region", "status", "description", "fundingType", "exclude"}
 
 ARABIC = re.compile(r"[؀-ۿ]")
 
@@ -132,6 +134,8 @@ def _apply_value(rec, field, value):
         rec[field] = bd.normalize_date(value) if value else None
     elif field == "region":
         rec["region"] = bd.classify_region(value)
+    elif field == "exclude":
+        rec["_exclude"] = value.lower() in ("yes", "y", "true", "1", "x")
     else:
         rec[field] = value
 
@@ -159,18 +163,106 @@ def apply_corrections(records):
             continue
         for r in targets:
             _apply_value(r, field, row.get("New value"))
-            if field == "fundingDate" and row.get("Evidence quote"):
-                r["dateBasis"] = r.get("dateBasis") or "Researched"
-                r["dateEvidence"] = row["Evidence quote"]
+            if field == "fundingDate":
+                if not str(row.get("New value") or "").strip():
+                    r["dateBasis"], r["dateEvidence"] = "Not stated in article", ""
+                elif row.get("Evidence quote"):
+                    r["dateBasis"] = "Researched"
+                    r["dateEvidence"] = row["Evidence quote"]
         applied += 1
     print(f"  corrections.csv: {applied} approved correction(s) applied"
           + (f", {unmatched} matched no record" if unmatched else "")
           + (f", {bad_field} with an unknown Field" if bad_field else ""))
 
 
+def drop_excluded(records):
+    """Remove records marked exclude=yes in corrections.csv. Returns the kept list."""
+    kept = [r for r in records if not r.pop("_exclude", False)]
+    if len(kept) != len(records):
+        print(f"  corrections.csv: {len(records) - len(kept)} record(s) removed (exclude)")
+    return kept
+
+
+# How a funding date was worked out (the record's dateBasis). Validation (Nov 2026)
+# found that these give the date of an event, a launch or the article - not of the
+# funding - so such funding dates are cleared ("left unspecified").
+NOT_FUNDING_DATE_BASES = ("same-day report", "in-text: launched", "from live page: event date",
+                          "from live page: same-day report", "from live page: published",
+                          "from live page: launched")
+
+
 def tidy(records):
-    """Small consistency fixes: placeholder text in date fields becomes empty."""
+    """Consistency fixes: placeholder text in date fields becomes empty, and funding
+    dates that are really event / launch / publication dates are cleared."""
+    cleared = 0
     for r in records:
         for key in ("date", "fundingDate"):
             if str(r.get(key) or "").strip().lower() in ("not specified", "unknown", "n/a"):
                 r[key] = None
+        basis = str(r.get("dateBasis") or "").strip().lower()
+        if r.get("fundingDate") and basis != "researched" and (
+                basis.startswith(NOT_FUNDING_DATE_BASES)
+                or (basis == "in-text date" and r["fundingDate"] == r.get("date"))):
+            r["fundingDate"], r["dateBasis"], r["dateEvidence"] = None, "Not stated in article", ""
+            cleared += 1
+    if cleared:
+        print(f"  dates: cleared {cleared} funding date(s) that were event/launch/publication dates")
+
+
+DUPLICATES_PATH = ROOT / "possible_duplicates.csv"
+_DUP_STOP = set("with from that this their have been will under project programme program lebanon "
+                "lebanese support ministry funding initiative phase through".split())
+
+
+def report_duplicates(records):
+    """Write possible_duplicates.csv: pairs of records of the same ministry that look like
+    the same project (similar names, or fairly similar names published within a month of
+    each other with the same funders). Nothing is removed automatically - a reviewer marks
+    the extra one with Field "exclude" in corrections.csv."""
+    import itertools
+    from datetime import date
+
+    def words(r):
+        return {w for w in re.findall(r"[a-z]{4,}", str(r.get("project") or "").lower())
+                if w not in _DUP_STOP}
+
+    def years(r):
+        return set(re.findall(r"\b20\d\d\b", str(r.get("project") or "")))
+
+    def day(r):
+        try:
+            return date.fromisoformat(str(r.get("date"))[:10])
+        except ValueError:
+            return None
+
+    rows = []
+    for i, j in itertools.combinations(range(len(records)), 2):
+        a, b = records[i], records[j]
+        if a.get("ministry") != b.get("ministry"):
+            continue
+        ya, yb = years(a), years(b)
+        if ya and yb and ya != yb:  # e.g. Response Plan 2025 vs 2026
+            continue
+        wa, wb = words(a), words(b)
+        if not wa or not wb:
+            continue
+        sim = len(wa & wb) / len(wa | wb)
+        da, db = day(a), day(b)
+        close = bool(da and db and abs((da - db).days) <= 31)
+        same_funders = set(a.get("funders") or []) == set(b.get("funders") or [])
+        if sim >= 0.5 or (sim >= 0.3 and close and same_funders):
+            rows.append({
+                "Similarity": f"{sim:.2f}", "Ministry": a.get("ministry", ""),
+                "Project A": a.get("project", ""), "Date A": a.get("date") or "",
+                "Link A": a.get("sourceLink", ""),
+                "Project B": b.get("project", ""), "Date B": b.get("date") or "",
+                "Link B": b.get("sourceLink", ""),
+                "Same funders": "yes" if same_funders else "no",
+            })
+    rows.sort(key=lambda r: -float(r["Similarity"]))
+    with open(DUPLICATES_PATH, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["Similarity", "Ministry", "Project A", "Date A", "Link A",
+                                          "Project B", "Date B", "Link B", "Same funders"])
+        w.writeheader()
+        w.writerows(rows)
+    print(f"  duplicates: {len(rows)} possible duplicate pair(s) listed in {DUPLICATES_PATH.name}")
