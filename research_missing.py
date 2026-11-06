@@ -73,8 +73,22 @@ How to research:
 3. Only report a value if a page you actually opened states it explicitly for THIS project.
    No guessing, no estimates, no values from a different project or a different year.
 
+Field rules:
+- amountRaw: money committed to THIS project (grant, loan, budget, contribution) with currency.
+  NOT damages, losses, needs, appeal targets, numbers of people/workdays/tons.
+- fundingDate and date: ONE date (YYYY-MM-DD, or YYYY-MM / YYYY if that is all that is stated).
+  Not a range, not "ongoing".
+- projectPeriod: start -> end, both stated.
+- funders: organisations or governments that PAY for the project - not implementers, not the
+  ministry receiving it (unless it funds from its own budget).
+- An analysis, report launch or assessment is not funding: only report a funder or amount if
+  the page says who financed it.
+
 For each value give the URL it came from and a short exact quote (original language) that
-shows it. Write values in English. If you cannot find a field, leave it out.
+shows that value - the quote must contain the date, amount or name you report. Write values in
+English. If you cannot find a field, LEAVE IT OUT - never return "Not specified" or similar.
+Confidence: High only if the quote states the value for this exact project; Medium if the page
+is clearly about this project but the value needs light interpretation; otherwise Low.
 """
 
 SCHEMA = {
@@ -103,6 +117,49 @@ SCHEMA = {
         },
     },
 }
+
+
+PLACEHOLDER = re.compile(r"^(not specified|not stated|unknown|n/?a|none|ongoing|not disclosed|"
+                         r"unspecified|-|\?)$", re.I)
+CURRENCY = re.compile(r"(USD|US\$|\$|EUR|€|euro|GBP|£|JPY|¥|CHF|SEK|NOK|DKK|CAD|AUD|LBP|dollar|"
+                      r"دولار|يورو|ليرة)", re.I)
+NOT_FUNDING = re.compile(r"damage|loss|needs?\b|appeal|people|individuals|families|workdays|tons?\b",
+                         re.I)
+ARABIC = re.compile(r"[\u0600-\u06FF]")
+
+
+def check(field, value, quote):
+    """Reject proposals that are placeholders or that the quote does not back up.
+    Returns a reason string, or '' if the proposal looks usable."""
+    v, q = value.strip(), quote.strip()
+    if not v or PLACEHOLDER.match(v) or "not specified" in v.lower():
+        return "placeholder value"
+    if not q or q.lower() == v.lower() or PLACEHOLDER.match(q):
+        return "no real quote"
+    if field in ("date", "fundingDate"):
+        if not re.match(r"^\d{4}(-\d{2}(-\d{2})?)?$", v):
+            return "not a single date"
+        if v[:4] not in q and not ARABIC.search(q) and not re.search(r"\d", q):
+            return "date not in quote"
+    if field == "projectPeriod":
+        parts = [x.strip() for x in v.split("->")]
+        if len(parts) != 2 or not all(re.search(r"\d{4}", x) for x in parts):
+            return "period needs a start and an end year"
+    if field == "amountRaw":
+        if not re.search(r"\d", v) or not CURRENCY.search(v):
+            return "amount without number/currency"
+        if NOT_FUNDING.search(v):
+            return "not a funding amount"
+        digits = re.findall(r"\d+", v)
+        if digits and not any(d in re.sub(r"[,.\s]", "", q) or d in q for d in digits):
+            return "amount not in quote"
+    if field in ("funders", "partners") and not ARABIC.search(q):
+        names = [n.strip() for n in v.split(",") if n.strip()]
+        words = lambda n: [w for w in re.findall(r"[A-Za-z]{4,}", n)]
+        if names and not any(any(w.lower() in q.lower() for w in words(n)) or n.lower() in q.lower()
+                             for n in names):
+            return "name not in quote"
+    return ""
 
 
 def is_empty(value):
@@ -213,9 +270,13 @@ def main():
     proposed = 0
     for i, (r, gaps) in enumerate(todo, 1):
         result, calls = ask(api_key, args.model, r, gaps, usage)
-        rows = []
+        rows, rejected = [], []
         for item in result.get("found", []):
-            if item["field"] not in gaps or not item["value"].strip() or not item["evidence_url"].startswith("http"):
+            if item["field"] not in gaps or not item["evidence_url"].startswith("http"):
+                continue
+            why = check(item["field"], item["value"], item["evidence_quote"])
+            if why:
+                rejected.append(f"{item['field']}: {why}")
                 continue
             rows.append({
                 "Status": "pending", "Source link": r.get("sourceLink", ""), "Project": r.get("project", ""),
@@ -233,7 +294,8 @@ def main():
             "Search calls": calls, "Model": args.model}])
         proposed += len(rows)
         print(f"  [{i}/{len(todo)}] found {len(rows)}/{len(gaps)} ({', '.join(x['Field'] for x in rows) or '-'})"
-              f"  {r.get('project', '')[:60]}")
+              f"  {r.get('project', '')[:60]}"
+              + (f"\n      skipped: {'; '.join(rejected)}" if rejected else ""))
 
     cost = usage["calls"] * 0.01 + usage["in"] / 1e6 * 0.40 + usage["out"] / 1e6 * 1.60
     print(f"\nDone: {proposed} proposed value(s) added to {CORRECTIONS_PATH.name} as 'pending'.")
