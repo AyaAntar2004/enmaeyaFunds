@@ -2,8 +2,8 @@
   "meta": {
     "title": "ENMAEYA Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
-    "reportingPeriod": "1 January–31 October 2026",
-    "lastRecord": "31 October 2026",
+    "reportingPeriod": "1 January–6 November 2026",
+    "lastRecord": "6 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -19330,6 +19330,38 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "\"استكمال التحضيرات لإطلاق مشروع إنتاج الكهرباء من الطاقة الشمسية في منطقة المتن الأعلى\"",
       "fundingType": "Unknown"
+    },
+    {
+      "ministry": "Ministry of Interior and Municipalities",
+      "ministryCode": "MoIM",
+      "sector": "development",
+      "project": "CAPACITY Programme",
+      "status": "Ongoing",
+      "funders": [
+        "Denmark"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "IOM"
+      ],
+      "region": "National",
+      "date": "2026-11-06",
+      "confidence": "Medium",
+      "sourceFeed": "IOM",
+      "description": "Denmark is funding the CAPACITY Programme, which supports stronger border and document verification capacities in Lebanon, training around 400 officials and partners.",
+      "sourceLink": "https://www.iom.int/news/iom-chief-copenhagen-urges-world-act-crises-drive-people-home",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
     }
   ]
 }
