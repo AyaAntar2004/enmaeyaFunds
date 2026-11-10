@@ -1,0 +1,4 @@
+pandas
+odfpy
+openpyxl
+requests
