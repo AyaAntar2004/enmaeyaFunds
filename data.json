@@ -17,7 +17,7 @@
     },
     "mission": {
       "title": "Mission & Vision",
-      "html": "<p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable, giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p><p style='margin-top:8px'><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>"
+      "html": "<p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable, giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p><p style='margin top:8px'><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>"
     }
   },
   "sectorFilters": [
@@ -288,7 +288,7 @@
     ]
   },
   "scatter": {
-    "note": "Each bubble is a Lebanese ministry; bubble size indicates the breadth of its partner network. Edit projects (0-40), fundingM (0-60) and partners (0-10), positions are calculated automatically.",
+    "note": "Each bubble is a Lebanese ministry; bubble size indicates the breadth of its partner network. Edit projects (0 to 40), fundingM (0 to 60) and partners (0 to 10), positions are calculated automatically.",
     "ministries": [
       {
         "code": "MoPH",
@@ -364,15 +364,15 @@
   ],
   "sectorData": {
     "all": {
-      "main": "Health and Development together account for over half of tracked funding, while Education and AI & Technology remain comparatively small despite their long-run relevance to Lebanon's recovery, a gap worth watching.",
+      "main": "Health and Development together account for over half of tracked funding, while Education and AI & Technology remain comparatively small despite their long run relevance to Lebanon's recovery, a gap worth watching.",
       "funding": "Health leads overall funding at $68M, nearly six times the size of AI & Technology ($12M), the widest spread across sectors.",
-      "flow": "The World Bank, EU, and UNICEF each anchor a distinct sector-ministry relationship, pointing to a concentrated rather than diversified funder base across ministries.",
-      "location": "Beirut and Mount Lebanon together host 46% of geographically-located projects, while national/unspecified projects remain the single largest category, a possible transparency gap.",
-      "heat": "UNDP shows the broadest cross-sector presence, ranking as a top partner in four of five sectors, the closest thing to a generalist funder in this data.",
+      "flow": "The World Bank, EU, and UNICEF each anchor a distinct sector ministry relationship, pointing to a concentrated rather than diversified funder base across ministries.",
+      "location": "Beirut and Mount Lebanon together host 46% of geographically located projects, while national/unspecified projects remain the single largest category, a possible transparency gap.",
+      "heat": "UNDP shows the broadest cross sector presence, ranking as a top partner in four of five sectors, the closest thing to a generalist funder in this data.",
       "scatter": "MoPH combines high funding with high project count; MoPWT sits at the other extreme, with few projects and 57% of its funding from a single source, a concentration risk worth flagging.",
       "opportunities": {
         "students": [
-          "Development, health, and social-sector fields show the most active project pipelines right now.",
+          "Development, health, and social sector fields show the most active project pipelines right now.",
           "Programs in public health, environmental policy, and social protection align closely with current funding priorities."
         ],
         "jobseekers": [
@@ -388,8 +388,8 @@
           "MoSA's broad partner network (9 organizations) suggests openness to new implementing partners."
         ],
         "researchers": [
-          "AI & Technology and Education are comparatively data-poor and underfunded relative to their long-run importance.",
-          "Funder concentration (e.g. MoPWT's 57% single-funder dependency) is a notable risk area worth investigating."
+          "AI & Technology and Education are comparatively data poor and underfunded relative to their long run importance.",
+          "Funder concentration (e.g. MoPWT's 57% single funder dependency) is a notable risk area worth investigating."
         ]
       },
       "knowMore": {
@@ -401,15 +401,15 @@
       }
     },
     "health": {
-      "main": "Health receives the largest share of reported funding ($68M), yet Education, critical for long-run human capital and growth, receives roughly a third of that. This imbalance may point to future opportunities in education, or to unmet needs where health investment isn't yet translating into workforce outcomes.",
+      "main": "Health receives the largest share of reported funding ($68M), yet Education, critical for long run human capital and growth, receives roughly a third of that. This imbalance may point to future opportunities in education, or to unmet needs where health investment isn't yet translating into workforce outcomes.",
       "funding": "At $68M, Health is Lebanon's most heavily funded sector, about 1.3x the size of Development, the next largest.",
       "flow": "The World Bank funds 42% of the Ministry of Public Health's tracked funding, a dependency worth monitoring against diversification efforts.",
-      "location": "MoPH activity skews national and Beirut-based, consistent with the concentration of tertiary healthcare infrastructure in the capital.",
+      "location": "MoPH activity skews national and Beirut based, consistent with the concentration of tertiary healthcare infrastructure in the capital.",
       "heat": "WHO (5) and UNICEF (4) dominate health partnerships, with World Bank and UNDP in secondary roles, a relatively concentrated partner base.",
-      "scatter": "MoPH sits in the high-funding, high-activity quadrant, indicating a sector with both scale and sustained donor engagement.",
+      "scatter": "MoPH sits in the high funding, high activity quadrant, indicating a sector with both scale and sustained donor engagement.",
       "opportunities": {
         "students": [
-          "Rising demand for public health, epidemiology, and health-systems management graduates.",
+          "Rising demand for public health, epidemiology, and health systems management graduates.",
           "Digital health and health informatics are emerging but still underrepresented skill areas."
         ],
         "jobseekers": [
@@ -417,7 +417,7 @@
           "WHO, UNICEF, and World Bank are active employers and implementing partners in this sector."
         ],
         "startups": [
-          "Digital health and medical-supply procurement remain comparatively underserved niches.",
+          "Digital health and medical supply procurement remain comparatively underserved niches.",
           "High donor funding paired with a concentrated partner base suggests room for new implementing organizations."
         ],
         "ngos": [
@@ -425,7 +425,7 @@
           "MoPH's high project count signals capacity for additional implementing partnerships."
         ],
         "researchers": [
-          "Health-financing sustainability and the 42% World Bank dependency are underexplored questions.",
+          "Health financing sustainability and the 42% World Bank dependency are underexplored questions.",
           "Little visible link yet between health investment and workforce/economic outcomes, a research gap."
         ]
       },
@@ -438,27 +438,27 @@
       }
     },
     "education": {
-      "main": "Education receives just $24M, about a third of Health's funding, despite being a core driver of long-run productivity and youth employment. The gap suggests education may be an underfunded priority relative to its economic importance.",
+      "main": "Education receives just $24M, about a third of Health's funding, despite being a core driver of long run productivity and youth employment. The gap suggests education may be an underfunded priority relative to its economic importance.",
       "funding": "Education ranks fourth of five sectors at $24M, ahead only of AI & Technology.",
-      "flow": "UNICEF funds 39% of the Ministry of Education's tracked funding, the lowest top-funder concentration among the four flows shown, implying a slightly more diversified funder base.",
-      "location": "Education projects are not separately mapped here, but sit within the broader national and Beirut-weighted pattern seen across sectors.",
+      "flow": "UNICEF funds 39% of the Ministry of Education's tracked funding, the lowest top funder concentration among the four flows shown, implying a slightly more diversified funder base.",
+      "location": "Education projects are not separately mapped here, but sit within the broader national and Beirut weighted pattern seen across sectors.",
       "heat": "UNICEF (5) is the dominant education partner; World Bank (3) and ILO (2) play secondary roles, with UNDP and FAO largely absent.",
-      "scatter": "MoEHE sits mid-chart on both axes, moderate funding, moderate activity, neither a clear priority nor clearly neglected.",
+      "scatter": "MoEHE sits mid chart on both axes, moderate funding, moderate activity, neither a clear priority nor clearly neglected.",
       "opportunities": {
         "students": [
-          "Education data gaps mean there's real room to specialize in education economics, learning assessment, or ed-tech.",
-          "Youth-unemployment-linked fields (skills training, vocational education) look increasingly relevant."
+          "Education data gaps mean there's real room to specialize in education economics, learning assessment, or ed tech.",
+          "Youth unemployment linked fields (skills training, vocational education) look increasingly relevant."
         ],
         "jobseekers": [
           "Fewer recorded education projects than health or development suggest a smaller, more competitive job pool for now.",
           "UNICEF and World Bank are the main organizations active in this space."
         ],
         "startups": [
-          "Ed-tech and skills-training platforms remain a comparatively open field given low sector funding.",
+          "Ed tech and skills training platforms remain a comparatively open field given low sector funding.",
           "Underfunding relative to need may translate into procurement or grant openings as donor attention shifts."
         ],
         "ngos": [
-          "UNICEF is the anchor funder-partner; ILO's presence points to a training/livelihoods angle worth pairing with education work.",
+          "UNICEF is the anchor funder partner; ILO's presence points to a training/livelihoods angle worth pairing with education work.",
           "Lower overall funding may mean less competition for new partnerships here than in Health."
         ],
         "researchers": [
@@ -507,15 +507,15 @@
       }
     },
     "environment": {
-      "main": "Environment funding ($32M) sits mid-pack, but its funder base is the most concentrated of the four flows shown, 51% from the EU alone, meaning sector momentum may be closely tied to a single donor's priorities.",
+      "main": "Environment funding ($32M) sits mid pack, but its funder base is the most concentrated of the four flows shown, 51% from the EU alone, meaning sector momentum may be closely tied to a single donor's priorities.",
       "funding": "Environment ranks third at $32M, roughly 47% of Health's total.",
-      "flow": "The EU funds 51% of the Ministry of Energy and Water's tracked funding, the highest single-funder share among the four flows shown.",
-      "location": "Environmental projects follow the same national/Beirut-weighted pattern seen elsewhere, without a distinct regional cluster in this data.",
-      "heat": "FAO (5) and UNDP (5) co-lead environment partnerships, giving the sector two strong anchor partners rather than one.",
-      "scatter": "MoEW and MoA cluster in the lower-funding, lower-activity region, smaller in scale than Health or Development, but not without partner depth.",
+      "flow": "The EU funds 51% of the Ministry of Energy and Water's tracked funding, the highest single funder share among the four flows shown.",
+      "location": "Environmental projects follow the same national/Beirut weighted pattern seen elsewhere, without a distinct regional cluster in this data.",
+      "heat": "FAO (5) and UNDP (5) colead environment partnerships, giving the sector two strong anchor partners rather than one.",
+      "scatter": "MoEW and MoA cluster in the lower funding, lower activity region, smaller in scale than Health or Development, but not without partner depth.",
       "opportunities": {
         "students": [
-          "Environmental policy, water resource management, and climate-adaptation fields align with FAO/UNDP-led programming.",
+          "Environmental policy, water resource management, and climate adaptation fields align with FAO/UNDP led programming.",
           "Agricultural economics is increasingly relevant given FAO's strong presence."
         ],
         "jobseekers": [
@@ -524,11 +524,11 @@
         ],
         "startups": [
           "EU's 51% funding share signals a sector with real momentum, but limited beyond that single donor, worth watching donor diversification.",
-          "Water and energy-efficiency solutions look aligned with current ministry-level funding."
+          "Water and energy efficiency solutions look aligned with current ministry level funding."
         ],
         "ngos": [
           "FAO and UNDP are the strongest potential consortium partners in this sector.",
-          "High single-funder dependency (EU) may mean openings if the EU diversifies its implementing partners."
+          "High single funder dependency (EU) may mean openings if the EU diversifies its implementing partners."
         ],
         "researchers": [
           "Donor concentration risk (51% from one funder) is a clear, quantifiable research question.",
@@ -547,29 +547,29 @@
       "main": "AI & Technology is by far the smallest funded sector ($12M, 18% of Health's total), despite Lebanon's active push toward digital transformation, this gap between policy ambition and funding may be the clearest opportunity signal in the dataset.",
       "funding": "AI & Technology is the smallest tracked sector at $12M, less than a fifth of Health's funding.",
       "flow": "No dedicated funder→ministry flow is shown for AI & Technology in this dataset yet, itself a data gap worth flagging.",
-      "location": "AI & Technology projects aren't separately geo-mapped here; most likely cluster in Beirut given the sector's institutional base.",
+      "location": "AI & Technology projects aren't separately geo mapped here; most likely cluster in Beirut given the sector's institutional base.",
       "heat": "UNDP (4) is the only partner with a meaningful presence in AI & Technology, every other tracked organization shows little to no activity.",
-      "scatter": "MoET sits at the lower end of both funding and project count, a sector still early in attracting large-scale, multi-partner investment.",
+      "scatter": "MoET sits at the lower end of both funding and project count, a sector still early in attracting large scale, multi partner investment.",
       "opportunities": {
         "students": [
-          "AI, data science, and digital-governance skills are in growing demand relative to current (thin) supply of funded programs.",
+          "AI, data science, and digital governance skills are in growing demand relative to current (thin) supply of funded programs.",
           "This is the sector with the widest gap between ambition (MITAI's mandate) and funding, worth watching closely."
         ],
         "jobseekers": [
-          "Fewer recorded projects mean a smaller current job pool, but a first-mover advantage as funding likely grows.",
+          "Fewer recorded projects mean a smaller current job pool, but a first mover advantage as funding likely grows.",
           "UNDP is currently the most visible partner organization in this space."
         ],
         "startups": [
           "The clearest underserved sector in the entire dataset, low funding, few partners, but strong policy attention.",
-          "Digital-government and AI-readiness procurement may open up as MITAI's mandate translates into funded projects."
+          "Digital government and AI readiness procurement may open up as MITAI's mandate translates into funded projects."
         ],
         "ngos": [
           "Very few funders are currently active here, an open field for organizations positioning early in AI & Technology.",
           "Partnering with UNDP, the sector's lone visible anchor, may be the fastest entry point."
         ],
         "researchers": [
-          "The funding-ambition gap in AI & Technology is a clear, underexplored research question.",
-          "Almost no partner-network data exists for this sector, a genuine data gap to document."
+          "The funding ambition gap in AI & Technology is a clear, underexplored research question.",
+          "Almost no partner network data exists for this sector, a genuine data gap to document."
         ]
       },
       "knowMore": {
@@ -581,31 +581,31 @@
       }
     },
     "development": {
-      "main": "Development is the second-largest funded sector ($54M) and has the broadest implementing-partner network (MoSA: 9 organizations), suggesting a sector that's both well-resourced and structurally open to new partnerships.",
+      "main": "Development is the second largest funded sector ($54M) and has the broadest implementing partner network (MoSA: 9 organizations), suggesting a sector that's both well resourced and structurally open to new partnerships.",
       "funding": "Development ranks second at $54M, about 79% of Health's total.",
-      "flow": "The EU funds 48% of the Ministry of Social Affairs' tracked funding, the second-highest single-funder concentration among the four flows shown.",
-      "location": "Development projects likely track closely with the national/unspecified category (66 projects), consistent with cross-regional social-protection programming.",
-      "heat": "UNICEF (5) and UNDP (5) co-lead development partnerships, with FAO (4) and ILO (4) also strongly present, the most multi-partner sector in the heatmap.",
-      "scatter": "MoSA sits in the high-funding, high-activity quadrant alongside MoPH, with the largest bubble size (9 partners), the sector with the widest partner network.",
+      "flow": "The EU funds 48% of the Ministry of Social Affairs' tracked funding, the second highest single funder concentration among the four flows shown.",
+      "location": "Development projects likely track closely with the national/unspecified category (66 projects), consistent with cross regional social protection programming.",
+      "heat": "UNICEF (5) and UNDP (5) colead development partnerships, with FAO (4) and ILO (4) also strongly present, the most multi partner sector in the heatmap.",
+      "scatter": "MoSA sits in the high funding, high activity quadrant alongside MoPH, with the largest bubble size (9 partners), the sector with the widest partner network.",
       "opportunities": {
         "students": [
           "Social protection, livelihoods, and community development fields align with MoSA's broad partner base.",
-          "Multi-stakeholder program design is a valuable skill given the sector's dense partner network."
+          "Multi stakeholder program design is a valuable skill given the sector's dense partner network."
         ],
         "jobseekers": [
-          "MoSA's 9-partner network suggests the widest range of potential employers of any ministry tracked.",
+          "MoSA's 9 partner network suggests the widest range of potential employers of any ministry tracked.",
           "UNICEF, UNDP, FAO, and ILO are all actively engaged, more entry points than most sectors."
         ],
         "startups": [
-          "A well-resourced sector, but with 9 partners already active, differentiation matters more than sector access.",
-          "Livelihoods and social-enterprise models may find natural entry points via existing implementing partners."
+          "A well resourced sector, but with 9 partners already active, differentiation matters more than sector access.",
+          "Livelihoods and social enterprise models may find natural entry points via existing implementing partners."
         ],
         "ngos": [
           "MoSA's openness (9 partners) makes it one of the more accessible ministries for new consortium relationships.",
           "EU (48% share) and UNICEF/UNDP are the funders most worth approaching."
         ],
         "researchers": [
-          "The EU's 48% concentration despite a 9-partner network is a notable tension worth investigating.",
+          "The EU's 48% concentration despite a 9 partner network is a notable tension worth investigating.",
           "Development sits second in funding but its outcomes data is less visible than Health's, a reporting gap."
         ]
       },
