@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Lebanon Funding Network — Enmaeya</title>
+<title>Funding Overview Network, enmaeya</title>
 <script src="vendor/d3.min.js"></script>
 <style>
   :root{--bg:#f4f6f8;--ink:#000;--muted:#2b3640;--line:#c3ccd4;--ring:#3b6ea5;--hi:#141b22;}
@@ -38,7 +38,7 @@
   .card .src{position:absolute;top:8px;left:8px;background:rgba(20,27,34,.62);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.02em;padding:3px 8px;border-radius:5px}
   .card .overlay{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;background:linear-gradient(to top,rgba(0,0,0,.82),rgba(0,0,0,0));font-size:14px;font-weight:700;line-height:1.28}
   .link{fill:none;stroke:#b7c1cb;stroke-width:1;opacity:0}
-  .olabel{font-size:12px;fill:var(--ink);pointer-events:none}
+  .olabel{font-size:13px;fill:var(--ink);pointer-events:none}
   .slabel{font-weight:700;font-size:14.5px;pointer-events:none}
   .hublabel{fill:#fff;font-weight:700;text-anchor:middle}
   .hubsub{fill:#aebfce;font-size:12.5px;text-anchor:middle}
@@ -60,12 +60,12 @@
       <div class="back" id="back">&#8592; Dashboard</div>
       <div class="crumb" id="crumb">Overview</div>
     </div>
-    <svg id="map" viewBox="0 0 820 780"></svg>
-    <div class="foot">Source: Enmaeya (enmaeya.com) &middot; click a sector to open it, click again to close &middot; open as many as you like &middot; data prototype</div>
+    <svg id="map" viewBox="-80 -100 980 980"></svg>
+    <div class="foot">Source: enmaeya (enmaeya.com) &middot; click a sector to open it, click again to close &middot; open as many as you like &middot; data prototype</div>
   </div>
   <div class="right">
-    <div class="phead" id="phead"><div><h2 id="ptitle">Lebanon Funding Network</h2>
-      <div class="curation" id="pcuration">Enmaeya</div></div></div>
+    <div class="phead" id="phead"><div><h2 id="ptitle">Funding Overview Network</h2>
+      <div class="curation" id="pcuration">enmaeya</div></div></div>
     <div class="pmeta" id="pmeta"></div>
     <div class="pbody" id="pbody"></div>
     <div class="browse" id="newsBrowse">
@@ -95,7 +95,7 @@
     <div class="browse" id="instaBrowse">
       <h3>On Instagram</h3>
       <a class="insta" href="https://www.instagram.com/enmaeya/p/Ddoh0Z7DMb4/" target="_blank" rel="noopener">
-        <img src="images/instagram-post.jpg" alt="Enmaeya Instagram post" loading="lazy">
+        <img src="images/instagram-post.jpg" alt="enmaeya Instagram post" loading="lazy">
         <span class="itext"><strong>Latest from @enmaeya</strong><span>View the post on Instagram &#8599;</span></span>
       </a>
     </div>
@@ -114,7 +114,7 @@ const SUBTOPICS = {
 };
 
 // Development's subtopics are grouped subsectors, each backed by several
-// specific Enmaeya articles rather than a single generic news link.
+// specific enmaeya articles rather than a single generic news link.
 const SUBTOPIC_ARTICLES = {
   development: {
     "Governance": [
@@ -168,7 +168,7 @@ const SUBTOPIC_ARTICLES = {
       { title: "More Than 100,000 Children in Lebanon Might Miss School, Education Ministry Warns", url: "https://enmaeya.com/en/news/6a479afe71cd2c83c51f4a1b", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9F5Ml2unjvpqr9hJ9ATS6ma7a_1783077508878_NWycu.jpg" }
     ],
     "Higher Education": [
-      { title: "New MEHE–AUB MoU to Modernize Lebanon's Education System", url: "https://enmaeya.com/en/news/69318496b03917dbe095e4bb-new-meheaub-mou-to-modernize-lebanons-education-system", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/iCp5W0JUjjbYTQTtqYBfryr_1764852626019_QPyqd.jpg" }
+      { title: "New MEHE to AUB MoU to Modernize Lebanon's Education System", url: "https://enmaeya.com/en/news/69318496b03917dbe095e4bb-new-meheaub-mou-to-modernize-lebanons-education-system", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/iCp5W0JUjjbYTQTtqYBfryr_1764852626019_QPyqd.jpg" }
     ],
     "Citizenship": [
       { title: "Lebanon Launches Citizenship Education Alliance", url: "https://enmaeya.com/en/news/6996c5606b5d92c96c93f568-lebanon-launches-citizenship-education-alliance", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/mZx8IxtV2Pu0s23daYYVDN0_1771488568398_VxquQ.jpg" }
@@ -238,7 +238,7 @@ const SUBTOPIC_ARTICLES = {
   }
 };
 
-// Curated Enmaeya Hub resources (reports/toolkits) per Development subsector,
+// Curated enmaeya Hub resources (reports/toolkits) per Development subsector,
 // shown in their own "Resources" carousel below each subsector's News list.
 const SUBTOPIC_RESOURCES = {
   development: {
@@ -276,7 +276,7 @@ const SUBTOPIC_RESOURCES = {
   },
   education: {
     "Access": [
-      { title: "Global Education Monitoring Report 2026: Access and Equity – Countdown to 2030", url: "https://enmaeya.com/en/hub/resources/6a801eb23bb91c526e448ed4", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/s0qPItw6O0dcgfuBa7FTkkQvN_1786781232862_PrVaa.jpg", blurb: "Access and equity in education, countdown to 2030." }
+      { title: "Global Education Monitoring Report 2026: Access and Equity, Countdown to 2030", url: "https://enmaeya.com/en/hub/resources/6a801eb23bb91c526e448ed4", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/s0qPItw6O0dcgfuBa7FTkkQvN_1786781232862_PrVaa.jpg", blurb: "Access and equity in education, countdown to 2030." }
     ],
     "Crisis Education": [
       { title: "Impact of Escalating Conflict on Education Systems in the Arab States", url: "https://enmaeya.com/en/hub/resources/69f9abc045dafd6423edeea7", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/zwQ8HAUCTDu6zLk7tP8mMrCrP_1777970008458_qwvAQ.jpg", blurb: "UNESCO rapid overview and response, April 2026." }
@@ -287,7 +287,7 @@ const SUBTOPIC_RESOURCES = {
   },
   health: {
     "Health Systems": [
-      { title: "Country Cooperation Strategy for WHO and Lebanon 2026–2029", url: "https://enmaeya.com/en/hub/resources/693fd77cb03917dbe0eb758e-country-cooperation-strategy-for-who-and-lebanon-20262029", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/1nqmmN7qHVXBxDvKGhVckxFJs_1765790127816_mlvfq.jpg", blurb: "WHO's cooperation strategy with Lebanon's health system." }
+      { title: "Country Cooperation Strategy for WHO and Lebanon 2026 to 2029", url: "https://enmaeya.com/en/hub/resources/693fd77cb03917dbe0eb758e-country-cooperation-strategy-for-who-and-lebanon-20262029", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/1nqmmN7qHVXBxDvKGhVckxFJs_1765790127816_mlvfq.jpg", blurb: "WHO's cooperation strategy with Lebanon's health system." }
     ],
     "Public Health": [
       { title: "UNICEF Lebanon Humanitarian Situation Report No. 5", url: "https://enmaeya.com/en/hub/resources/69970ffb6b5d92c96c9522db-unicef-lebanon-humanitarian-situation-report-no-5", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dv3jm2a8MrniWsIirubjnM8V0_1771413942777_DDMOO.jpg", blurb: "UNICEF's humanitarian situation reporting for Lebanon." }
@@ -326,89 +326,89 @@ const SUBTOPIC_RESOURCES = {
   }
 };
 
-// Curated Enmaeya Studio interviews per subsector, shown in their own
+// Curated enmaeya Studio interviews per subsector, shown in their own
 // "Studio" carousel below each subsector's Resources list. Subsectors
 // without a clean match (e.g. Development's Recovery) simply omit the key.
 const SUBTOPIC_STUDIO = {
   development: {
     "Governance": [
-      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "The Gap Between Law and Reality with Khouloud Al-Khatib", url: "https://enmaeya.com/en/studio/interviews/693c1d1bb03917dbe0e02f2f-the-gap-between-law-and-reality-with-khouloud-al-khatib", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/pCOQaYz3o39QVbuWSaxThrftp_1784617135031_nVzUT.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Who Controls the Narrative? Media and Human Rights with Gretchen King", url: "https://enmaeya.com/en/studio/interviews/694b9eaab03917dbe0bddec7-palestine-beyond-the-headlines-beyond-the-headlines-palestine-palestine-and-information-warfare-palestine-and-manufactured-consent-palestine-media-framing-palestine-in-mainstream-media-palestine-media-and-propaganda", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZbcOyC9760NoetcNnqLboWD_1783424793541_IiHUe.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "The Gap Between Law and Reality with Khouloud Al-Khatib", url: "https://enmaeya.com/en/studio/interviews/693c1d1bb03917dbe0e02f2f-the-gap-between-law-and-reality-with-khouloud-al-khatib", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/pCOQaYz3o39QVbuWSaxThrftp_1784617135031_nVzUT.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Who Controls the Narrative? Media and Human Rights with Gretchen King", url: "https://enmaeya.com/en/studio/interviews/694b9eaab03917dbe0bddec7-palestine-beyond-the-headlines-beyond-the-headlines-palestine-palestine-and-information-warfare-palestine-and-manufactured-consent-palestine-media-framing-palestine-in-mainstream-media-palestine-media-and-propaganda", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZbcOyC9760NoetcNnqLboWD_1783424793541_IiHUe.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Youth": [
-      { title: "Youth at the Decision-Making Table", url: "https://enmaeya.com/en/studio/interviews/69e229e43ac211857efcc9c7-youth-in-decision-making-lebanon-why-youth-should-lead-decisions-youth-voice-policy-change-lebanon-young-leaders-shaping-the-future-youth-leadership-change-making-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/OEqyNPGQny26x1yuRd9RpbjQp_1784616967585_bbZCw.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "A Social Experiment Disguised as a TV Show", url: "https://enmaeya.com/en/studio/interviews/69f9c287381a4fd6e1f82f25-joe-maaluf-on-msh-masrahiye-the-unscripted-unfiltered-social-experiment-giving-lebanese-youth-a-voice-breaking-taboos-challenging-coexistence-and-reshaping-how-a-generation-talks-to-itself-and-to-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/sO8rzIuwgKq2Vr3wvqHq97ZpI_1783338614469_ploFE.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Youth at the Decision-Making Table", url: "https://enmaeya.com/en/studio/interviews/69e229e43ac211857efcc9c7-youth-in-decision-making-lebanon-why-youth-should-lead-decisions-youth-voice-policy-change-lebanon-young-leaders-shaping-the-future-youth-leadership-change-making-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/OEqyNPGQny26x1yuRd9RpbjQp_1784616967585_bbZCw.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "A Social Experiment Disguised as a TV Show", url: "https://enmaeya.com/en/studio/interviews/69f9c287381a4fd6e1f82f25-joe-maaluf-on-msh-masrahiye-the-unscripted-unfiltered-social-experiment-giving-lebanese-youth-a-voice-breaking-taboos-challenging-coexistence-and-reshaping-how-a-generation-talks-to-itself-and-to-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/sO8rzIuwgKq2Vr3wvqHq97ZpI_1783338614469_ploFE.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Social Inclusion": [
-      { title: "Beyond Limits for an Inclusive Lebanon with Michael Haddad", url: "https://enmaeya.com/en/studio/interviews/696a6edf3d23c23e9ed66f3b-beyond-limits-inclusive-sustainable-lebanon-beyond-limits-inclusive-lebanon-beyond-limits-sustainable-lebanon-beyond-limits-inclusion-beyond-limits-sustainability", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tLN2tWfK46ozzKpB9NWfsA4h_1783424822573_wqsNm.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Beyond Limits for an Inclusive Lebanon with Michael Haddad", url: "https://enmaeya.com/en/studio/interviews/696a6edf3d23c23e9ed66f3b-beyond-limits-inclusive-sustainable-lebanon-beyond-limits-inclusive-lebanon-beyond-limits-sustainable-lebanon-beyond-limits-inclusion-beyond-limits-sustainability", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tLN2tWfK46ozzKpB9NWfsA4h_1783424822573_wqsNm.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Digital Transformation": [
-      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Inside the Launch of Lebanon's Gender Handbook", url: "https://enmaeya.com/en/studio/interviews/68590aebd643526485bd2a53-inside-the-launch-of-lebanon-s-gender-handbook", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/UgUBzkWRGF6xz7NAYeM4Mtc_1783339010136_lqJmW.jpg", blurb: "Studio interview from enmaeya." }
     ]
   },
   economy: {
     "Entrepreneurship": [
-      { title: "Beyond Shark Tank: Inside the Mind of an Entrepreneur with Alain Bejjani", url: "https://enmaeya.com/en/studio/interviews/68fb64287d9c6f548703be79-alain-bejjani-shark-tank-lebanon-lebanese-entrepreneurs-entrepreneurship-investment-gen-z-burnout", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/4fq9JBoK5jQzepdy0ehDP7Om_1785490682467_mgSmz.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Beyond Shark Tank: Georges Karam on Entrepreneurship in Lebanon", url: "https://enmaeya.com/en/studio/interviews/68f62aa299ef424d7f6a33d4-shark-tank-sharktank-entrepreneurship-business-economy-innovation", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/E2GZOmFQqX5HlWI4GFtRNP_1785490726034_iLhYT.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Beyond Shark Tank: Maroun Chammas Reflects on a Lifetime of Entrepreneurship", url: "https://enmaeya.com/en/studio/interviews/6911f1f6b60244fe5bf72dcb-shark-tank-maroun-chammas-entrepreneurship-human-capital-maroun-chammas-berytech-shark-tank-lebanon-judge-lebanon-business", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Yzdi8FrraRMtMqZGFLMXgkICP_1784617159701_QuLhk.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Beyond Shark Tank: Inside the Mind of an Entrepreneur with Alain Bejjani", url: "https://enmaeya.com/en/studio/interviews/68fb64287d9c6f548703be79-alain-bejjani-shark-tank-lebanon-lebanese-entrepreneurs-entrepreneurship-investment-gen-z-burnout", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/4fq9JBoK5jQzepdy0ehDP7Om_1785490682467_mgSmz.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Beyond Shark Tank: Georges Karam on Entrepreneurship in Lebanon", url: "https://enmaeya.com/en/studio/interviews/68f62aa299ef424d7f6a33d4-shark-tank-sharktank-entrepreneurship-business-economy-innovation", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/E2GZOmFQqX5HlWI4GFtRNP_1785490726034_iLhYT.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Beyond Shark Tank: Maroun Chammas Reflects on a Lifetime of Entrepreneurship", url: "https://enmaeya.com/en/studio/interviews/6911f1f6b60244fe5bf72dcb-shark-tank-maroun-chammas-entrepreneurship-human-capital-maroun-chammas-berytech-shark-tank-lebanon-judge-lebanon-business", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Yzdi8FrraRMtMqZGFLMXgkICP_1784617159701_QuLhk.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Investment": [
-      { title: "Insights from the Power X Summit", url: "https://enmaeya.com/en/studio/interviews/682f339712dad92571a8cb7c-insights-from-the-power-x-summit", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/bnMka7jp9wuY4HLb0HndiZH_1783338892241_afKMl.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Insights from the Power X Summit", url: "https://enmaeya.com/en/studio/interviews/682f339712dad92571a8cb7c-insights-from-the-power-x-summit", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/bnMka7jp9wuY4HLb0HndiZH_1783338892241_afKMl.jpg", blurb: "Studio interview from enmaeya." }
     ]
   },
   education: {
     "Access": [
-      { title: "A Conversation with IB Senior Manager, Mary Tadros", url: "https://enmaeya.com/en/studio/interviews/683c3450a0ffcfafd9bfec53-a-conversation-with-ib-senior-manager-mary-tadros", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xp8T1VVnE2CYXsR83F89q9vUj_1783338915063_gFdEB.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "A Conversation with IB Senior Manager, Mary Tadros", url: "https://enmaeya.com/en/studio/interviews/683c3450a0ffcfafd9bfec53-a-conversation-with-ib-senior-manager-mary-tadros", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xp8T1VVnE2CYXsR83F89q9vUj_1783338915063_gFdEB.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Crisis Education": [
-      { title: "When Education Competes With Survival", url: "https://enmaeya.com/en/studio/interviews/69f32eab381a4fd6e1f4260a-education-for-refugees-lebanon-learning-in-crisis-lebanon-refugee-education-lebanon-alsama-project-lebanon-education-vs-survival-refugees-g12plusplus-lebanon-child-labour-lebanon-education-access-to-education-lebanon-refugee-youth-opportunity-lebanon-camps-to-classrooms-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ENIqWC2BaM50N7JAcm0lDdi6z_1784616894274_MCpBW.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "When Education Competes With Survival", url: "https://enmaeya.com/en/studio/interviews/69f32eab381a4fd6e1f4260a-education-for-refugees-lebanon-learning-in-crisis-lebanon-refugee-education-lebanon-alsama-project-lebanon-education-vs-survival-refugees-g12plusplus-lebanon-child-labour-lebanon-education-access-to-education-lebanon-refugee-youth-opportunity-lebanon-camps-to-classrooms-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ENIqWC2BaM50N7JAcm0lDdi6z_1784616894274_MCpBW.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Future Skills": [
-      { title: "AI and the Future of Learning with Dr. Hatem Sleem", url: "https://enmaeya.com/en/studio/interviews/688ca64752d33bafc3ac5ac6-ai-skills-and-the-future-of-learning-with-dr-hatem-sleem", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/lRW6yRPYPMGiOGbP6TqJp0FVI_1785490866770_FiyLm.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "What It Takes to Build an Idea with Jennifer Aouad", url: "https://enmaeya.com/en/studio/interviews/69173e8eb60244fe5b09f68f-ata3allam-app-arabic-education-digital-learning-lebanese-entrepreneurs-women-in-business-startup-lessons-founder-story-innovation-in-education", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cZQU1VaHVgOCV8MXWZt8057_1783424602455_TWpTF.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "AI and the Future of Learning with Dr. Hatem Sleem", url: "https://enmaeya.com/en/studio/interviews/688ca64752d33bafc3ac5ac6-ai-skills-and-the-future-of-learning-with-dr-hatem-sleem", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/lRW6yRPYPMGiOGbP6TqJp0FVI_1785490866770_FiyLm.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "What It Takes to Build an Idea with Jennifer Aouad", url: "https://enmaeya.com/en/studio/interviews/69173e8eb60244fe5b09f68f-ata3allam-app-arabic-education-digital-learning-lebanese-entrepreneurs-women-in-business-startup-lessons-founder-story-innovation-in-education", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cZQU1VaHVgOCV8MXWZt8057_1783424602455_TWpTF.jpg", blurb: "Studio interview from enmaeya." }
     ]
   },
   health: {
     "Mental Health": [
-      { title: "Mental Health in Times of Crisis with Dima Ayass", url: "https://enmaeya.com/en/studio/interviews/697c6d4b6b5d92c96c1f5760-mental-health-in-times-of-crisis-with-dima-ayass", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dawTc2FeepmipXxAKHr08MsLo_1783338818881_yplpb.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Education That Cares for the Mind with Dr. Jeanine Ziade", url: "https://enmaeya.com/en/studio/interviews/697386e86b5d92c96caf29e1-international-day-of-education-education-and-mental-health-education-and-mental-wellbeing-with-dr-jeanine-ziadeh-the-link-between-education-and-mental-health-education-mental-health-and-resilience-how-education-shapes-mental-wellbeing", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/slhXf0WyPVxx9RSGF2E3l6kQ_1783338833582_fBBDc.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Mental Health in Times of Crisis with Dima Ayass", url: "https://enmaeya.com/en/studio/interviews/697c6d4b6b5d92c96c1f5760-mental-health-in-times-of-crisis-with-dima-ayass", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/dawTc2FeepmipXxAKHr08MsLo_1783338818881_yplpb.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Education That Cares for the Mind with Dr. Jeanine Ziade", url: "https://enmaeya.com/en/studio/interviews/697386e86b5d92c96caf29e1-international-day-of-education-education-and-mental-health-education-and-mental-wellbeing-with-dr-jeanine-ziadeh-the-link-between-education-and-mental-health-education-mental-health-and-resilience-how-education-shapes-mental-wellbeing", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/slhXf0WyPVxx9RSGF2E3l6kQ_1783338833582_fBBDc.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Community Health": [
-      { title: "On Autism and Leading With Purpose with Aline Karam", url: "https://enmaeya.com/en/studio/interviews/69ce80493ac211857ec9709d-on-autism-and-leading-with-purpose-with-aline-karam", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WBgipvT2IkoiEFiW2HNV4gq_1783338699590_ExAjb.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Recognizing Alzheimer's Early: Why Diagnosis Matters", url: "https://enmaeya.com/en/studio/interviews/6a3a7ff13b72adb3be7e99b5-recognizing-alzheimers-early-why-diagnosis-matters-recommended-early-alzheimers-diagnosis-why-it-matters-understanding-alzheimers-early-diagnosis-alzheimers-early-signs-and-diagnosis-recognizing-alzheimers-symptoms-and-care-alzheimers-disease-early-detection-and-support-the-importance-of-early-alzheimers-diagnosis-understanding-alzheimers-with-dr-georges-karam-alzheimers-awareness-symptoms-diagnosis-and-care-recognizing-memory-loss-and-alzheimers-early", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9WAAgEwdwh7MgB2bjPhjK4s_1782218542371_AgPUR.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "On Autism and Leading With Purpose with Aline Karam", url: "https://enmaeya.com/en/studio/interviews/69ce80493ac211857ec9709d-on-autism-and-leading-with-purpose-with-aline-karam", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WBgipvT2IkoiEFiW2HNV4gq_1783338699590_ExAjb.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Recognizing Alzheimer's Early: Why Diagnosis Matters", url: "https://enmaeya.com/en/studio/interviews/6a3a7ff13b72adb3be7e99b5-recognizing-alzheimers-early-why-diagnosis-matters-recommended-early-alzheimers-diagnosis-why-it-matters-understanding-alzheimers-early-diagnosis-alzheimers-early-signs-and-diagnosis-recognizing-alzheimers-symptoms-and-care-alzheimers-disease-early-detection-and-support-the-importance-of-early-alzheimers-diagnosis-understanding-alzheimers-with-dr-georges-karam-alzheimers-awareness-symptoms-diagnosis-and-care-recognizing-memory-loss-and-alzheimers-early", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/9WAAgEwdwh7MgB2bjPhjK4s_1782218542371_AgPUR.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Health Systems": [
-      { title: "Bridging Tourism and Healthcare with Dr. Viana Hassan", url: "https://enmaeya.com/en/studio/interviews/694a4c91b03917dbe0b2faf9-tourism-meets-healthcare-where-tourism-meets-healthcare-tourism-and-healthcare-intersection-tourism-healthcare-medical-tourism-healthcare-beyond-borders-medical-tourism-where-healthcare-meets-travel-tourism-healthcare-lebanon-medical-tourism-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tHXq9JB5eSnZKTlZpy1Vhld_1783424777811_kXITb.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Bridging Tourism and Healthcare with Dr. Viana Hassan", url: "https://enmaeya.com/en/studio/interviews/694a4c91b03917dbe0b2faf9-tourism-meets-healthcare-where-tourism-meets-healthcare-tourism-and-healthcare-intersection-tourism-healthcare-medical-tourism-healthcare-beyond-borders-medical-tourism-where-healthcare-meets-travel-tourism-healthcare-lebanon-medical-tourism-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/tHXq9JB5eSnZKTlZpy1Vhld_1783424777811_kXITb.jpg", blurb: "Studio interview from enmaeya." }
     ]
   },
   environment: {
     "Water": [
-      { title: "Sustaining Lebanon's Water Resources with Dr. Georges Gharios", url: "https://enmaeya.com/en/studio/interviews/699874a96b5d92c96c997f5a-lebanons-water-future-rethinking-water-sustainability-in-lebanon-water-governance-in-lebanon-lebanon-water-crisis-and-climate-change-sustaining-water-resources-in-lebanon-water-management-and-reform-lebanon-securing-lebanons-water-future-lebanon-water-policy-and-resilience", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/gAqzaXLic58HyrjwAZQxaFzOx_1784616990480_geRFW.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Sustaining Lebanon's Water Resources with Dr. Georges Gharios", url: "https://enmaeya.com/en/studio/interviews/699874a96b5d92c96c997f5a-lebanons-water-future-rethinking-water-sustainability-in-lebanon-water-governance-in-lebanon-lebanon-water-crisis-and-climate-change-sustaining-water-resources-in-lebanon-water-management-and-reform-lebanon-securing-lebanons-water-future-lebanon-water-policy-and-resilience", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/gAqzaXLic58HyrjwAZQxaFzOx_1784616990480_geRFW.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Biodiversity": [
-      { title: "Learning to Live With Lebanon's Wildlife", url: "https://enmaeya.com/en/studio/interviews/6a82e8bbdedad4e8efc88da3-protecting-lebanons-wildlife-in-times-of-crisis-saving-lebanons-wildlife-against-the-odds-war-wildfires-and-wildlife-in-lebanon-snakes-sea-turtles-and-lebanons-wildlife-who-protects-lebanons-wildlife-what-happens-to-wildlife-during-war-protecting-lebanons-biodiversity-rami-khashab-lebanon-wildlife-from-sea-turtles-to-snakes-living-alongside-lebanons-wildlife", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xK3B953eDNutz05dw1ScEi8ah_1786964004383_BGQEV.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Saving Lebanon's Coastal Biodiversity", url: "https://enmaeya.com/en/studio/interviews/6a143be3a7d759db17cd773f-biodiversity-in-lebanons-coastline-protecting-lebanons-biodiversity-lebanons-coastal-biodiversity-crisis-public-spaces-and-biodiversity-in-lebanon-saving-lebanons-coastline-biodiversity-and-public-access-to-the-sea-mohammad-ayoub-nahnoo-interview-protecting-public-maritime-properties-lebanon-biodiversity-under-threat-in-lebanon-the-fight-for-lebanons-coast-coastal-violations-in-lebanon-preserving-lebanons-natural-coastline-biodiversity-and-coastal-protection-lebanons-shores-under-threat-international-day-for-biological-diversity-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZgRmjpw9NIycZ0q5n7wiT0tz_1783338524212_MQfiF.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Learning to Live With Lebanon's Wildlife", url: "https://enmaeya.com/en/studio/interviews/6a82e8bbdedad4e8efc88da3-protecting-lebanons-wildlife-in-times-of-crisis-saving-lebanons-wildlife-against-the-odds-war-wildfires-and-wildlife-in-lebanon-snakes-sea-turtles-and-lebanons-wildlife-who-protects-lebanons-wildlife-what-happens-to-wildlife-during-war-protecting-lebanons-biodiversity-rami-khashab-lebanon-wildlife-from-sea-turtles-to-snakes-living-alongside-lebanons-wildlife", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/xK3B953eDNutz05dw1ScEi8ah_1786964004383_BGQEV.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Saving Lebanon's Coastal Biodiversity", url: "https://enmaeya.com/en/studio/interviews/6a143be3a7d759db17cd773f-biodiversity-in-lebanons-coastline-protecting-lebanons-biodiversity-lebanons-coastal-biodiversity-crisis-public-spaces-and-biodiversity-in-lebanon-saving-lebanons-coastline-biodiversity-and-public-access-to-the-sea-mohammad-ayoub-nahnoo-interview-protecting-public-maritime-properties-lebanon-biodiversity-under-threat-in-lebanon-the-fight-for-lebanons-coast-coastal-violations-in-lebanon-preserving-lebanons-natural-coastline-biodiversity-and-coastal-protection-lebanons-shores-under-threat-international-day-for-biological-diversity-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/ZgRmjpw9NIycZ0q5n7wiT0tz_1783338524212_MQfiF.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Climate": [
-      { title: "Who Tells the Story of the Environment?", url: "https://enmaeya.com/en/studio/interviews/6a22c0f211d96626392a33b3-who-tells-the-story-of-the-environment-environmental-journalism-in-lebanon-covering-the-environment-in-lebanon-why-environmental-journalism-matters-the-future-of-environmental-reporting-beyond-environmental-crises-media-climate-and-public-awareness-environmental-storytelling-in-lebanon-reporting-on-the-environment-environment-and-the-media", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cJUVzrgVJ99ZQ6xD61b9GxM_1780662234953_oEaLU.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Governance for Sustainability with Dr. Nasser Yassine", url: "https://enmaeya.com/en/studio/interviews/69a19d906b5d92c96cbc834e-governance-for-sustainability-with-dr-nasser-yassine-embedding-sustainability-into-governance-lebanon-from-policy-to-practice-sustainability-in-lebanon-environmental-governance-and-recovery-in-lebanon-building-institutions-for-sustainable-lebanon-climate-policy-and-governance-reform-lebanon-sustainability-beyond-strategy-papers-institutional-reform-for-environmental-resilience-governance-accountability-and-climate-action-long-term-planning-for-lebanons-environment", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/7GTsXNYGPdYRyW51ExxGqPIu_1783338713732_Jgrif.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Who Tells the Story of the Environment?", url: "https://enmaeya.com/en/studio/interviews/6a22c0f211d96626392a33b3-who-tells-the-story-of-the-environment-environmental-journalism-in-lebanon-covering-the-environment-in-lebanon-why-environmental-journalism-matters-the-future-of-environmental-reporting-beyond-environmental-crises-media-climate-and-public-awareness-environmental-storytelling-in-lebanon-reporting-on-the-environment-environment-and-the-media", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/5cJUVzrgVJ99ZQ6xD61b9GxM_1780662234953_oEaLU.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Governance for Sustainability with Dr. Nasser Yassine", url: "https://enmaeya.com/en/studio/interviews/69a19d906b5d92c96cbc834e-governance-for-sustainability-with-dr-nasser-yassine-embedding-sustainability-into-governance-lebanon-from-policy-to-practice-sustainability-in-lebanon-environmental-governance-and-recovery-in-lebanon-building-institutions-for-sustainable-lebanon-climate-policy-and-governance-reform-lebanon-sustainability-beyond-strategy-papers-institutional-reform-for-environmental-resilience-governance-accountability-and-climate-action-long-term-planning-for-lebanons-environment", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/7GTsXNYGPdYRyW51ExxGqPIu_1783338713732_Jgrif.jpg", blurb: "Studio interview from enmaeya." }
     ]
   },
   ai: {
     "Social Impact": [
-      { title: "AI and Social Impact in Lebanon with Jack Jendo", url: "https://enmaeya.com/en/studio/interviews/69947e4f6b5d92c96c8d2b6e-ai-and-social-impact-in-lebanon-lebanons-digital-future-and-ai-ai-beyond-hype-and-innovation-technology-with-purpose-lebanon-brain-gain-or-brain-drain-human-centered-ai-in-lebanon-rethinking-innovation-in-lebanon-ai-entrepreneurship-and-policy-building-lebanons-digital-economy-innovation-leadership-in-the-age-of-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/azJo6o18gfgwtiAYPUlugr0w_1784617013719_KlrYF.jpg", blurb: "Studio interview from Enmaeya." },
-      { title: "Can AI Help NGOs Secure More Funding?", url: "https://enmaeya.com/en/studio/interviews/6a633b600fa04f9804078dcf-ai-transforming-ngo-funding-the-future-of-ngo-grant-funding-how-ai-is-changing-social-impact-novai-reinventing-grant-management-bridging-the-funding-gap-for-ngos-making-international-funding-more-accessible-inside-novai-the-ai-platform-for-ngos-empowering-ngos-through-artificial-intelligence-from-grant-search-to-funded-projects-democratizing-access-to-global-funding-solving-the-biggest-problem-in-ngo-funding-artificial-intelligence-for-development-organizations-building-a-smarter-funding-ecosystem-simplifying-the-entire-grant-application-process-how-lebanese-innovation-is-helping-ngos-worldwide", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/HzZ4NLQZkHBU1xaMTaYCZOG_1784887946729_JSJci.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "AI and Social Impact in Lebanon with Jack Jendo", url: "https://enmaeya.com/en/studio/interviews/69947e4f6b5d92c96c8d2b6e-ai-and-social-impact-in-lebanon-lebanons-digital-future-and-ai-ai-beyond-hype-and-innovation-technology-with-purpose-lebanon-brain-gain-or-brain-drain-human-centered-ai-in-lebanon-rethinking-innovation-in-lebanon-ai-entrepreneurship-and-policy-building-lebanons-digital-economy-innovation-leadership-in-the-age-of-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/azJo6o18gfgwtiAYPUlugr0w_1784617013719_KlrYF.jpg", blurb: "Studio interview from enmaeya." },
+      { title: "Can AI Help NGOs Secure More Funding?", url: "https://enmaeya.com/en/studio/interviews/6a633b600fa04f9804078dcf-ai-transforming-ngo-funding-the-future-of-ngo-grant-funding-how-ai-is-changing-social-impact-novai-reinventing-grant-management-bridging-the-funding-gap-for-ngos-making-international-funding-more-accessible-inside-novai-the-ai-platform-for-ngos-empowering-ngos-through-artificial-intelligence-from-grant-search-to-funded-projects-democratizing-access-to-global-funding-solving-the-biggest-problem-in-ngo-funding-artificial-intelligence-for-development-organizations-building-a-smarter-funding-ecosystem-simplifying-the-entire-grant-application-process-how-lebanese-innovation-is-helping-ngos-worldwide", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/HzZ4NLQZkHBU1xaMTaYCZOG_1784887946729_JSJci.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Digital Government": [
-      { title: "Reinventing Governance in the Digital Age with Ihab Hallab", url: "https://enmaeya.com/en/studio/interviews/699d97466b5d92c96cb04c9a-rethinking-digital-governance-reinventing-governance-in-the-digital-age-governance-beyond-technology-building-smarter-public-systems-digital-transformation-done-right-innovation-inside-government-future-of-governance-smart-governance-lebanon-digital-governance-lebanon-tech-and-public-policy-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/VORozyGDfYXFdw4sZxiL6YPmW_1783339096997_nJeCo.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Reinventing Governance in the Digital Age with Ihab Hallab", url: "https://enmaeya.com/en/studio/interviews/699d97466b5d92c96cb04c9a-rethinking-digital-governance-reinventing-governance-in-the-digital-age-governance-beyond-technology-building-smarter-public-systems-digital-transformation-done-right-innovation-inside-government-future-of-governance-smart-governance-lebanon-digital-governance-lebanon-tech-and-public-policy-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/VORozyGDfYXFdw4sZxiL6YPmW_1783339096997_nJeCo.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "Innovation": [
-      { title: "LEBTECH 2026: Connecting Lebanon to the Future of Tech", url: "https://enmaeya.com/en/studio/interviews/6a8c08c4ebab4304982c70ec-lebtech-2026-lebanon-tech-future-maya-zgheib-lebtech-2026-lebtech-ai-startups-lebanon-lebanon-technology-ecosystem-lebtech-lebtech-2026-ai-innovation-building-lebanon-tech-future-technology-for-resilience-lebanon-lebtech-startup-world-cup-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Y94belKPVHSUT0M2bByLC6ij_1787562097262_uFDdc.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "LEBTECH 2026: Connecting Lebanon to the Future of Tech", url: "https://enmaeya.com/en/studio/interviews/6a8c08c4ebab4304982c70ec-lebtech-2026-lebanon-tech-future-maya-zgheib-lebtech-2026-lebtech-ai-startups-lebanon-lebanon-technology-ecosystem-lebtech-lebtech-2026-ai-innovation-building-lebanon-tech-future-technology-for-resilience-lebanon-lebtech-startup-world-cup-lebanon", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/Y94belKPVHSUT0M2bByLC6ij_1787562097262_uFDdc.jpg", blurb: "Studio interview from enmaeya." }
     ],
     "AI Skills": [
-      { title: "Can Schools Keep Up With Artificial Intelligence?", url: "https://enmaeya.com/en/studio/interviews/6a6c6c3903e0f12641b552ce-ai-future-of-education-mike-harb-mike-harb-ai-education-artificial-intelligence-in-education-ai-in-education-and-healthcare-how-ai-is-changing-education-chatgpt-and-the-future-of-learning-can-ai-save-education-future-of-learning-with-ai-education-in-the-age-of-ai-ai-education-lebanon-mike-harb-on-ai-the-future-of-ai-in-schools-ai-teachers-chatgpt-and-learning-artificial-intelligence-podcast-mike-harb-education-healthcare-and-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WTRzETWf7HDzdUrJfQ6c1FuKc_1785490270884_YVWdw.jpg", blurb: "Studio interview from Enmaeya." }
+      { title: "Can Schools Keep Up With Artificial Intelligence?", url: "https://enmaeya.com/en/studio/interviews/6a6c6c3903e0f12641b552ce-ai-future-of-education-mike-harb-mike-harb-ai-education-artificial-intelligence-in-education-ai-in-education-and-healthcare-how-ai-is-changing-education-chatgpt-and-the-future-of-learning-can-ai-save-education-future-of-learning-with-ai-education-in-the-age-of-ai-ai-education-lebanon-mike-harb-on-ai-the-future-of-ai-in-schools-ai-teachers-chatgpt-and-learning-artificial-intelligence-podcast-mike-harb-education-healthcare-and-ai", img: "https://enmaeya-production.s3.eu-west-1.amazonaws.com/global/image/WTRzETWf7HDzdUrJfQ6c1FuKc_1785490270884_YVWdw.jpg", blurb: "Studio interview from enmaeya." }
     ]
   }
 };
@@ -458,9 +458,9 @@ function buildTree(data) {
   const projects = data.ministryProjects || [];
 
   return {
-    id: "root", label: "Lebanon Funding", sub: "sectors · funding · news",
-    report: R("Lebanon Funding Network", "Enmaeya", lastRecord, undefined,
-      "A live map of where funding flows across Lebanon's sectors — education, economy, health, environment, artificial intelligence, and development. Click any sector to open its funding data, news, and the latest Enmaeya coverage."),
+    id: "root", label: "Funding Overview", sub: "sectors · funding · news",
+    report: R("Funding Overview Network", "enmaeya", lastRecord, undefined,
+      "Explore Lebanon’s development funding landscape through an interactive network of six key sectors. Select a sector to discover its main subsectors and related funding, along with the latest enmaeya news, resources, and interviews."),
     children: sectors.map(function (s) {
       const label = LABEL_OVERRIDE[s.id] || s.label;
       const subtopics = SUBTOPICS[s.id] || [];
@@ -468,35 +468,35 @@ function buildTree(data) {
       const subtopicResources = SUBTOPIC_RESOURCES[s.id] || {};
       const subtopicStudio = SUBTOPIC_STUDIO[s.id] || {};
 
-      // Only real, ID-specific Enmaeya links are ever shown as cards — a
+      // Only real, ID-specific enmaeya links are ever shown as cards, a
       // subtopic with no curated article/resource/interview just leaves that
       // carousel empty (hidden) rather than falling back to a generic,
       // non-specific link like enmaeya.com/en/news.
       const subtopicNodes = subtopics.map(function (word, i) {
         const arts = subtopicArticles[word];
         const articleReports = arts
-          ? arts.map(function (a) { return R(a.title, "Enmaeya", lastRecord, a.url, a.blurb || (word + " coverage from Enmaeya."), a.img); })
+          ? arts.map(function (a) { return R(a.title, "enmaeya", lastRecord, a.url, a.blurb || (word + " coverage from enmaeya."), a.img); })
           : [];
         const res = subtopicResources[word];
         const resourceReports = res
-          ? res.map(function (r) { return R(r.title, "Enmaeya Hub", lastRecord, r.url, r.blurb || (word + " resource from Enmaeya Hub."), r.img); })
+          ? res.map(function (r) { return R(r.title, "enmaeya Hub", lastRecord, r.url, r.blurb || (word + " resource from enmaeya Hub."), r.img); })
           : [];
         const stu = subtopicStudio[word];
         const studioReports = stu
-          ? stu.map(function (r) { return R(r.title, "Enmaeya Studio", lastRecord, r.url, r.blurb || (word + " interview from Enmaeya Studio."), r.img); })
+          ? stu.map(function (r) { return R(r.title, "enmaeya Studio", lastRecord, r.url, r.blurb || (word + " interview from enmaeya Studio."), r.img); })
           : [];
         return {
           id: s.id + "-sub" + i, label: word, value: 17, hot: false,
           articles: articleReports,
           resources: resourceReports,
           studio: studioReports,
-          report: articleReports[0] || R(label + " — " + word, "Enmaeya", lastRecord, undefined, word + " is a tracked subtopic within " + label + ".")
+          report: articleReports[0] || R(label + ", " + word, "enmaeya", lastRecord, undefined, word + " is a tracked subtopic within " + label + ".")
         };
       });
 
       return {
         id: s.id, label: label, color: s.color,
-        report: R(label, "Enmaeya", lastRecord, undefined, summarizeSector(s.id, projects)),
+        report: R(label, "enmaeya", lastRecord, undefined, summarizeSector(s.id, projects)),
         children: subtopicNodes
       };
     })
@@ -515,7 +515,7 @@ function linkPath(d){
   return "M"+d.o._x+","+d.o._y+" Q"+kx+","+ky+" "+d.s._x+","+d.s._y;
 }
 
-// Inner ring only — always all 6 sectors, evenly spaced regardless of which
+// Inner ring only, always all 6 sectors, evenly spaced regardless of which
 // are open. The outer ring (each open sector's own subtopic words) is laid
 // out separately, and dynamically, by layoutOuterPositions() below.
 function layoutPositions(sectors){
@@ -530,7 +530,7 @@ function layoutPositions(sectors){
 
 // Recomputed every time a sector opens or closes: each open sector's words
 // fan out from its own fixed hub angle (never relocated), but the WIDTH of
-// that fan grows the fewer sectors are open — one sector alone gets to
+// that fan grows the fewer sectors are open, one sector alone gets to
 // spread its words across a wide, roomy arc; with several open at once each
 // one's fan narrows back down, capped so neighboring fans can never cross.
 function layoutOuterPositions(open){
@@ -538,7 +538,7 @@ function layoutOuterPositions(open){
   const TAU = 2 * Math.PI;
   // Each open sector's fan is capped by how close its nearest OPEN
   // neighbor actually is on the ring (always 60deg apart, whether or not
-  // the sectors between them are open) — not just by how many sectors are
+  // the sectors between them are open), not just by how many sectors are
   // open in total. Two adjacent open sectors get narrow fans that can't
   // cross; two open sectors on opposite sides of the hub still get to
   // spread wide, however many others are open elsewhere.
@@ -588,12 +588,12 @@ function updateCrumbBack(){
 
 function refreshSelection(){
   svg.select(".inner-layer").selectAll("g.node circle")
-    .attr("fill",function(d){return openSectors.has(d.id)?"#141b22":"#fff";})
-    .attr("stroke",function(d){return openSectors.has(d.id)?"#141b22":d.color;});
+    .attr("fill",function(d){return openSectors.has(d.id)?d.color:"#fff";})
+    .attr("stroke",function(d){return openSectors.has(d.id)?d.color:d.color;});
   if(outerLayer){
     outerLayer.selectAll("g.node circle")
-      .attr("fill",function(d){return d.id===selectedId?"#141b22":"#fff";})
-      .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";});
+      .attr("fill",function(d){return d.id===selectedId?sectorColorOf(d):"#fff";})
+      .attr("stroke",function(d){return d.id===selectedId?sectorColorOf(d):"#9aa8b4";});
   }
 }
 
@@ -647,7 +647,7 @@ function animateOuter(){
   svg.select(".hubring").transition().duration(dur).ease(ease)
     .attr("stroke", ringColor).attr("opacity", open.length?0.9:0.7);
 
-  // LINKS — grow from a zero-length stub at the parent sector out to the leaf,
+  // LINKS, grow from a zero-length stub at the parent sector out to the leaf,
   // each one staggered so they fan out in sequence rather than all at once.
   const linkSel=linkLayer.selectAll("path.link").data(linkData, function(d){return d.o.id;});
   linkSel.exit()
@@ -662,7 +662,7 @@ function animateOuter(){
   // (opening/closing a neighbor changes everyone else's fan), not just new ones.
   linkSel.transition().duration(dur).ease(ease).attr("d",linkPath);
 
-  // NODES — pop outward from the parent's position with a springy overshoot,
+  // NODES, pop outward from the parent's position with a springy overshoot,
   // staggered per node for a cascading "bloom" effect.
   const nodeSel=outerLayer.selectAll("g.node").data(leaves, function(d){return d.id;});
 
@@ -679,8 +679,8 @@ function animateOuter(){
   nodeEnter.append("circle")
     .attr("cx",function(d){return parentPos(d)[0];}).attr("cy",function(d){return parentPos(d)[1];})
     .attr("r",0)
-    .attr("fill",function(d){return d.id===selectedId?"#141b22":"#fff";})
-    .attr("stroke",function(d){return d.id===selectedId?"#141b22":"#9aa8b4";}).attr("stroke-width",1.4)
+    .attr("fill",function(d){return d.id===selectedId?sectorColorOf(d):"#fff";})
+    .attr("stroke",function(d){return d.id===selectedId?sectorColorOf(d):"#9aa8b4";}).attr("stroke-width",1.4)
     .on("click",function(e,d){ e.stopPropagation(); selectedId=d.id; setPanel(d); refreshSelection(); buildList(); buildResourceList(); buildStudioList(); });
   nodeEnter.append("text").attr("class","olabel").style("opacity",0).each(function(d){
     var a=leafLabelAttrs(d);
@@ -697,7 +697,7 @@ function animateOuter(){
 
   // Words for sectors that were already open glide to their new spot in the
   // (possibly wider or narrower) fan too, instead of only ever moving on
-  // their own sector's open/close — this is what keeps everything currently
+  // their own sector's open/close, this is what keeps everything currently
   // on screen from ever overlapping, no matter what else opens or closes.
   nodeSel.select("circle").transition().duration(dur).ease(ease)
     .attr("cx",function(d){return d._x;}).attr("cy",function(d){return d._y;});
@@ -711,27 +711,28 @@ function drawHub(root){
   svg.append("circle").attr("class","hubring").attr("cx",cx).attr("cy",cy).attr("r",Rc+15).attr("fill","none").attr("stroke","#3b6ea5").attr("stroke-width",2).attr("opacity",.7);
   svg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",Rc).attr("fill","url(#hg)").style("cursor","pointer")
     .on("click",function(){ closeAll(); });
-  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy-8).attr("font-size",21).text("Lebanon");
-  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy+16).attr("font-size",21).text("Funding");
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy-8).attr("font-size",21).text("Funding");
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy+16).attr("font-size",21).text("Overview");
   svg.append("text").attr("class","hubsub").attr("x",cx).attr("y",cy+40).text(root.sub);
 }
 
 function drawInner(sectors){
   const gg=svg.append("g").attr("class","inner-layer").selectAll("g").data(sectors).enter().append("g").attr("class","node");
   gg.append("circle").attr("cx",function(d){return d._x;}).attr("cy",function(d){return d._y;}).attr("r",18)
-    .attr("fill",function(d){return openSectors.has(d.id)?"#141b22":"#fff";}).attr("stroke",function(d){return openSectors.has(d.id)?"#141b22":d.color;}).attr("stroke-width",3)
+    .attr("fill",function(d){return openSectors.has(d.id)?d.color:"#fff";}).attr("stroke",function(d){return openSectors.has(d.id)?d.color:d.color;}).attr("stroke-width",3)
     .on("click",function(e,d){
       e.stopPropagation();
       d3.select(this).transition().duration(110).ease(d3.easeCubicOut).attr("r",23)
         .transition().duration(dur*0.6).ease(d3.easeElasticOut.amplitude(1).period(0.35)).attr("r",18);
       toggleSector(d);
     });
-  // Always centered directly under the sector's own circle — not beside it
-  // at the same ring angle — so every label sits in the same relative spot
+  // Always centered directly under the sector's own circle, not beside it
+  // at the same ring angle, so every label sits in the same relative spot
   // no matter where around the hub that sector falls.
   gg.append("text").attr("class","slabel")
-    .attr("x",function(d){return d._x-(d.id==="ai"?16:0);}).attr("y",function(d){return d._y+34;})
-    .attr("text-anchor","middle")
+    .attr("x",function(d){var c=Math.cos(d._a);return d._x+(c>0.3?-24:c<-0.3?24:0);})
+    .attr("y",function(d){return d._y+(Math.sin(d._a)<-0.3?40:34);})
+    .attr("text-anchor",function(d){var c=Math.cos(d._a);return c>0.3?"start":c<-0.3?"end":"middle";})
     .attr("fill",function(d){return d.color;}).text(function(d){return d.label;});
 }
 
@@ -762,12 +763,12 @@ function setPanel(node){
   var rep=node.report||node, color=node.color||sectorColorOf(node);
   d3.select("#phead").style("background","linear-gradient(135deg,#26344c,"+color+")");
   d3.select("#ptitle").text(rep.title);
-  d3.select("#pcuration").text(rep.src||"Enmaeya");
+  d3.select("#pcuration").text(rep.src||"enmaeya");
   d3.select("#pmeta").html(rep.date?"<span class='tag'>"+(node.label||"Report")+"</span> "+rep.date:"");
   d3.select("#pbody").text(rep.blurb||"");
 }
 
-// Only real, ID-specific articles ever become cards — a subsector or sector
+// Only real, ID-specific articles ever become cards, a subsector or sector
 // with none just leaves the News carousel empty (hidden), same as the
 // Resources/Studio carousels.
 function buildList(){

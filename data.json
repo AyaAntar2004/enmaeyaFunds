@@ -1,15 +1,15 @@
 {
   "meta": {
-    "title": "ENMAEYA Funding & Opportunities Dashboard",
+    "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
-    "reportingPeriod": "1 January–7 November 2026",
+    "reportingPeriod": "1 January to 7 November 2026",
     "lastRecord": "7 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
     "what": {
       "title": "What is this?",
-      "html": "<p>This dashboard tracks <strong>development funding in Lebanon</strong> — showing where money is allocated across government ministries, sectors, implementing organizations, and geographic locations. It's built to make this information accessible to the public, promoting transparency and helping users understand the country's development landscape.</p>"
+      "html": "<p>This dashboard tracks <strong>development funding in Lebanon</strong>, showing where money is allocated across government ministries, sectors, implementing organizations, and geographic locations. It's built to make this information accessible to the public, promoting transparency and helping users understand the country's development landscape.</p>"
     },
     "why": {
       "title": "Why it matters",
@@ -17,7 +17,7 @@
     },
     "mission": {
       "title": "Mission & Vision",
-      "html": "<p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable — giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p><p style='margin-top:8px'><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>"
+      "html": "<p><strong>Mission:</strong> make development funding in Lebanon transparent, accessible, and understandable, giving the public what it needs to see national priorities, emerging sectors, and the opportunities they create for education, employment, entrepreneurship, and research.</p><p style='margin-top:8px'><strong>Vision:</strong> a Lebanon where development information is open and accessible to everyone, enabling more informed decisions by citizens, institutions, businesses, and development partners.</p>"
     }
   },
   "sectorFilters": [
@@ -229,9 +229,9 @@
         "name": "WHO",
         "values": [
           5,
-          "—",
-          "—",
-          "—",
+          "",
+          "",
+          "",
           2
         ]
       },
@@ -241,7 +241,7 @@
           4,
           5,
           1,
-          "—",
+          "",
           5
         ]
       },
@@ -261,7 +261,7 @@
           1,
           1,
           5,
-          "—",
+          "",
           4
         ]
       },
@@ -288,7 +288,7 @@
     ]
   },
   "scatter": {
-    "note": "Each bubble is a Lebanese ministry; bubble size indicates the breadth of its partner network. Edit projects (0-40), fundingM (0-60) and partners (0-10) — positions are calculated automatically.",
+    "note": "Each bubble is a Lebanese ministry; bubble size indicates the breadth of its partner network. Edit projects (0-40), fundingM (0-60) and partners (0-10), positions are calculated automatically.",
     "ministries": [
       {
         "code": "MoPH",
@@ -364,12 +364,12 @@
   ],
   "sectorData": {
     "all": {
-      "main": "Health and Development together account for over half of tracked funding, while Education and AI & Technology remain comparatively small despite their long-run relevance to Lebanon's recovery — a gap worth watching.",
-      "funding": "Health leads overall funding at $68M, nearly six times the size of AI & Technology ($12M) — the widest spread across sectors.",
+      "main": "Health and Development together account for over half of tracked funding, while Education and AI & Technology remain comparatively small despite their long-run relevance to Lebanon's recovery, a gap worth watching.",
+      "funding": "Health leads overall funding at $68M, nearly six times the size of AI & Technology ($12M), the widest spread across sectors.",
       "flow": "The World Bank, EU, and UNICEF each anchor a distinct sector-ministry relationship, pointing to a concentrated rather than diversified funder base across ministries.",
-      "location": "Beirut and Mount Lebanon together host 46% of geographically-located projects, while national/unspecified projects remain the single largest category — a possible transparency gap.",
-      "heat": "UNDP shows the broadest cross-sector presence, ranking as a top partner in four of five sectors — the closest thing to a generalist funder in this data.",
-      "scatter": "MoPH combines high funding with high project count; MoPWT sits at the other extreme, with few projects and 57% of its funding from a single source — a concentration risk worth flagging.",
+      "location": "Beirut and Mount Lebanon together host 46% of geographically-located projects, while national/unspecified projects remain the single largest category, a possible transparency gap.",
+      "heat": "UNDP shows the broadest cross-sector presence, ranking as a top partner in four of five sectors, the closest thing to a generalist funder in this data.",
+      "scatter": "MoPH combines high funding with high project count; MoPWT sits at the other extreme, with few projects and 57% of its funding from a single source, a concentration risk worth flagging.",
       "opportunities": {
         "students": [
           "Development, health, and social-sector fields show the most active project pipelines right now.",
@@ -380,7 +380,7 @@
           "Beirut and Mount Lebanon concentrate the most project activity, and likely the most roles."
         ],
         "startups": [
-          "AI & Technology is the smallest funded sector — a potential underserved niche for new ventures.",
+          "AI & Technology is the smallest funded sector, a potential underserved niche for new ventures.",
           "66 projects are recorded nationally rather than regionally, suggesting demand for solutions that scale beyond one area."
         ],
         "ngos": [
@@ -401,11 +401,11 @@
       }
     },
     "health": {
-      "main": "Health receives the largest share of reported funding ($68M), yet Education — critical for long-run human capital and growth — receives roughly a third of that. This imbalance may point to future opportunities in education, or to unmet needs where health investment isn't yet translating into workforce outcomes.",
-      "funding": "At $68M, Health is Lebanon's most heavily funded sector — about 1.3x the size of Development, the next largest.",
+      "main": "Health receives the largest share of reported funding ($68M), yet Education, critical for long-run human capital and growth, receives roughly a third of that. This imbalance may point to future opportunities in education, or to unmet needs where health investment isn't yet translating into workforce outcomes.",
+      "funding": "At $68M, Health is Lebanon's most heavily funded sector, about 1.3x the size of Development, the next largest.",
       "flow": "The World Bank funds 42% of the Ministry of Public Health's tracked funding, a dependency worth monitoring against diversification efforts.",
       "location": "MoPH activity skews national and Beirut-based, consistent with the concentration of tertiary healthcare infrastructure in the capital.",
-      "heat": "WHO (5) and UNICEF (4) dominate health partnerships, with World Bank and UNDP in secondary roles — a relatively concentrated partner base.",
+      "heat": "WHO (5) and UNICEF (4) dominate health partnerships, with World Bank and UNDP in secondary roles, a relatively concentrated partner base.",
       "scatter": "MoPH sits in the high-funding, high-activity quadrant, indicating a sector with both scale and sustained donor engagement.",
       "opportunities": {
         "students": [
@@ -426,7 +426,7 @@
         ],
         "researchers": [
           "Health-financing sustainability and the 42% World Bank dependency are underexplored questions.",
-          "Little visible link yet between health investment and workforce/economic outcomes — a research gap."
+          "Little visible link yet between health investment and workforce/economic outcomes, a research gap."
         ]
       },
       "knowMore": {
@@ -438,12 +438,12 @@
       }
     },
     "education": {
-      "main": "Education receives just $24M — about a third of Health's funding — despite being a core driver of long-run productivity and youth employment. The gap suggests education may be an underfunded priority relative to its economic importance.",
+      "main": "Education receives just $24M, about a third of Health's funding, despite being a core driver of long-run productivity and youth employment. The gap suggests education may be an underfunded priority relative to its economic importance.",
       "funding": "Education ranks fourth of five sectors at $24M, ahead only of AI & Technology.",
-      "flow": "UNICEF funds 39% of the Ministry of Education's tracked funding — the lowest top-funder concentration among the four flows shown, implying a slightly more diversified funder base.",
+      "flow": "UNICEF funds 39% of the Ministry of Education's tracked funding, the lowest top-funder concentration among the four flows shown, implying a slightly more diversified funder base.",
       "location": "Education projects are not separately mapped here, but sit within the broader national and Beirut-weighted pattern seen across sectors.",
       "heat": "UNICEF (5) is the dominant education partner; World Bank (3) and ILO (2) play secondary roles, with UNDP and FAO largely absent.",
-      "scatter": "MoEHE sits mid-chart on both axes — moderate funding, moderate activity — neither a clear priority nor clearly neglected.",
+      "scatter": "MoEHE sits mid-chart on both axes, moderate funding, moderate activity, neither a clear priority nor clearly neglected.",
       "opportunities": {
         "students": [
           "Education data gaps mean there's real room to specialize in education economics, learning assessment, or ed-tech.",
@@ -462,7 +462,7 @@
           "Lower overall funding may mean less competition for new partnerships here than in Health."
         ],
         "researchers": [
-          "Education data gaps in Arab LDCs remain a known, underexplored area — directly relevant to Enmaeya's own prior coverage.",
+          "Education data gaps in Arab LDCs remain a known, underexplored area, directly relevant to enmaeya's own prior coverage.",
           "The link between education funding and youth unemployment outcomes is a live research question."
         ]
       },
@@ -475,7 +475,7 @@
       }
     },
     "economy": {
-      "main": "Economy sector data is not yet available in this dataset — check back once funding figures for this sector have been collected and validated.",
+      "main": "Economy sector data is not yet available in this dataset, check back once funding figures for this sector have been collected and validated.",
       "funding": "Data coming soon.",
       "flow": "Data coming soon.",
       "location": "Data coming soon.",
@@ -507,12 +507,12 @@
       }
     },
     "environment": {
-      "main": "Environment funding ($32M) sits mid-pack, but its funder base is the most concentrated of the four flows shown — 51% from the EU alone — meaning sector momentum may be closely tied to a single donor's priorities.",
+      "main": "Environment funding ($32M) sits mid-pack, but its funder base is the most concentrated of the four flows shown, 51% from the EU alone, meaning sector momentum may be closely tied to a single donor's priorities.",
       "funding": "Environment ranks third at $32M, roughly 47% of Health's total.",
-      "flow": "The EU funds 51% of the Ministry of Energy and Water's tracked funding — the highest single-funder share among the four flows shown.",
+      "flow": "The EU funds 51% of the Ministry of Energy and Water's tracked funding, the highest single-funder share among the four flows shown.",
       "location": "Environmental projects follow the same national/Beirut-weighted pattern seen elsewhere, without a distinct regional cluster in this data.",
       "heat": "FAO (5) and UNDP (5) co-lead environment partnerships, giving the sector two strong anchor partners rather than one.",
-      "scatter": "MoEW and MoA cluster in the lower-funding, lower-activity region — smaller in scale than Health or Development, but not without partner depth.",
+      "scatter": "MoEW and MoA cluster in the lower-funding, lower-activity region, smaller in scale than Health or Development, but not without partner depth.",
       "opportunities": {
         "students": [
           "Environmental policy, water resource management, and climate-adaptation fields align with FAO/UNDP-led programming.",
@@ -523,7 +523,7 @@
           "Lower project counts than Health mean fewer but more specialized roles."
         ],
         "startups": [
-          "EU's 51% funding share signals a sector with real momentum, but limited beyond that single donor — worth watching donor diversification.",
+          "EU's 51% funding share signals a sector with real momentum, but limited beyond that single donor, worth watching donor diversification.",
           "Water and energy-efficiency solutions look aligned with current ministry-level funding."
         ],
         "ngos": [
@@ -544,32 +544,32 @@
       }
     },
     "ai": {
-      "main": "AI & Technology is by far the smallest funded sector ($12M, 18% of Health's total), despite Lebanon's active push toward digital transformation — this gap between policy ambition and funding may be the clearest opportunity signal in the dataset.",
-      "funding": "AI & Technology is the smallest tracked sector at $12M — less than a fifth of Health's funding.",
+      "main": "AI & Technology is by far the smallest funded sector ($12M, 18% of Health's total), despite Lebanon's active push toward digital transformation, this gap between policy ambition and funding may be the clearest opportunity signal in the dataset.",
+      "funding": "AI & Technology is the smallest tracked sector at $12M, less than a fifth of Health's funding.",
       "flow": "No dedicated funder→ministry flow is shown for AI & Technology in this dataset yet, itself a data gap worth flagging.",
       "location": "AI & Technology projects aren't separately geo-mapped here; most likely cluster in Beirut given the sector's institutional base.",
-      "heat": "UNDP (4) is the only partner with a meaningful presence in AI & Technology — every other tracked organization shows little to no activity.",
-      "scatter": "MoET sits at the lower end of both funding and project count — a sector still early in attracting large-scale, multi-partner investment.",
+      "heat": "UNDP (4) is the only partner with a meaningful presence in AI & Technology, every other tracked organization shows little to no activity.",
+      "scatter": "MoET sits at the lower end of both funding and project count, a sector still early in attracting large-scale, multi-partner investment.",
       "opportunities": {
         "students": [
           "AI, data science, and digital-governance skills are in growing demand relative to current (thin) supply of funded programs.",
-          "This is the sector with the widest gap between ambition (MITAI's mandate) and funding — worth watching closely."
+          "This is the sector with the widest gap between ambition (MITAI's mandate) and funding, worth watching closely."
         ],
         "jobseekers": [
           "Fewer recorded projects mean a smaller current job pool, but a first-mover advantage as funding likely grows.",
           "UNDP is currently the most visible partner organization in this space."
         ],
         "startups": [
-          "The clearest underserved sector in the entire dataset — low funding, few partners, but strong policy attention.",
+          "The clearest underserved sector in the entire dataset, low funding, few partners, but strong policy attention.",
           "Digital-government and AI-readiness procurement may open up as MITAI's mandate translates into funded projects."
         ],
         "ngos": [
-          "Very few funders are currently active here — an open field for organizations positioning early in AI & Technology.",
+          "Very few funders are currently active here, an open field for organizations positioning early in AI & Technology.",
           "Partnering with UNDP, the sector's lone visible anchor, may be the fastest entry point."
         ],
         "researchers": [
           "The funding-ambition gap in AI & Technology is a clear, underexplored research question.",
-          "Almost no partner-network data exists for this sector — a genuine data gap to document."
+          "Almost no partner-network data exists for this sector, a genuine data gap to document."
         ]
       },
       "knowMore": {
@@ -581,12 +581,12 @@
       }
     },
     "development": {
-      "main": "Development is the second-largest funded sector ($54M) and has the broadest implementing-partner network (MoSA: 9 organizations) — suggesting a sector that's both well-resourced and structurally open to new partnerships.",
+      "main": "Development is the second-largest funded sector ($54M) and has the broadest implementing-partner network (MoSA: 9 organizations), suggesting a sector that's both well-resourced and structurally open to new partnerships.",
       "funding": "Development ranks second at $54M, about 79% of Health's total.",
       "flow": "The EU funds 48% of the Ministry of Social Affairs' tracked funding, the second-highest single-funder concentration among the four flows shown.",
       "location": "Development projects likely track closely with the national/unspecified category (66 projects), consistent with cross-regional social-protection programming.",
-      "heat": "UNICEF (5) and UNDP (5) co-lead development partnerships, with FAO (4) and ILO (4) also strongly present — the most multi-partner sector in the heatmap.",
-      "scatter": "MoSA sits in the high-funding, high-activity quadrant alongside MoPH, with the largest bubble size (9 partners) — the sector with the widest partner network.",
+      "heat": "UNICEF (5) and UNDP (5) co-lead development partnerships, with FAO (4) and ILO (4) also strongly present, the most multi-partner sector in the heatmap.",
+      "scatter": "MoSA sits in the high-funding, high-activity quadrant alongside MoPH, with the largest bubble size (9 partners), the sector with the widest partner network.",
       "opportunities": {
         "students": [
           "Social protection, livelihoods, and community development fields align with MoSA's broad partner base.",
@@ -594,7 +594,7 @@
         ],
         "jobseekers": [
           "MoSA's 9-partner network suggests the widest range of potential employers of any ministry tracked.",
-          "UNICEF, UNDP, FAO, and ILO are all actively engaged — more entry points than most sectors."
+          "UNICEF, UNDP, FAO, and ILO are all actively engaged, more entry points than most sectors."
         ],
         "startups": [
           "A well-resourced sector, but with 9 partners already active, differentiation matters more than sector access.",
@@ -606,7 +606,7 @@
         ],
         "researchers": [
           "The EU's 48% concentration despite a 9-partner network is a notable tension worth investigating.",
-          "Development sits second in funding but its outcomes data is less visible than Health's — a reporting gap."
+          "Development sits second in funding but its outcomes data is less visible than Health's, a reporting gap."
         ]
       },
       "knowMore": {
@@ -1855,7 +1855,7 @@
       "note": "",
       "fundingDate": "2016-11-10",
       "dateBasis": "In-text: Signed",
-      "dateEvidence": "Beirut – 10 November, 2016 The Food and Agriculture Organization",
+      "dateEvidence": "Beirut, 10 November, 2016 The Food and Agriculture Organization",
       "projectPeriod": "2016-12",
       "in2025_26": "NO - 2016",
       "enmaeyaLink": "",
@@ -3333,7 +3333,7 @@
       "note": "",
       "fundingDate": "2025-11",
       "dateBasis": "In-text: Disbursed",
-      "dateEvidence": "contributed 864 metric tons of rice—equivalent to over USD 1 million—to WFP Lebanon in November 2025",
+      "dateEvidence": "contributed 864 metric tons of rice, equivalent to over USD 1 million, to WFP Lebanon in November 2025",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
@@ -3365,7 +3365,7 @@
       "note": "",
       "fundingDate": "2025-11",
       "dateBasis": "In-text: Disbursed",
-      "dateEvidence": "contributed 864 metric tons of rice—equivalent to over USD 1 million—to WFP Lebanon in November 2025",
+      "dateEvidence": "contributed 864 metric tons of rice, equivalent to over USD 1 million, to WFP Lebanon in November 2025",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
@@ -3573,7 +3573,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "الاخبار 23 أيلول 2025 — توقيع عقود شراء طاقة مع CMA CGM",
+      "livePageEvidence": "الاخبار 23 أيلول 2025, توقيع عقود شراء طاقة مع CMA CGM",
       "fundingType": "External donor"
     },
     {
@@ -5260,13 +5260,13 @@
       "note": "",
       "fundingDate": "2025-01-14",
       "dateBasis": "In-text: Signed",
-      "dateEvidence": "Beirut, Lebanon – January 14, 2025",
+      "dateEvidence": "Beirut, Lebanon, January 14, 2025",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Beirut, Lebanon – January 14, 2025 – ... UNESCO signed a Tripartite Partnership Agreement today under the leadership of Ministry",
+      "livePageEvidence": "Beirut, Lebanon, January 14, 2025, ... UNESCO signed a Tripartite Partnership Agreement today under the leadership of Ministry",
       "fundingType": "External donor"
     },
     {
@@ -6456,7 +6456,7 @@
       "note": "",
       "fundingDate": "2025-07-23",
       "dateBasis": "In-text: Announced",
-      "dateEvidence": "Beirut, 23 July 2025 — The European Union announced a new €12.5 million project to support the Lebanese Armed Forces",
+      "dateEvidence": "Beirut, 23 July 2025, The European Union announced a new €12.5 million project to support the Lebanese Armed Forces",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
@@ -7638,7 +7638,7 @@
       "note": "",
       "fundingDate": "2025-04-11",
       "dateBasis": "In-text: Handover",
-      "dateEvidence": "Beirut, 11 April 2025 – As Lebanon continues to grapple with the devastating impact of the conflict",
+      "dateEvidence": "Beirut, 11 April 2025, As Lebanon continues to grapple with the devastating impact of the conflict",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
@@ -7893,7 +7893,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/٦/١١ — بالشراكة مع \"سلسلة الأمل\" (La Chaîne de l'Espoir) وبتمويل من الإتحاد الأوروبي",
+      "livePageEvidence": "Date: ٢٠٢٥/٦/١١, بالشراكة مع \"سلسلة الأمل\" (La Chaîne de l'Espoir) وبتمويل من الإتحاد الأوروبي",
       "fundingType": "External donor"
     },
     {
@@ -8524,7 +8524,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Re-checked at source",
-      "livePageEvidence": "She also participated in the launch of the WHO–Lebanon Country Cooperation Strategy 2026–2029, a joint roadmap developed with the Ministry of Public Health.",
+      "livePageEvidence": "She also participated in the launch of the WHO to Lebanon Country Cooperation Strategy 2026 to 2029, a joint roadmap developed with the Ministry of Public Health.",
       "fundingType": "No funding involved"
     },
     {
@@ -9034,7 +9034,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/٤ — \"ثم جاء دعم المجلس النرويجي للاجئين بتمويل من البنك الألماني للتنمية لإتمام التأهيل الداخلي\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/٤, \"ثم جاء دعم المجلس النرويجي للاجئين بتمويل من البنك الألماني للتنمية لإتمام التأهيل الداخلي\"",
       "fundingType": "External donor"
     },
     {
@@ -9064,7 +9064,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/٦ — \"تم التوافق على بدء الخطوات التنفيذية لابرام اتفاقية تعاون بين الوزارة وصندوق قطر للتنمية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/٦, \"تم التوافق على بدء الخطوات التنفيذية لابرام اتفاقية تعاون بين الوزارة وصندوق قطر للتنمية\"",
       "fundingType": "External donor"
     },
     {
@@ -9096,7 +9096,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/١٧ — \"منذ عام 2015، ساهم الاتحاد الأوروبي بأكثر من 75 مليون يورو لتعزيز النظام الوطني للأدوية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/١٧, \"منذ عام 2015، ساهم الاتحاد الأوروبي بأكثر من 75 مليون يورو لتعزيز النظام الوطني للأدوية\"",
       "fundingType": "External donor"
     },
     {
@@ -9126,7 +9126,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/١٨ — \"مساهمة من الحكومة بقيمة تفوق نصف مليون دولار لدعم المستشفى الحكومي في الهرمل\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/١٨, \"مساهمة من الحكومة بقيمة تفوق نصف مليون دولار لدعم المستشفى الحكومي في الهرمل\"",
       "fundingType": "External donor"
     },
     {
@@ -9258,7 +9258,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٧ — \"تحرك اليوم بتمويل من البنك الإسلامي، وإصرار من الوزارة، ودعم من مجلس الإنماء والإعمار\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٧, \"تحرك اليوم بتمويل من البنك الإسلامي، وإصرار من الوزارة، ودعم من مجلس الإنماء والإعمار\"",
       "fundingType": "External donor"
     },
     {
@@ -9288,7 +9288,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٧ — \"تحرك اليوم بتمويل من البنك الإسلامي، وإصرار من الوزارة، ودعم من مجلس الإنماء والإعمار\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٧, \"تحرك اليوم بتمويل من البنك الإسلامي، وإصرار من الوزارة، ودعم من مجلس الإنماء والإعمار\"",
       "fundingType": "External donor"
     },
     {
@@ -9318,7 +9318,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٨ — \"إستقبل وزير الصحة ... وفدًا من صندوق قطر للتنمية وتناول البحث سبل تعزيز الشراكة الاستراتيجية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١٠/٢٨, \"إستقبل وزير الصحة ... وفدًا من صندوق قطر للتنمية وتناول البحث سبل تعزيز الشراكة الاستراتيجية\"",
       "fundingType": "External donor"
     },
     {
@@ -9352,7 +9352,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١١/١ — \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١١/١, \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
       "fundingType": "External donor"
     },
     {
@@ -9382,7 +9382,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١١/١ — \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١١/١, \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
       "fundingType": "External donor"
     },
     {
@@ -9412,7 +9412,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١١/١ — \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١١/١, \"نعلن اننا وقعنا مناقصة دواء بقيمة ١٠ مليون دولار اميركي لدعم مراكز الرعاية الصحية\"",
       "fundingType": "External donor"
     },
     {
@@ -9507,7 +9507,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١١/٨ — \"نوّه بمناقشات جرت مع البنك الدولي بشأن مشاريع دعم المستشفيات الحكومية\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١١/٨, \"نوّه بمناقشات جرت مع البنك الدولي بشأن مشاريع دعم المستشفيات الحكومية\"",
       "fundingType": "External donor"
     },
     {
@@ -9633,7 +9633,7 @@
       "enmaeyaLink": "",
       "origin": "Original run",
       "sourceChecked": "Fetched OK",
-      "livePageEvidence": "Date: ٢٠٢٥/١١/١٩ — \"وزارة الصحة قررت دعم هذا المستشفى بتجهيزات قيمتها مليون ونصف مليون دولار\"",
+      "livePageEvidence": "Date: ٢٠٢٥/١١/١٩, \"وزارة الصحة قررت دعم هذا المستشفى بتجهيزات قيمتها مليون ونصف مليون دولار\"",
       "fundingType": "External donor"
     },
     {
@@ -10259,7 +10259,7 @@
       "confidence": "Low",
       "sourceFeed": "Ministry of Public Health",
       "description": "The Minister inaugurated the \"St Veronica Medical Center\" at the Our Lady of Annunciation convent in Zouk Mikael, an integrated health complex with a laboratory, radiology, physiotherapy, dental and outpatient clinics.",
-      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/82096/ناصرالدين-افتتح-مركز-القديسة-فيرونيكا-الطبي-في-دير-سيدة-البشارة-–-زوق-مكايل",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/82096/ناصرالدين-افتتح-مركز-القديسة-فيرونيكا-الطبي-في-دير-سيدة-البشارة- to -زوق-مكايل",
       "note": "",
       "fundingDate": null,
       "dateBasis": "Not stated in article",
@@ -10290,7 +10290,7 @@
       "confidence": "High",
       "sourceFeed": "Ministry of Public Health",
       "description": "The Minister said the ministry launched a project under Lebanese government patronage to support public hospitals, financed by the World Bank and the Islamic Bank at USD 100 million, with departments already opened in Batroun and Beirut Governmental Hospital.",
-      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/82096/ناصرالدين-افتتح-مركز-القديسة-فيرونيكا-الطبي-في-دير-سيدة-البشارة-–-زوق-مكايل",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/82096/ناصرالدين-افتتح-مركز-القديسة-فيرونيكا-الطبي-في-دير-سيدة-البشارة- to -زوق-مكايل",
       "note": "",
       "fundingDate": null,
       "dateBasis": "Not stated in article",
@@ -12573,7 +12573,7 @@
       "note": "",
       "fundingDate": null,
       "dateBasis": "Same-day, but publication date unreliable",
-      "dateEvidence": "Beirut, 19 February – In order to strengthen the capacities of the Lebanese health care staff",
+      "dateEvidence": "Beirut, 19 February, In order to strengthen the capacities of the Lebanese health care staff",
       "projectPeriod": "",
       "in2025_26": "Unknown",
       "enmaeyaLink": "",
@@ -12736,7 +12736,7 @@
       "note": "",
       "fundingDate": null,
       "dateBasis": "Same-day, but publication date unreliable",
-      "dateEvidence": "Beirut, 2 July – WHO Lebanon has provided the Lebanese Ministry of Public Health with 13 vehicles",
+      "dateEvidence": "Beirut, 2 July, WHO Lebanon has provided the Lebanese Ministry of Public Health with 13 vehicles",
       "projectPeriod": "",
       "in2025_26": "Unknown",
       "enmaeyaLink": "",
@@ -13164,7 +13164,7 @@
       "note": "",
       "fundingDate": "2025-06-24",
       "dateBasis": "In-text: Approved",
-      "dateEvidence": "Beirut, June 25, 2025 – The World Bank Board of Executive Directors approved yesterday",
+      "dateEvidence": "Beirut, June 25, 2025, The World Bank Board of Executive Directors approved yesterday",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
@@ -18260,7 +18260,7 @@
       "enmaeyaLink": "",
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
-      "livePageEvidence": "«تدشين نظام التحكم والإدارة المركزي – سكادا»",
+      "livePageEvidence": "«تدشين نظام التحكم والإدارة المركزي, سكادا»",
       "fundingType": "External donor"
     },
     {
@@ -18428,7 +18428,7 @@
       "ministry": "Ministry of Energy and Water",
       "ministryCode": "MoEW",
       "sector": "environment",
-      "project": "Empowering Public Services with Solar Energy – Lebanon",
+      "project": "Empowering Public Services with Solar Energy, Lebanon",
       "status": "Signed",
       "funders": [
         "Kuwait Fund for Development",
@@ -18444,7 +18444,7 @@
       "date": "2026-07-21",
       "confidence": "High",
       "sourceFeed": "UNDP Lebanon",
-      "description": "The Kuwait Fund for Development and UNDP signed a US$3 million partnership to implement the 'Empowering Public Services with Solar Energy – Lebanon' initiative, aimed at providing renewable energy solutions to seven public institutions in Lebanon.",
+      "description": "The Kuwait Fund for Development and UNDP signed a US$3 million partnership to implement the 'Empowering Public Services with Solar Energy, Lebanon' initiative, aimed at providing renewable energy solutions to seven public institutions in Lebanon.",
       "sourceLink": "https://www.undp.org/lebanon/press-releases/undp-and-kuwait-fund-sign-us3-million-partnership-strengthen-public-services-lebanon",
       "note": "",
       "fundingDate": "2026-07-21",
@@ -19078,7 +19078,7 @@
       "enmaeyaLink": "",
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
-      "livePageEvidence": "\"أطلق وزير الصحة العامة الدكتور ركان ناصر الدين مبادرة 'نفَس' – نحو بيئات عمل حكومية أكثر صحة\"",
+      "livePageEvidence": "\"أطلق وزير الصحة العامة الدكتور ركان ناصر الدين مبادرة 'نفَس', نحو بيئات عمل حكومية أكثر صحة\"",
       "fundingType": "Unknown"
     },
     {
@@ -19446,17 +19446,17 @@
       "confidence": "High",
       "sourceFeed": "Ministry of Public Health",
       "description": "The second branch of the Benin Medical Center for Primary Health Care was opened in Hermel, supported by the Benin Charity Association and donors including Wish Foundation Australia, enhancing primary health care services in the region.",
-      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87730/افتتاح-الفرع-الثاني-لمركز-بنين-الطبي-للرعاية-الصحية-الأولية-في-الهرمل-–-الشربين",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87730/افتتاح-الفرع-الثاني-لمركز-بنين-الطبي-للرعاية-الصحية-الأولية-في-الهرمل- to -الشربين",
       "note": "",
       "fundingDate": "2026-11-07",
       "dateBasis": "In-text: Announced",
-      "dateEvidence": "افتُتح مركز بنين الطبي للرعاية الصحية الأولية في بلدة الشربين – الهرمل، بتاريخ 7 تشرين الثاني 2026",
+      "dateEvidence": "افتُتح مركز بنين الطبي للرعاية الصحية الأولية في بلدة الشربين, الهرمل، بتاريخ 7 تشرين الثاني 2026",
       "projectPeriod": "",
       "in2025_26": "Yes",
       "enmaeyaLink": "",
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
-      "livePageEvidence": "افتُتح مركز بنين الطبي للرعاية الصحية الأولية في بلدة الشربين – الهرمل، بتاريخ 7 تشرين الثاني 2026",
+      "livePageEvidence": "افتُتح مركز بنين الطبي للرعاية الصحية الأولية في بلدة الشربين, الهرمل، بتاريخ 7 تشرين الثاني 2026",
       "fundingType": "External donor"
     },
     {

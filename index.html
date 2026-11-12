@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ENMAEYA Development Funding & Opportunities Dashboard</title>
+<title>enmaeya Funding Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -119,7 +119,7 @@
     color: #fff;
   }
 
-  /* The "All sectors" pill's own --pc is raw black — striking as its filled/active
+  /* The "All sectors" pill's own --pc is raw black, striking as its filled/active
      state, so it gets the app's light card gray instead, with dark text (the
      base white would be unreadable against it). Its unselected border/text stay
      black, matching every other pill's own-color outline when not the active
@@ -297,7 +297,7 @@
   }
 
   /* On "All sectors" every card re-tints to the app's own light card gray
-     (#f4f5f4) instead of any one sector's color — set on .about-card (not
+     (#f4f5f4) instead of any one sector's color, set on .about-card (not
      .about-head directly) so it cascades to the head bar, its badge, and the
      icon ring below, all of which read off the inherited --pc. Unlike the old
      black tint, a pale head bar can't carry the default white h3 text or the
@@ -469,11 +469,11 @@
     fill: #0a0d0f;
   }
 
-  /* Small, data-driven takeaway sentence under each graph — separate from the
+  /* Small, data-driven takeaway sentence under each graph, separate from the
      static .chart-sub caption above the chart, which just says what the chart is.
      Styled like a little callout card (tinted background, colored kicker label,
      left accent bar) so it reads as a highlight, not another line of gray caption
-     text — same sector-color convention as .sidebar-insight-card. Every instance
+     text, same sector-color convention as .sidebar-insight-card. Every instance
      (one per chart, plus the map's) shares the same min-height so the row of
      callout boxes lines up instead of each hugging its own text length. */
   .chart-insight-wrap {
@@ -530,12 +530,12 @@
   }
 
   .chart-insight::before {
-    content: "Enmaeya's Insight";
+    content: "enmaeya's Insight";
     display: block;
-    font-size: 12.5px;
+    font-size: 15.5px;
     font-weight: 800;
     letter-spacing: 0.06em;
-    text-transform: uppercase;
+    text-transform: none;
     color: var(--pc, var(--insight-accent));
     margin-bottom: 6px;
   }
@@ -560,26 +560,32 @@
     display: none;
   }
 
-  /* Same size and type scale as every other Enmaeya Insight box — the map's
+  /* Same size and type scale as every other enmaeya Insight box, the map's
      callout used to run smaller/compact on its own, but it's now unified so
      the whole set of boxes reads as one consistent family. */
   .map-description.chart-insight {
-    margin: 10px 0 10px;
+    margin: 22px 0 10px;
   }
 
-  /* On "All sectors" the shared --pc is the medium grey used for the pill itself —
-     fine as a border/background tint, but this panel reads calmer in the lighter
+  /* On "All sectors" the shared --pc is the medium grey used for the pill itself, fine as a border/background tint, but this panel reads calmer in the lighter
      grey already used for "National/unspecified" elsewhere. Set on the wrap (not
-     just .chart-insight) so the icon badge — a sibling, not a descendant — re-tints
+     just .chart-insight) so the icon badge, a sibling, not a descendant, re-tints
      along with the box instead of staying the darker grey. */
   .charts-grid.is-all .chart-insight-wrap {
-    --pc: #c7ccd1;
+    --pc: #6b727a;
+  }
+
+  /* The default 10% tint reads as almost white on grey, so the box itself gets
+     a stronger grey wash on "All sectors". */
+  .charts-grid.is-all .chart-insight {
+    background: color-mix(in srgb, var(--pc) 22%, #fff);
+    border-color: color-mix(in srgb, var(--pc) 60%, transparent);
   }
 
   /* ---------- "Who this data helps" audience boxes ---------- */
   /* One shared block, relocated by JS: sits under the ministry bubble chart on
      "All sectors" (the only place that chart shows) and under the partners chart
-     on every individual sector page — see selectSector(). */
+     on every individual sector page, see selectSector(). */
   .audience-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -589,7 +595,7 @@
 
   /* Echoes the about-card pattern (icon straddling the card edge, colored
      outline that re-tints with --pc) but stays flat/bordered rather than
-     filled, and skips the numbered badge — a related but distinct identity
+     filled, and skips the numbered badge, a related but distinct identity
      for a different part of the page. */
   .audience-box {
     position: relative;
@@ -769,6 +775,9 @@
 
   .map-info .chart-sub { min-height: 0; }
 
+  /* Insight sits below the title/ranking/map, spanning the full card width */
+  .map-layout > .chart-insight-wrap { grid-column: 1 / -1; }
+
   .map-pane svg {
     width: 100%;
     height: auto;
@@ -777,7 +786,7 @@
     overflow: visible;
   }
 
-  /* With no single sector selected, the map is the main event — stack it full-width
+  /* With no single sector selected, the map is the main event, stack it full-width
      under the info panel instead of sharing a row, and size it by viewport height
      (rather than by container width) so the whole country is visible on screen at
      once instead of trailing off the bottom of the window. */
@@ -797,7 +806,7 @@
     width: auto;
     /* 190px reserves the title, subtitle, chip-row rank list, legend and card
        padding around the map (with room for the rank chips to wrap an extra
-       line on narrower screens), so the whole card — not just the map — fits
+       line on narrower screens), so the whole card, not just the map, fits
        one viewport instead of the map alone fitting while its own card overflows. */
     height: calc(100vh - 190px);
     max-height: calc(100vh - 190px);
@@ -806,7 +815,7 @@
     margin: 0 auto;
   }
 
-  /* The gradient bar explains a single color's shade-by-count intensity — with
+  /* The gradient bar explains a single color's shade-by-count intensity, with
      every region now tinted by whichever sector leads it instead, that reading
      no longer applies, so the legend drops for "All sectors" (single-sector
      view keeps it; its fill is still one color ramped by count). */
@@ -870,7 +879,7 @@
   }
 
   /* "All sectors" external labels: name/count/amount/histogram live in the side
-     margins, connected to their shape by one leader line — large, uncluttered
+     margins, connected to their shape by one leader line, large, uncluttered
      type instead of small text overlaid on (and fighting the contrast of) the
      shape's own fill color. */
   .ext-leader { pointer-events: none; }
@@ -1001,12 +1010,20 @@
   }
 
   .map-card.is-all .map-rank li {
-    padding: 4px 9px;
+    padding: 4px 11px;
     font-size: 13.5px;
+    gap: 8px;
+    white-space: nowrap;
   }
 
   .map-card.is-all .map-rank .rk-name {
     flex: none;
+  }
+
+  /* Keep the number clearly apart from the city name, on the same line */
+  .map-card.is-all .map-rank .rk-count {
+    flex: none;
+    margin-left: 12px;
   }
 
   /* ---------- Coverage sidebar (enmaeya.com) ---------- */
@@ -1281,7 +1298,7 @@
     stroke-linejoin: round;
   }
 
-  /* Its own small card — set apart from the network link above by the sidebar's
+  /* Its own small card, set apart from the network link above by the sidebar's
      usual 26px section gap, not grouped tightly under it. Sector-colored, same
      --pc convention as .about-grid: a soft tint of the active sector rather
      than the flat gray card used elsewhere in the sidebar, so it reads as a
@@ -1407,7 +1424,7 @@
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><circle cx="12" cy="7.8" r="0.6" fill="currentColor"/></svg>
       </div>
       <div class="about-body">
-        <p>This dashboard tracks development funding in Lebanon — showing where money is allocated across government ministries, sectors, implementing organizations, and geographic locations. It's built to make this information accessible to the public, promoting transparency and helping users understand the country's development landscape.</p>
+        <p>This dashboard tracks development funding in Lebanon, showing where money is allocated across government ministries, sectors, implementing organizations, and geographic locations. It's built to make this information accessible to the public, promoting transparency and helping users understand the country's development landscape.</p>
       </div>
     </div>
 
@@ -1433,7 +1450,7 @@
   <div class="charts-grid">
     <div class="chart-card">
       <h2 class="chart-title">Where is the funding going?</h2>
-      <p class="chart-sub" id="chart1Sub">Illustrative reported funding by ENMAEYA sector, from tracked ministry projects.</p>
+      <p class="chart-sub" id="chart1Sub">Illustrative reported funding by sector, from tracked ministry projects.</p>
       <svg id="chartFunding" viewBox="0 0 480 300"></svg>
       <div class="chart-insight-wrap">
         <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
@@ -1452,7 +1469,7 @@
     </div>
     <div class="chart-card chart-card-wide" id="bubbleCard">
       <h2 class="chart-title">How do ministries compare on projects and funding?</h2>
-      <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding — bubble color follows its main sector.</p>
+      <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding, bubble color follows its main sector.</p>
       <svg id="chartMinistryBubble" viewBox="0 0 980 620"></svg>
       <div class="bubble-legend" id="bubbleLegend"></div>
       <div class="chart-insight-wrap">
@@ -1503,7 +1520,7 @@
             <svg viewBox="0 0 24 24"><path d="M12 2c3 3 4 7 3 12l-3 3-3-3c-1-5 0-9 3-12Z"/><circle cx="12" cy="9" r="1.3" fill="currentColor" stroke="none"/><path d="M9 15c-2 1-3 3-3 6 3 0 5-1 6-3"/><path d="M15 15c2 1 3 3 3 6-3 0-5-1-6-3"/></svg>
           </div>
           <h3>For Startups</h3>
-          <p>AI &amp; Technology is the smallest funded sector — a potential underserved niche for new ventures.</p>
+          <p>AI &amp; Technology is the smallest funded sector, a potential underserved niche for new ventures.</p>
           <p>66 projects are recorded nationally rather than regionally, suggesting demand for solutions that scale beyond one area.</p>
         </div>
         <div class="audience-box">
@@ -1529,15 +1546,15 @@
         <div class="map-info">
           <h2 class="chart-title" id="chart3Title">Where are projects concentrated?</h2>
           <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
-          <div class="chart-insight-wrap">
-            <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
-            <p class="map-description chart-insight" id="mapDescription"></p>
-          </div>
           <ul class="map-rank" id="mapRank"></ul>
         </div>
         <div class="map-pane">
           <svg id="chartMap" class="lb-map" viewBox="0 0 603.3 760"></svg>
           <div class="map-legend"><span>Fewer</span><span class="bar" id="mapLegendBar"></span><span>More</span></div>
+        </div>
+        <div class="chart-insight-wrap">
+          <span class="chart-insight-icon"><svg viewBox="0 0 59.48 57.05"><path fill="currentColor" d="M18.81,41.74c-.92-2.88-2.43-4.76-3.94-6.63-2.71-3.36-5.39-6.69-5.39-14.85,0-5.59,2.27-10.66,5.93-14.32C19.08,2.27,24.14,0,29.74,0s10.66,2.27,14.32,5.93c3.67,3.67,5.93,8.73,5.93,14.32,0,8.15-2.68,11.49-5.39,14.85-1.51,1.87-3.02,3.75-3.94,6.63l.23.21c.68.69,1.1,1.62,1.1,2.64v2.36c0,.73-.21,1.41-.58,1.99.37.58.58,1.26.58,1.99v2.36c0,1.03-.42,1.96-1.1,2.65h0c-.69.69-1.62,1.11-2.65,1.11h-17.02c-1.03,0-1.96-.42-2.64-1.1h0c-.68-.69-1.1-1.63-1.1-2.65v-2.36c0-.73.21-1.41.58-1.99-.37-.58-.58-1.26-.58-1.99v-2.36c0-1.03.42-1.96,1.1-2.64l.23-.21h0ZM17.2,33.23c1.69,2.1,3.39,4.21,4.46,7.61h2.57c1-2.29,1.5-4.75,1.5-7.22,0-2.77-.63-5.52-1.89-8.05-.37-.74-.07-1.63.67-2,.74-.37,1.63-.07,2,.67,1.48,2.96,2.22,6.18,2.22,9.38,0,2.44-.43,4.88-1.29,7.22h4.57c-.85-2.33-1.28-4.78-1.28-7.22,0-3.21.74-6.43,2.21-9.38.37-.74,1.27-1.04,2.01-.67.74.37,1.04,1.27.67,2.01-1.26,2.53-1.9,5.29-1.9,8.05,0,2.46.5,4.92,1.51,7.22h2.57c1.07-3.39,2.77-5.51,4.46-7.6,2.37-2.95,4.72-5.87,4.72-12.98,0-4.77-1.93-9.08-5.06-12.21-3.12-3.12-7.44-5.06-12.21-5.06s-9.08,1.93-12.21,5.06c-3.12,3.12-5.06,7.44-5.06,12.21,0,7.11,2.35,10.03,4.72,12.98h0ZM38.25,43.84h-17.02c-.21,0-.4.08-.53.22h0c-.13.14-.22.33-.22.54v2.36c0,.1.02.2.06.29.23-.04.46-.07.7-.07h17.02c.24,0,.47.02.7.07.04-.09.06-.18.06-.29v-2.36c0-.21-.08-.4-.22-.53h0c-.13-.14-.32-.22-.53-.22h0ZM38.95,50.64c-.23.04-.46.07-.7.07h-17.02c-.24,0-.47-.02-.7-.07-.04.09-.06.18-.06.29v2.36c0,.21.08.4.22.53h0c.13.14.32.22.53.22h17.02c.21,0,.4-.08.53-.22h0c.13-.14.22-.33.22-.54v-2.36c0-.1-.02-.2-.06-.29h0ZM56.04,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM1.5,21.75c-.83,0-1.5-.67-1.5-1.5s.67-1.5,1.5-1.5h1.94c.83,0,1.5.67,1.5,1.5s-.67,1.5-1.5,1.5h-1.94ZM55.6,15.41c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM2.78,28.49c-.8.21-1.62-.26-1.83-1.06-.21-.8.26-1.62,1.06-1.83l1.88-.5c.8-.21,1.62.26,1.83,1.06.21.8-.26,1.62-1.06,1.83l-1.88.5ZM53.53,9.39c-.71.41-1.63.17-2.04-.55-.41-.71-.17-1.63.55-2.04l1.68-.97c.71-.41,1.63-.17,2.04.55.41.71.17,1.63-.55,2.04l-1.68.97ZM5.76,34.66c-.71.41-1.63.16-2.04-.55-.41-.71-.16-1.63.55-2.04l1.68-.97c.71-.41,1.63-.16,2.04.55.41.71.16,1.63-.55,2.04l-1.68.97ZM54.82,27.98c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM2,14.9c-.8-.21-1.27-1.03-1.06-1.83.21-.8,1.03-1.27,1.83-1.06l1.88.5c.8.21,1.27,1.03,1.06,1.83-.21.8-1.03,1.27-1.83,1.06l-1.88-.5ZM52.04,33.69c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97ZM4.27,8.42c-.71-.41-.96-1.32-.55-2.04.41-.71,1.32-.96,2.04-.55l1.68.97c.71.41.96,1.32.55,2.04-.41.71-1.32.96-2.04.55l-1.68-.97Z"/></svg></span>
+          <p class="map-description chart-insight" id="mapDescription"></p>
         </div>
       </div>
     </div>
@@ -1611,7 +1628,7 @@
       lx: 232, ly: 420, size: 12 },
     { region: "Beirut", label: "Beirut",
       d: "M176.3,382.6 L175.3,374.8 L172.0,367.5 L173.9,364.3 L177.5,363.0 L182.0,363.8 L188.0,367.3 L190.3,367.3 L193.6,365.5 L198.4,365.8 L194.4,379.8 L190.7,380.2 L187.3,383.8 L182.8,384.0 L176.3,382.6 Z",
-      lx: 122, ly: 372, size: 11, leader: { x1: 188, y1: 372, x2: 126, y2: 369 } },
+      lx: 122, ly: 372, dot: { x: 184, y: 373 }, size: 11, leader: { x1: 188, y1: 372, x2: 126, y2: 369 } },
     { region: "Bekaa", label: "Beqaa",
       d: "M299.4,565.3 L278.0,561.8 L275.4,559.0 L271.0,548.9 L269.1,546.4 L262.2,542.2 L255.5,540.0 L251.5,542.3 L246.8,547.1 L237.0,560.6 L234.4,561.7 L227.9,559.4 L226.7,550.6 L223.5,544.7 L221.6,537.8 L220.7,528.1 L225.1,524.1 L228.5,518.7 L234.1,496.4 L240.3,481.6 L259.9,451.8 L264.5,449.0 L269.0,443.4 L269.2,441.4 L264.0,436.0 L273.3,422.4 L282.8,422.2 L286.6,417.1 L285.1,414.1 L273.9,406.0 L296.0,379.6 L302.2,368.4 L444.9,368.4 L447.7,372.0 L457.7,379.8 L471.1,382.1 L476.9,385.7 L477.6,394.1 L473.5,399.6 L467.0,400.6 L454.1,397.6 L436.7,388.9 L430.8,387.8 L425.6,389.7 L415.4,396.9 L408.3,397.1 L399.0,388.6 L386.8,396.1 L369.1,402.6 L365.8,407.0 L361.2,415.7 L350.0,425.4 L343.2,437.1 L337.0,442.8 L334.5,446.5 L334.0,449.9 L335.0,457.3 L334.1,461.2 L326.6,465.9 L325.3,474.7 L329.8,477.5 L337.4,478.9 L345.3,483.4 L350.1,484.7 L356.4,487.9 L362.1,492.1 L365.1,496.7 L364.0,504.3 L358.7,510.5 L351.8,515.2 L345.3,518.2 L337.3,518.1 L329.3,520.7 L325.4,526.1 L330.0,534.4 L324.6,547.5 L314.1,556.5 L299.4,565.3 Z",
       lx: 286.8, ly: 470.3, size: 12 },
@@ -1694,7 +1711,7 @@
 
   // Pie-chart variant of the tooltip above: used when hovering a region name in the
   // map's ranked list, to show the sector split behind that region's headline color
-  // and dots (rows are already sorted by size — see sectorBreakdown()).
+  // and dots (rows are already sorted by size, see sectorBreakdown()).
   function pieSlicePath(cx, cy, r, startAngle, endAngle) {
     const x1 = cx + r * Math.sin(startAngle), y1 = cy - r * Math.cos(startAngle);
     const x2 = cx + r * Math.sin(endAngle), y2 = cy - r * Math.cos(endAngle);
@@ -1727,7 +1744,7 @@
 
   // Multi-year cumulative totals ("...since 2011") and national humanitarian
   // appeals get re-reported by multiple articles for the same underlying
-  // figure — summing every mention would double-count the same money many
+  // figure, summing every mention would double-count the same money many
   // times over. They're still tracked (counted), just excluded from the $ sum.
   function isMacroFigure(p) {
     return /flash appeal|response plan/i.test(p.project) || /since 20\d\d/i.test(p.project + " " + p.amountRaw);
@@ -1787,7 +1804,7 @@
       .attr("y", d => (d.amount > 0 ? y(d.amount) : base - 6) - 8)
       .attr("text-anchor", "middle").attr("font-size", 11.5).attr("font-weight", 700)
       .attr("fill", "#233")
-      .text(d => d.amount > 0 ? "$" + Math.round(d.amount) + "M" : (d.count ? d.count + " proj" : "—"));
+      .text(d => d.amount > 0 ? "$" + Math.round(d.amount) + "M" : (d.count ? d.count + " proj" : ""));
 
     g.selectAll("text.lab").data(rows).enter().append("text").attr("class", "lab")
       .attr("transform", d => "translate(" + (x(d.id) + x.bandwidth() / 2) + "," + (base + 14) + ") rotate(-30)")
@@ -1804,12 +1821,12 @@
       insightEl.textContent = "Reported funding by sector is not yet disclosed.";
     } else if (activeId === "all") {
       const share = Math.round((top.amount / totalAmt) * 100);
-      insightEl.textContent = top.label + " leads with " + fmtAmount(top.amount) + " reported — " + share + "% of all tracked funding.";
+      insightEl.textContent = top.label + " leads with " + fmtAmount(top.amount) + " reported, " + share + "% of all tracked funding.";
     } else {
       const active = rows.find(d => d.id === activeId);
       const rank = ranked.findIndex(d => d.id === activeId) + 1;
       insightEl.textContent = active.amount > 0
-        ? active.label + " reports " + fmtAmount(active.amount) + " — " + Math.round((active.amount / totalAmt) * 100) +
+        ? active.label + " reports " + fmtAmount(active.amount) + ", " + Math.round((active.amount / totalAmt) * 100) +
           "% of total tracked funding, ranked #" + rank + " of " + rows.length + " sectors."
         : active.label + " has " + active.count + " tracked project" + (active.count === 1 ? "" : "s") + " but no disclosed funding amount yet.";
     }
@@ -1852,7 +1869,7 @@
     links = links.filter(l => funderSet.has(l.funder));
 
     // Order ministries by total weight too, so the heaviest nodes cluster
-    // near the top on both sides of the funder->ministry ribbons — that
+    // near the top on both sides of the funder->ministry ribbons, that
     // alone removes most of the avoidable line crossings.
     const ministryTotals = new Map();
     links.forEach(l => ministryTotals.set(l.ministryCode, (ministryTotals.get(l.ministryCode) || 0) + l.count));
@@ -1961,7 +1978,7 @@
     }
   }
 
-  // One stacked column per funder, segmented by sector — the segment count shows how many
+  // One stacked column per funder, segmented by sector, the segment count shows how many
   // sectors a funder spans, segment height shows how much of its activity sits in each.
   // Always drawn from every tracked project (not the selected sector's subset), since the
   // whole point is the cross-sector picture; the active sector's segments are just highlighted.
@@ -2048,7 +2065,7 @@
 
     const topByReach = rows.slice().sort((a, b) => b.sectorCount - a.sectorCount || b.total - a.total)[0];
     if (topByReach) {
-      document.getElementById("chart2Insight").textContent = topByReach.name + " funds the most sectors — " +
+      document.getElementById("chart2Insight").textContent = topByReach.name + " funds the most sectors, " +
         topByReach.sectorCount + " of " + sectorsList.length + " tracked, across " + topByReach.total +
         " project" + (topByReach.total === 1 ? "" : "s") + ".";
     }
@@ -2118,7 +2135,7 @@
     const maxCount = d3.max(rows, d => d.count) || 1;
     const maxAmount = d3.max(rows, d => d.amount) || 1;
     // Both project counts and funding amounts span roughly an order of magnitude
-    // across ministries (a handful of mega-projects vs. many modest ones) — a
+    // across ministries (a handful of mega-projects vs. many modest ones), a
     // straight linear scale would crush most bubbles into one corner, so both
     // axes use sqrt scaling to spread the bulk of ministries out while still
     // anchoring at zero and keeping the biggest outliers visibly biggest.
@@ -2128,8 +2145,7 @@
     const y = d3.scaleSqrt().domain([0, maxAmount * 1.3]).range([H - marginB, marginT]);
     const r = d3.scaleSqrt().domain([0, maxAmount]).range([7, 26]);
 
-    // With ~20 ministries on one chart, labeling every bubble collides constantly —
-    // only the most notable ones (by project count or funding) get a persistent
+    // With ~20 ministries on one chart, labeling every bubble collides constantly, // only the most notable ones (by project count or funding) get a persistent
     // acronym tag; the rest are still fully visible bubbles, just identified via
     // hover instead, keeping the crowded low-count/low-funding cluster legible.
     const importance = d => d.count / maxCount + d.amount / maxAmount;
@@ -2145,9 +2161,7 @@
     // true positions would sit on top of one another. A short collision simulation
     // nudges overlapping bubbles apart just enough that every one stays visible,
     // while an x/y pull keeps each bubble anchored close to its real data point.
-    // Labeled bubbles get a much larger collision radius than their circle alone —
-    // it has to clear room for the diagonal acronym tag too, not just the bubble —
-    // so no two labels (or a label and a neighboring bubble) ever end up overlapping.
+    // Labeled bubbles get a much larger collision radius than their circle alone, // it has to clear room for the diagonal acronym tag too, not just the bubble, // so no two labels (or a label and a neighboring bubble) ever end up overlapping.
     // The four quadrant captions join the same simulation as fixed, invisible
     // obstacles, so a bubble that would otherwise land right on top of "Few
     // projects / lower funding" gets pushed clear of it exactly like it would a
@@ -2186,7 +2200,7 @@
       .attr("stroke", "#000").attr("stroke-width", 1.3);
 
     // Two-line labels sitting right at the quadrant crossing (not the far corners),
-    // second line bold — mirrors the reference chart's "Few projects / High funding"
+    // second line bold, mirrors the reference chart's "Few projects / High funding"
     // stacked callouts that sit beside the cross itself.
     const quadLabel = (qx, qy, anchor, line1, line2) => {
       const t = g.append("text").attr("x", qx).attr("y", qy).attr("text-anchor", anchor)
@@ -2231,7 +2245,7 @@
         .style("transition", "transform 0.15s ease");
 
       // Acronym rotated along the chart's rising trend line, anchored just past
-      // the bubble's upper-right edge — same diagonal-label treatment as the
+      // the bubble's upper-right edge, same diagonal-label treatment as the
       // reference chart's ministry tags.
       if (labelSet.has(d.name)) {
         const lx = cx + rad * 0.55 + 4, ly = cy - rad * 0.55 - 4;
@@ -2243,7 +2257,7 @@
       }
 
       node.on("mouseenter", e => {
-        // A small pop on the exact bubble being hovered — a visible cue that
+        // A small pop on the exact bubble being hovered, a visible cue that
         // ties the tooltip to that point rather than the ones around it.
         circle.style("transform", "scale(1.22)").attr("opacity", 0.95).attr("stroke-width", 2.4);
         showTip(e, d.name, [
@@ -2287,7 +2301,7 @@
   }
 
   // The map, the count baked onto each shape, and the list all show the same
-  // numbers — one source of truth (`stats`), no separate hover-detail panel
+  // numbers, one source of truth (`stats`), no separate hover-detail panel
   // that has to be kept in sync with what's already on screen.
   function renderMapChart(sectorObj, projects, sectorsList) {
     const svg = d3.select("#chartMap");
@@ -2356,7 +2370,7 @@
     const intensity = d3.scalePow().exponent(0.55).domain([0, maxCount]).range([0.28, 1]);
     const colorScale = count => d3.interpolateRgb(lightTint, sectorObj.color)(intensity(count));
 
-    // On "All sectors" each region mixes several sectors' projects — tally them here
+    // On "All sectors" each region mixes several sectors' projects, tally them here
     // (region -> sectorId -> count) so the map can shade every region by whichever
     // sector actually leads there, instead of one flat hue for the whole country.
     const regionSectorStats = new Map();
@@ -2405,7 +2419,7 @@
         if (!d.region) return;
         highlight(d.region);
         // Same sector-breakdown popup the ranked list already shows on hover,
-        // triggered here too — but only on "All sectors", where a region can
+        // triggered here too, but only on "All sectors", where a region can
         // actually mix more than one sector.
         if (isAll) {
           const breakdown = sectorBreakdown(d.region);
@@ -2449,17 +2463,17 @@
         .attr("text-anchor", d => d.leader ? "end" : "middle")
         .text(d => fmtAmount(stats.get(d.region).amount));
     } else {
-      // All sectors: every label moves off the map into the side margins — name,
+      // All sectors: every label moves off the map into the side margins, name,
       // count, amount in large clear type, plus the region's full sector-count
-      // histogram — each connected back to its shape by one leader line, instead
+      // histogram, each connected back to its shape by one leader line, instead
       // of small text crowded onto (and fighting the fill color of) the shape itself.
       const LEFT_ORDER = ["Akkar", "North Lebanon", "Beirut", "Mount Lebanon", "South Lebanon"];
       const RIGHT_ORDER = ["Baalbek-Hermel", "Bekaa", "Nabatieh"];
       function rowYFor(region) {
         const l = LEFT_ORDER.indexOf(region);
-        if (l !== -1) return LEFT_ORDER.length > 1 ? 60 + l * (MAP_H - 120) / (LEFT_ORDER.length - 1) : MAP_H / 2;
+        if (l !== -1) return LEFT_ORDER.length > 1 ? 74 + l * (MAP_H - 148) / (LEFT_ORDER.length - 1) : MAP_H / 2;
         const r = RIGHT_ORDER.indexOf(region);
-        if (r !== -1) return RIGHT_ORDER.length > 1 ? 60 + r * (MAP_H - 120) / (RIGHT_ORDER.length - 1) : MAP_H / 2;
+        if (r !== -1) return RIGHT_ORDER.length > 1 ? 74 + r * (MAP_H - 148) / (RIGHT_ORDER.length - 1) : MAP_H / 2;
         return MAP_H / 2;
       }
 
@@ -2473,7 +2487,7 @@
         const textX = side === "left" ? -170 : MAP_W + 170;
         const anchor = side === "left" ? "start" : "end";
         const s = stats.get(d.region);
-        // Biggest sector first, smallest last — sectorBreakdown() is already
+        // Biggest sector first, smallest last, sectorBreakdown() is already
         // sorted by count descending.
         const breakdown = sectorBreakdown(d.region);
 
@@ -2486,35 +2500,38 @@
           .on("mousemove", ev => moveTip(ev))
           .on("mouseleave", () => { clearHighlight(); hideTip(); });
 
-        // Invisible hit area behind the text block — text glyphs alone leave gaps
+        // Invisible hit area behind the text block, text glyphs alone leave gaps
         // (between/around letters) that wouldn't otherwise register hover.
         row.append("rect").attr("class", "ext-hitarea")
-          .attr("x", side === "left" ? textX : textX - 190).attr("y", y - 46)
-          .attr("width", 190).attr("height", 76)
+          .attr("x", side === "left" ? textX : textX - 190).attr("y", y - 58)
+          .attr("width", 190).attr("height", 88)
           .attr("fill", "transparent").attr("pointer-events", "all");
 
-        const nameY = y - 34;
+        const nameY = y - 48;
         const nameText = row.append("text").attr("class", "ext-name")
           .attr("x", textX).attr("y", nameY).attr("text-anchor", anchor)
           .text(d.label);
 
-        // One straight line, dot to label — no bends. It stops right at the
+        // One straight line, dot to label, no bends. It stops right at the
         // edge of the region name closest to the map: on the left side that's
         // where the name ends (its rightmost letter, reading toward the
         // map); on the right side that's where the name starts (its
-        // leftmost letter, reading toward the map) — never past the whole
+        // leftmost letter, reading toward the map), never past the whole
         // word.
         const nameBox = nameText.node().getBBox();
+        // Beirut's anchor can be overridden so its dot lands inside the shape
+        // rather than out in the sea.
+        const dotX = d.dot ? d.dot.x : d.lx, dotY = d.dot ? d.dot.y : d.ly;
         const leaderEndX = side === "left" ? nameBox.x + nameBox.width + 6 : nameBox.x - 6;
 
         row.insert("line", ".ext-name").attr("class", "ext-leader")
-          .attr("x1", d.lx).attr("y1", d.ly).attr("x2", leaderEndX).attr("y2", nameY)
+          .attr("x1", dotX).attr("y1", dotY).attr("x2", leaderEndX).attr("y2", nameY)
           .attr("stroke", "#b7bec2").attr("stroke-width", 1.4);
         row.insert("circle", ".ext-name").attr("class", "ext-dot")
-          .attr("cx", d.lx).attr("cy", d.ly).attr("r", 4.5)
+          .attr("cx", dotX).attr("cy", dotY).attr("r", 4.5)
           .attr("fill", "#000").attr("stroke", "#fff").attr("stroke-width", 1.5);
         // Matching marker at the label end, right where the line actually
-        // stops — same treatment as the dot on the map side.
+        // stops, same treatment as the dot on the map side.
         row.insert("circle", ".ext-name").attr("class", "ext-dot")
           .attr("cx", leaderEndX).attr("cy", nameY).attr("r", 3.5)
           .attr("fill", "#000").attr("stroke", "#fff").attr("stroke-width", 1.5);
@@ -2526,8 +2543,7 @@
           .attr("x", textX).attr("y", y + 20).attr("text-anchor", anchor)
           .text(fmtAmount(s.amount));
 
-        // Full sector-mix histogram, anchored at the outer edge of the margin —
-        // every sector tracked in the region, ordered biggest to smallest.
+        // Full sector-mix histogram, anchored at the outer edge of the margin, // every sector tracked in the region, ordered biggest to smallest.
         // Bars share one baseline and sit flush against each other (no gap),
         // so the row reads as a single histogram silhouette and the step
         // between sector counts is what shows, not the gaps between bars.
@@ -2552,7 +2568,7 @@
               .attr("stroke", "#fff").attr("stroke-width", 1)
               .on("mouseenter", ev => {
                 highlight(d.region);
-                showTip(ev, d.label + " — " + e.s.label, [e.c + " tracked project" + (e.c === 1 ? "" : "s")], e.s.color);
+                showTip(ev, d.label + ", " + e.s.label, [e.c + " tracked project" + (e.c === 1 ? "" : "s")], e.s.color);
               })
               .on("mousemove", moveTip)
               .on("mouseleave", () => { clearHighlight(); hideTip(); });
@@ -2565,8 +2581,7 @@
 
     if (isAll) {
       // Region name/count/amount/histogram now live directly on the map itself
-      // (see the external labels above), so this row no longer repeats them —
-      // it's just the key to the histogram colors: which sector each bar is.
+      // (see the external labels above), so this row no longer repeats them, // it's just the key to the histogram colors: which sector each bar is.
       sectorsList.forEach(s => {
         const li = document.createElement("li");
         li.innerHTML = '<span class="rk-dot" style="background:' + s.color + '"></span>' +
@@ -2623,7 +2638,7 @@
     const topPartner = rows[0];
     const topShare = totalMentions > 0 ? Math.round((topPartner.count / totalMentions) * 100) : 0;
     document.getElementById("partnersInsight").textContent = topPartner.name + " appears in " + topPartner.count +
-      " tracked project" + (topPartner.count === 1 ? "" : "s") + " — " + topShare + "% of partner mentions in " + sectorObj.label + ".";
+      " tracked project" + (topPartner.count === 1 ? "" : "s") + ", " + topShare + "% of partner mentions in " + sectorObj.label + ".";
 
     rows.forEach((d, i) => {
       const y = top + i * (barH + gap);
@@ -2649,7 +2664,7 @@
     });
   }
 
-  // Lifecycle order (not count order) — reads as a pipeline from first announced
+  // Lifecycle order (not count order), reads as a pipeline from first announced
   // to fully completed, which matters more here than which stage has the most.
   const PROJECT_STAGES = ["Announced", "Planned", "Signed", "Ongoing", "Completed"];
 
@@ -2671,9 +2686,9 @@
       const i = PROJECT_STAGES.indexOf(st);
       return d3.interpolateRgb(lightTint, sectorObj.color)(i / Math.max(1, PROJECT_STAGES.length - 1));
     };
-    // A fixed geometric triangle — same true-point apex, base and level count on
+    // A fixed geometric triangle, same true-point apex, base and level count on
     // every sector page, in a constant lifecycle order that's never resorted by
-    // count — so only the numbers change from one sector to the next, not the
+    // count, so only the numbers change from one sector to the next, not the
     // shape. Band width is purely geometric (distance from the apex), not scaled
     // to the data. Right-aligned: the right edge is a single straight vertical
     // line (the apex sits on it) and only the left edge slants outward going
@@ -2692,7 +2707,7 @@
       const leftX0 = leftXAt(y0);
       const leftX1 = leftXAt(y1);
       // Biased toward the band's wider (bottom) edge, not its true vertical
-      // center — the tip band is narrow near y0, and a centered number can
+      // center, the tip band is narrow near y0, and a centered number can
       // reach past the slanted left edge into the white background above it.
       const textY = y0 + (y1 - y0) * 0.72;
       const count = counts.get(status) || 0;
@@ -2816,7 +2831,7 @@
     let activeSectorId = null;
 
     // The Ministry/Funder/Location filters stack on top of whichever sector pill
-    // is active — filtering the project list once, here, means every chart below
+    // is active, filtering the project list once, here, means every chart below
     // (funding, flow, map, bubble, partners, stage pyramid) sees the same
     // narrowed data automatically, the same way they already all key off
     // whichever sector is selected.
@@ -2854,7 +2869,7 @@
       const audienceCard = document.getElementById('audienceCard');
       const anchorCard = document.getElementById(id === 'all' ? 'bubbleCard' : 'partnersCard');
       anchorCard.after(audienceCard);
-      document.getElementById('sidebarInsightCard').style.setProperty('--pc', sectorObj.color);
+      document.getElementById('sidebarInsightCard').style.setProperty('--pc', id === 'all' ? '#6b727a' : sectorObj.color);
       document.getElementById('sidebarInsightText').textContent = sd ? sd.main : 'Data coming soon.';
       renderMinistryCharts(id, sectors, filteredProjects());
       if (typeof updateClearButton === 'function') updateClearButton();
