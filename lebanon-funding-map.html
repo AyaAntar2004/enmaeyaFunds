@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Funding Overview Network, enmaeya</title>
+<title>Lebanon Funding Network</title>
 <script src="vendor/d3.min.js"></script>
 <style>
   :root{--bg:#f4f6f8;--ink:#000;--muted:#2b3640;--line:#c3ccd4;--ring:#3b6ea5;--hi:#141b22;}
@@ -17,9 +17,9 @@
   .crumb{color:var(--muted)}
   svg{width:100%;height:auto;display:block}
   .right{padding:22px 26px;border-left:1px solid var(--line);background:#fff}
-  .phead{height:120px;border-radius:12px;display:flex;align-items:flex-end;padding:16px 18px;color:#fff;background:linear-gradient(135deg,#26344c,#3b6ea5);transition:background .3s}
+  .phead{height:120px;border-radius:12px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding:16px 18px;color:#fff;background:linear-gradient(135deg,#26344c,#3b6ea5);transition:background .3s}
   .phead h2{margin:0;font-size:23.5px;line-height:1.15}
-  .curation{font-size:14.5px;opacity:.9;margin-top:4px}
+  .plogo{height:34px;width:auto;flex:none;filter:brightness(0) invert(1);opacity:.95}
   .pmeta{font-size:13.5px;color:var(--muted);margin:14px 0 8px}
   .pmeta .tag{background:#eef2f6;color:#1c2a36;border-radius:6px;padding:3px 10px;margin-right:6px}
   .pbody{font-size:15.5px;line-height:1.55;color:#33404d}
@@ -64,8 +64,7 @@
     <div class="foot">Source: enmaeya (enmaeya.com) &middot; click a sector to open it, click again to close &middot; open as many as you like &middot; data prototype</div>
   </div>
   <div class="right">
-    <div class="phead" id="phead"><div><h2 id="ptitle">Funding Overview Network</h2>
-      <div class="curation" id="pcuration">enmaeya</div></div></div>
+    <div class="phead" id="phead"><div><h2 id="ptitle">Lebanon Funding Network</h2></div></div>
     <div class="pmeta" id="pmeta"></div>
     <div class="pbody" id="pbody"></div>
     <div class="browse" id="newsBrowse">
@@ -458,9 +457,9 @@ function buildTree(data) {
   const projects = data.ministryProjects || [];
 
   return {
-    id: "root", label: "Funding Overview", sub: "sectors · funding · news",
-    report: R("Funding Overview Network", "enmaeya", lastRecord, undefined,
-      "Explore Lebanon’s development funding landscape through an interactive network of six key sectors. Select a sector to discover its main subsectors and related funding, along with the latest enmaeya news, resources, and interviews."),
+    id: "root", label: "Funding Overview", sub: "",
+    report: R("Lebanon Funding Network", "enmaeya", lastRecord, undefined,
+      "Explore Lebanon’s development funding landscape through an interactive network of six key sectors. Select a sector to discover its main areas of focus, explore related funding information, and access Enmaeya’s latest news and resources."),
     children: sectors.map(function (s) {
       const label = LABEL_OVERRIDE[s.id] || s.label;
       const subtopics = SUBTOPICS[s.id] || [];
@@ -711,9 +710,8 @@ function drawHub(root){
   svg.append("circle").attr("class","hubring").attr("cx",cx).attr("cy",cy).attr("r",Rc+15).attr("fill","none").attr("stroke","#3b6ea5").attr("stroke-width",2).attr("opacity",.7);
   svg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",Rc).attr("fill","url(#hg)").style("cursor","pointer")
     .on("click",function(){ closeAll(); });
-  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy-8).attr("font-size",21).text("Funding");
-  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy+16).attr("font-size",21).text("Overview");
-  svg.append("text").attr("class","hubsub").attr("x",cx).attr("y",cy+40).text(root.sub);
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy-2).attr("font-size",21).text("Funding");
+  svg.append("text").attr("class","hublabel").attr("x",cx).attr("y",cy+22).attr("font-size",21).text("Overview");
 }
 
 function drawInner(sectors){
@@ -763,7 +761,6 @@ function setPanel(node){
   var rep=node.report||node, color=node.color||sectorColorOf(node);
   d3.select("#phead").style("background","linear-gradient(135deg,#26344c,"+color+")");
   d3.select("#ptitle").text(rep.title);
-  d3.select("#pcuration").text(rep.src||"enmaeya");
   d3.select("#pmeta").html(rep.date?"<span class='tag'>"+(node.label||"Report")+"</span> "+rep.date:"");
   d3.select("#pbody").text(rep.blurb||"");
 }

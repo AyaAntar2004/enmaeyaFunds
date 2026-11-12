@@ -510,7 +510,7 @@
     right: 12px;
     width: 42px;
     height: 42px;
-    color: var(--pc, var(--insight-accent));
+    color: var(--title-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -536,7 +536,7 @@
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: none;
-    color: var(--pc, var(--insight-accent));
+    color: var(--title-color);
     margin-bottom: 6px;
   }
 
@@ -1449,7 +1449,7 @@
 
   <div class="charts-grid">
     <div class="chart-card">
-      <h2 class="chart-title">Where is the funding going?</h2>
+      <h2 class="chart-title">Where Is the Funding Going?</h2>
       <p class="chart-sub" id="chart1Sub">Illustrative reported funding by sector, from tracked ministry projects.</p>
       <svg id="chartFunding" viewBox="0 0 480 300"></svg>
       <div class="chart-insight-wrap">
@@ -1458,8 +1458,8 @@
       </div>
     </div>
     <div class="chart-card">
-      <h2 class="chart-title" id="chart2Title">Who funds whom?</h2>
-      <p class="chart-sub" id="chart2Sub">Leading funder &#8594; Lebanese ministry &#8594; sector</p>
+      <h2 class="chart-title" id="chart2Title">Who Funds Whom?</h2>
+      <p class="chart-sub" id="chart2Sub">Leading funder &#8594; Lebanese ministry &#8594; sector.</p>
       <svg id="chartFlow" viewBox="0 0 480 328"></svg>
       <svg id="chartFunderSectors" viewBox="0 0 480 300"></svg>
       <div class="chart-insight-wrap">
@@ -1468,7 +1468,7 @@
       </div>
     </div>
     <div class="chart-card chart-card-wide" id="bubbleCard">
-      <h2 class="chart-title">How do ministries compare on projects and funding?</h2>
+      <h2 class="chart-title">How Do Ministries Compare on Projects and Funding?</h2>
       <p class="chart-sub">Every tracked ministry, plotted by project count and reported funding, bubble color follows its main sector.</p>
       <svg id="chartMinistryBubble" viewBox="0 0 980 620"></svg>
       <div class="bubble-legend" id="bubbleLegend"></div>
@@ -1478,7 +1478,7 @@
       </div>
     </div>
     <div class="chart-card" id="statusCard">
-      <h2 class="chart-title">What stage are these projects at?</h2>
+      <h2 class="chart-title">What Stage Are These Projects At?</h2>
       <p class="chart-sub" id="chart5Sub">Project count by stage within the selected sector.</p>
       <svg id="chartStatus" viewBox="0 0 480 300"></svg>
       <div class="chart-insight-wrap">
@@ -1487,7 +1487,7 @@
       </div>
     </div>
     <div class="chart-card" id="partnersCard">
-      <h2 class="chart-title">Which partners dominate each sector?</h2>
+      <h2 class="chart-title">Which Partners Dominate Each Sector?</h2>
       <p class="chart-sub" id="chart4Sub">Partner frequency within the selected sector.</p>
       <svg id="chartPartners" viewBox="0 0 480 300"></svg>
       <div class="chart-insight-wrap">
@@ -1496,7 +1496,7 @@
       </div>
     </div>
     <div class="chart-card chart-card-wide audience-card" id="audienceCard">
-      <h2 class="chart-title">Who this data helps</h2>
+      <h2 class="chart-title">Who Does This Data Help?</h2>
       <p class="chart-sub">Practical takeaways for people using this dashboard.</p>
       <div class="audience-grid">
         <div class="audience-box">
@@ -1544,7 +1544,7 @@
     <div class="chart-card map-card">
       <div class="map-layout">
         <div class="map-info">
-          <h2 class="chart-title" id="chart3Title">Where are projects concentrated?</h2>
+          <h2 class="chart-title" id="chart3Title">Where Are Projects Concentrated?</h2>
           <p class="chart-sub" id="chart3Sub">Location and project volume by governorate.</p>
           <ul class="map-rank" id="mapRank"></ul>
         </div>
@@ -1564,7 +1564,7 @@
 
 <aside class="coverage-sidebar">
   <div class="coverage-panel">
-    <h2 class="coverage-title">Related coverage<small>from enmaeya.com</small></h2>
+    <h2 class="coverage-title">Related Coverage<small>from enmaeya.com</small></h2>
     <nav class="coverage-list">
       <a class="coverage-item" style="--cc: var(--c-development)" href="https://enmaeya.com/en/news" target="_blank" rel="noopener">
         <span class="cov-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="9" x2="17" y2="9"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="17" x2="13" y2="17"/></svg></span>
@@ -1599,7 +1599,7 @@
       <span class="sidebar-insight-icon">
         <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.6c.6.55 1 1.3 1 2.4h6c0-1.1.4-1.85 1-2.4A7 7 0 0 0 12 2Z"/></svg>
       </span>
-      <p class="sidebar-insight-title">What this view suggests</p>
+      <p class="sidebar-insight-title">What This View Suggests</p>
     </div>
     <p class="sidebar-insight-text" id="sidebarInsightText">Select a sector to see insights.</p>
   </div>
@@ -2310,8 +2310,8 @@
     const isAll = sectorObj.id === "all";
     document.querySelector(".map-card").classList.toggle("is-all", isAll);
     document.getElementById("chart3Title").textContent = isAll
-      ? "Where are sectorial projects concentrated?"
-      : "Where are projects concentrated?";
+      ? "Where Are Sectorial Projects Concentrated?"
+      : "Where Are Projects Concentrated?";
 
     document.getElementById("mapLegendBar").style.setProperty("--pc", sectorObj.color);
 
@@ -2781,10 +2781,10 @@
     // The cross-sector stacked bars only make sense with no single sector picked
     // (each bar would otherwise collapse to one segment); "Who funds whom?" only
     // makes sense once a sector narrows the ministries down to a legible handful.
-    document.getElementById("chart2Title").textContent = isAll ? "Which Sectors Do Funders Support?" : "Who funds whom?";
+    document.getElementById("chart2Title").textContent = isAll ? "Which Sectors Do Funders Support?" : "Who Funds Whom?";
     document.getElementById("chart2Sub").textContent = isAll
       ? "Every tracked funder, broken down by sector."
-      : "Leading funder → " + sectorObj.label + " ministry → sector";
+      : "Leading funder → " + sectorObj.label + " ministry → sector.";
     document.getElementById("chartFunderSectors").classList.toggle("is-hidden", !isAll);
     document.getElementById("chartFlow").classList.toggle("is-hidden", isAll);
 
