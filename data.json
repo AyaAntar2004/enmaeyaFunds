@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "11 November 2026",
+    "lastRecord": "13 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -19586,6 +19586,68 @@
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "\"أموالا كانت مجمدة لدى البنك الدولي والبنك الإسلامي جرى استخدامها لتفعيل شبكة المستشفيات الحكومية\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "Creation of a Central Pharmaceutical Laboratory",
+      "status": "Planned",
+      "funders": [],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Lebanese University"
+      ],
+      "region": "National",
+      "date": "2026-11-13",
+      "confidence": "Medium",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The Ministry of Public Health announced plans to create a Central Pharmaceutical Laboratory in collaboration with the Lebanese University to ensure the quality and effectiveness of medicines in Lebanon.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87849/وزير-الصحة-الجودة-أولوية-في-الدواء-والاستشفاء-رغم-محدودية-الموازنة",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"توقيع عقد مع الجامعة اللبنانية أمس لإنشاء مختبر مركزي دوائي مرجعي\"",
+      "fundingType": "Unknown"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "Central Laboratory for Pharmaceutical Safety and Quality",
+      "status": "Planned",
+      "funders": [
+        "World Bank"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Lebanese University"
+      ],
+      "region": "National",
+      "date": "2026-11-12",
+      "confidence": "High",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The Lebanese University signed a cooperation agreement with the Ministry of Public Health to establish a central laboratory for pharmaceutical safety and quality, with initial funding from the World Bank.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87836/اتفاقية-تعاون-بين-الجامعة-اللبنانية-ووزارة-الصحة-لإنشاء-المختبر-المركزي",
+      "note": "",
+      "fundingDate": "2025-10-29",
+      "dateBasis": "In-text: Approved",
+      "dateEvidence": "بموجب القرار رقم 8/تاريخ 29/10/2025",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "تفعيل هبة من البنك الدولي لتجهيزه كمرحلة أولى",
       "fundingType": "External donor"
     }
   ]
