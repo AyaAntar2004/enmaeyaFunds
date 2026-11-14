@@ -19649,6 +19649,34 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "تفعيل هبة من البنك الدولي لتجهيزه كمرحلة أولى",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Energy and Water",
+      "ministryCode": "MoEW",
+      "sector": "environment",
+      "project": "Funding for Electricité du Liban",
+      "status": "Announced",
+      "funders": [],
+      "amountRaw": "LBP 8,950 billion",
+      "amountUSDm": null,
+      "partners": [],
+      "region": "National",
+      "date": "2026-01-01",
+      "confidence": "High",
+      "sourceFeed": "Lebanese Presidency",
+      "description": "The Lebanese government announced an additional budget allocation of LBP 8,950 billion to settle part of the outstanding dues of Electricité du Liban, as approved by the Parliament.",
+      "sourceLink": "https://www.presidency.gov.lb/media/news/1686",
+      "note": "",
+      "fundingDate": "2026-11-13",
+      "dateBasis": "In-text: Approved",
+      "dateEvidence": "القانون الرقم 72 تاريخ 13 تشرين الثاني 2026",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "بقيمة ٨٩٥٠ مليار ليرة لبنانية",
+      "fundingType": "Ministry budget"
     }
   ]
 }
