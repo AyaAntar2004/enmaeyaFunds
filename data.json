@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "13 November 2026",
+    "lastRecord": "16 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -19677,6 +19677,67 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "بقيمة ٨٩٥٠ مليار ليرة لبنانية",
       "fundingType": "Ministry budget"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "Kids First Conference",
+      "status": "Ongoing",
+      "funders": [],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Kids First Association",
+        "Gustave Roussy Institute"
+      ],
+      "region": "National",
+      "date": "2026-11-14",
+      "confidence": "Medium",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The Kids First Association is continuing its support for children with cancer and blood disorders, with the Ministry of Public Health providing essential medications, ensuring ongoing treatments despite Lebanon's challenges.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87883/وزير-الصحة-في-افتتاح-مؤتمر-كيدز-فيرست-",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"دعم الوزارة في تأمين الأدوية للأطفال المصابين بالسرطان واضطرابات الدم\"",
+      "fundingType": "Unknown"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "Winter Preparedness and Response 2026-2027",
+      "status": "Planned",
+      "funders": [],
+      "amountRaw": "USD 43.64 million",
+      "amountUSDm": 43.64,
+      "partners": [
+        "Lebanon Response Plan partners"
+      ],
+      "region": "National",
+      "date": "2026-11-16",
+      "confidence": "High",
+      "sourceFeed": "ReliefWeb OCHA",
+      "description": "The Lebanon Response Plan partners are coordinating a winter preparedness and response initiative for 2026-2027, requiring $43.64 million to support vulnerable households and improve shelter conditions amid ongoing humanitarian challenges.",
+      "sourceLink": "https://reliefweb.int/report/lebanon/lebanon-overview-lebanon-winter-preparedness-response-2026-2027",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
     }
   ]
 }
