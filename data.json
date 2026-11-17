@@ -19738,6 +19738,71 @@
       "sourceChecked": "Fetch failed (scraped text only)",
       "livePageEvidence": "",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Finance",
+      "ministryCode": "MoF",
+      "sector": "development",
+      "project": "Lebanon Emergency Assistance Project (LEAP)",
+      "status": "Ongoing",
+      "funders": [
+        "World Bank"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [],
+      "region": "National",
+      "date": "2026-11-16",
+      "confidence": "Medium",
+      "sourceFeed": "World Bank Lebanon",
+      "description": "The World Bank is supporting the Lebanon Emergency Assistance Project (LEAP), which is helping restore essential services and critical infrastructure in conflict-affected areas of Lebanon.",
+      "sourceLink": "https://www.worldbank.org/en/news/press-release/2026/11/16/world-bank-managing-director-visits-lebanon-to-reaffirm-support-for-recovery",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"World Bank financed Lebanon Emergency Assistance Project (LEAP)\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Labour",
+      "ministryCode": "MoL",
+      "sector": "development",
+      "project": "Partnership for improving prospects for forcibly displaced persons and host communities (PROSPECTS)",
+      "status": "Ongoing",
+      "funders": [
+        "European Union",
+        "Kingdom of the Netherlands"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "ILO",
+        "UNHCR",
+        "IOM"
+      ],
+      "region": "National",
+      "date": "2026-11-16",
+      "confidence": "High",
+      "sourceFeed": "ILO Lebanon Arab States",
+      "description": "The EU and the Kingdom of the Netherlands are supporting the PROSPECTS Partnership to improve labour market governance and regularisation for displaced persons in Lebanon, focusing on decent work and worker protection.",
+      "sourceLink": "https://www.ilo.org/resource/news/ilo-brings-together-stakeholders-advance-labour-market-governance",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "2019-01 -> 2027-12",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "Partnership for improving prospects for forcibly displaced persons and host communities (PROSPECTS) in Lebanon",
+      "fundingType": "External donor"
     }
   ]
 }
