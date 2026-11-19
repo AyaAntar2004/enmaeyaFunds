@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "18 November 2026",
+    "lastRecord": "19 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -19996,6 +19996,104 @@
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "حوّل إلى مصرف الإسكان حتى تاريخه نحو 115 مليون دولار أميركي من أصل 165 مليون دولار، خُصصت لدعم برنامج القروض السكنية.",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Agriculture",
+      "ministryCode": "MoA",
+      "sector": "development",
+      "project": "Support for Lebanese Apples Campaign",
+      "status": "Ongoing",
+      "funders": [
+        "Lions Clubs International"
+      ],
+      "amountRaw": "1,000 boxes of apples",
+      "amountUSDm": null,
+      "partners": [
+        "Lions Clubs International",
+        "Friends of the Cedar Forest Association"
+      ],
+      "region": "National",
+      "date": null,
+      "confidence": "Medium",
+      "sourceFeed": "Ministry of Agriculture",
+      "description": "Lions Clubs International is supporting Lebanese farmers by purchasing 1,000 boxes of apples to distribute for free to families and institutions in need, as part of a national campaign to promote Lebanese apples.",
+      "sourceLink": "http://www.agriculture.gov.lb/Media/News/2026/برعاية-وزير-الزراعة،-«الليونز»-تطلق-مشاركتها-في-حم",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Economy and Trade",
+      "ministryCode": "MoET",
+      "sector": "economy",
+      "project": "Digital Intellectual Property Registration System",
+      "status": "Completed",
+      "funders": [
+        "Government of Canada"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "UNDP"
+      ],
+      "region": "National",
+      "date": "2026-11-19",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The Government of Canada funded the development of Lebanon's new Digital Intellectual Property Registration System, which aims to simplify registration procedures for businesses and innovators. The system was launched on November 18, 2026.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/lebanon-launches-new-digital-intellectual-property-registration-system-support-businesses-and-innovators",
+      "note": "",
+      "fundingDate": "2026-11-18",
+      "dateBasis": "In-text: Announced",
+      "dateEvidence": "\"developed with support from the United Nations Development Programme (UNDP) and funding from the Government of Canada\"",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "Awareness Campaign on Men's Mental Health",
+      "status": "Ongoing",
+      "funders": [
+        "European Union"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "International Organization for Migration",
+        "Embrace"
+      ],
+      "region": "National",
+      "date": "2026-11-17",
+      "confidence": "Medium",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The European Union is funding a national awareness campaign on men's mental health, which includes promoting the national hotline 1564 for psychological support and suicide prevention, implemented by the Ministry of Public Health in partnership with IOM and Embrace.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87921/وزارتا-الصحة-والأشغال-تطلقان-حملة-للتوعية-على-الصحة-النفسية-للرجال-وتعزّزان-التعريف-بخط-الحياة-1564",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"تمويل من الإتحاد الأوروبي وتنفيذ المنظمة الدولية للهجرة (IOM)\"",
       "fundingType": "External donor"
     }
   ]
