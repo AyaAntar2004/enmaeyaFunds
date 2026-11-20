@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "19 November 2026",
+    "lastRecord": "20 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -20094,6 +20094,39 @@
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "\"تمويل من الإتحاد الأوروبي وتنفيذ المنظمة الدولية للهجرة (IOM)\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Education and Higher Education",
+      "ministryCode": "MoEHE",
+      "sector": "development",
+      "project": "National Nutrition and Food Environment Report",
+      "status": "Ongoing",
+      "funders": [
+        "WFP",
+        "UNICEF"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "UNICEF"
+      ],
+      "region": "National",
+      "date": "2026-11-20",
+      "confidence": "Medium",
+      "sourceFeed": "ReliefWeb OCHA",
+      "description": "WFP and UNICEF, in collaboration with the Ministry of Education and Higher Education, are working on Lebanon’s first National Nutrition and Food Environment Report to establish a national baseline and inform policies and programmes.",
+      "sourceLink": "https://reliefweb.int/report/lebanon/wfp-lebanon-country-brief-november-2026",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "No - 2026",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"WFP requires immediate, flexible, and front-loaded funding at scale to sustain and expand assistance\"",
       "fundingType": "External donor"
     }
   ]
