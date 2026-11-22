@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "20 November 2026",
+    "lastRecord": "22 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -20127,6 +20127,41 @@
       "origin": "Daily run",
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "\"WFP requires immediate, flexible, and front-loaded funding at scale to sustain and expand assistance\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "National strategy on the rights and inclusion of persons with disabilities",
+      "status": "Ongoing",
+      "funders": [
+        "ESCWA"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Parliamentary Committee on Women and Children",
+        "National Commission for Lebanese Women",
+        "Ministry of Finance",
+        "Office of the Minister of State for Administrative Reform"
+      ],
+      "region": "National",
+      "date": "2026-11-22",
+      "confidence": "Medium",
+      "sourceFeed": "ESCWA",
+      "description": "ESCWA is assisting Lebanon in implementing a national strategy focused on the rights and inclusion of persons with disabilities, alongside efforts to advance women's economic empowerment and improve public finance management.",
+      "sourceLink": "https://www.unescwa.org/news/lebanon%E2%80%99s-independence-day-escwa-executive-secretary-reaffirms-commitment-lebanon%E2%80%99s-recovery",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"ESCWA helped finalize and launch the strategy, contributing to national efforts to strengthen rights and participation in society.\"",
       "fundingType": "External donor"
     }
   ]
