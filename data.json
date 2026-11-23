@@ -20163,6 +20163,38 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "\"ESCWA helped finalize and launch the strategy, contributing to national efforts to strengthen rights and participation in society.\"",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Social Affairs",
+      "ministryCode": "MoSA",
+      "sector": "development",
+      "project": "Emergency Response in Lebanon",
+      "status": "Ongoing",
+      "funders": [
+        "Medair"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Medair"
+      ],
+      "region": "National",
+      "date": "2026-11-18",
+      "confidence": "High",
+      "sourceFeed": "ReliefWeb OCHA",
+      "description": "Medair is providing emergency assistance to internally displaced people in Lebanon, including shelter support, water, sanitation, hygiene services, and healthcare, reaching over 118,000 individuals.",
+      "sourceLink": "https://reliefweb.int/report/lebanon/nine-months-humanitarian-emergency-lebanon-far-over",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
     }
   ]
 }
