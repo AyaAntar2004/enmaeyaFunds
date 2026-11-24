@@ -3,7 +3,7 @@
     "title": "enmaeya Funding & Opportunities Dashboard",
     "subtitle": "Lebanon development projects, funding relationships, and where they lead",
     "reportingPeriod": "1 January to 7 November 2026",
-    "lastRecord": "22 November 2026",
+    "lastRecord": "24 November 2026",
     "footnote": "Illustrative prototype only. Funding amounts and relationships require final cleaning and validation."
   },
   "hero": {
@@ -20194,6 +20194,207 @@
       "origin": "Daily run",
       "sourceChecked": "Fetch failed (scraped text only)",
       "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Agriculture",
+      "ministryCode": "MoA",
+      "sector": "economy",
+      "project": "Mahsouli App",
+      "status": "Planned",
+      "funders": [
+        "Government of Denmark"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "FAO"
+      ],
+      "region": "National",
+      "date": null,
+      "confidence": "High",
+      "sourceFeed": "FAO Lebanon",
+      "description": "The Government of Denmark is funding the Mahsouli mobile application project, which aims to provide Lebanese farmers with tools for agricultural cost-benefit analysis, set to be deployed in 2026.",
+      "sourceLink": "https://www.fao.org/lebanon/news/detail/launch-of-mahsouli-app--bringing-digital-innovation-to-lebanese-farmers/en",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "2026 -> 2026",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"funded by the Government of Denmark\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Agriculture",
+      "ministryCode": "MoA",
+      "sector": "development",
+      "project": "Support to Women's Cooperatives and Associations in the Agri-food Sector in Lebanon",
+      "status": "Ongoing",
+      "funders": [
+        "Canada"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "FAO",
+        "Ministry of Agriculture"
+      ],
+      "region": "National",
+      "date": "2020-03-05",
+      "confidence": "High",
+      "sourceFeed": "FAO Lebanon",
+      "description": "Canada is funding the FAO project 'Support to Women's Cooperatives and Associations in the Agri-food Sector in Lebanon', which aims to empower women's cooperatives and associations economically and socially. The project is ongoing and expected to complete its activities in 2021.",
+      "sourceLink": "https://www.fao.org:443/lebanon/news/detail/Women-s-expectations-voiced-to-FAO-in-a-field-visit-to-Deir-El-Ahmar/en",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "2019-01 -> 2021-12",
+      "in2025_26": "NO - 2021",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "Funded by Canada, FAO is implementing the project 'Support to Women's Cooperatives and Associations in the Agri-food Sector in Lebanon'",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Agriculture",
+      "ministryCode": "MoA",
+      "sector": "environment",
+      "project": "Sustainable Land Management in the Qaraoun Catchment",
+      "status": "Ongoing",
+      "funders": [
+        "Global Environment Facility",
+        "German International Climate Action"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Food and Agriculture Organization",
+        "United Nations Development Programme",
+        "Ministry of Environment"
+      ],
+      "region": "Bekaa",
+      "date": "2020-03-03",
+      "confidence": "Medium",
+      "sourceFeed": "FAO Lebanon",
+      "description": "The project on Sustainable Land Management in the Qaraoun Catchment is focused on developing management plans for rangelands in collaboration with the Ministry of Agriculture and is funded by the Global Environment Facility and the German International Climate Action.",
+      "sourceLink": "https://www.fao.org:443/lebanon/news/detail/Meeting-with-shepherds-to-discuss-rangeland-management-actions-and-ways-of-cooperation/en",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"funded by the Global Enviroment Facility (GEF)\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Energy and Water",
+      "ministryCode": "MoEW",
+      "sector": "environment",
+      "project": "Energy Innovation Lab",
+      "status": "Completed",
+      "funders": [
+        "European Union"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "UNDP Lebanon",
+        "NV Innovation Lebanon"
+      ],
+      "region": "National",
+      "date": "2026-11-24",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The Energy Innovation Lab, funded by the European Union and implemented by UNDP Lebanon, supported Lebanese startups in developing innovative solutions to energy challenges through incubation, acceleration, and grant funding.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/lebanese-startups-showcase-innovative-solutions-lebanons-energy-challenges",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Interior and Municipalities",
+      "ministryCode": "MoIM",
+      "sector": "development",
+      "project": "Civil Defense Center in Minnieh",
+      "status": "Completed",
+      "funders": [
+        "Government of Germany",
+        "KfW Development Bank"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "UNDP",
+        "Lebanese Civil Defense",
+        "Minnieh Union of Municipalities"
+      ],
+      "region": "North Lebanon",
+      "date": "2026-11-24",
+      "confidence": "High",
+      "sourceFeed": "UNDP Lebanon",
+      "description": "The Government of Germany, through KfW Development Bank, funded the construction and equipping of a new Civil Defense Center in Minnieh to enhance emergency response services for local residents.",
+      "sourceLink": "https://www.undp.org/lebanon/press-releases/new-civil-defense-center-inaugurated-minnieh-german-support-strengthen-emergency-response-north-lebanon",
+      "note": "",
+      "fundingDate": "2026-11-20",
+      "dateBasis": "In-text: Announced",
+      "dateEvidence": "Today, a new Civil Defense Center was inaugurated in Minnieh, North Lebanon, to strengthen emergency response for approximately 97,500 residents across five municipalities.",
+      "projectPeriod": "2024 -> 2026",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Fetch failed (scraped text only)",
+      "livePageEvidence": "",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "HPV Vaccine Availability",
+      "status": "Announced",
+      "funders": [
+        "Gavi",
+        "UNICEF"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Lebanese Society of Obstetrics and Gynecology"
+      ],
+      "region": "National",
+      "date": "2026-11-24",
+      "confidence": "High",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The Minister of Public Health announced that the HPV vaccine will be available in primary healthcare centers for Lebanese girls starting January 2027, supported by Gavi and UNICEF.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/87994/وزير-الصحة-يفتتح-مؤتمر-الجمعية-اللبنانية-للتوليد-والأمراض-النسائية-ويبشّر",
+      "note": "",
+      "fundingDate": "2027-01-01",
+      "dateBasis": "In-text: Announced",
+      "dateEvidence": "لقاح فيروس الورم الحليمي البشري (HPV) سيكون متوافراً اعتباراً من كانون الثاني المقبل",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "لقاح فيروس الورم الحليمي البشري (HPV) سيكون متوافرًا في مراكز الرعاية مطلع العام المقبل",
       "fundingType": "External donor"
     }
   ]
