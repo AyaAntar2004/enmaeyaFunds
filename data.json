@@ -20521,6 +20521,102 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Energy and Water",
+      "ministryCode": "MoEW",
+      "sector": "development",
+      "project": "Electricity Services Emergency Support Project",
+      "status": "Ongoing",
+      "funders": [
+        "World Bank"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Electricité du Liban",
+        "World Bank"
+      ],
+      "region": "National",
+      "date": "2026-08-25",
+      "confidence": "High",
+      "sourceFeed": "Ministry of Energy and Water",
+      "description": "The World Bank approved the Electricity Services Emergency Support Project to address the accumulated debts of Electricité du Liban and improve electricity services in Lebanon.",
+      "sourceLink": "https://www.energyandwater.gov.lb/ar/details/101237/%D8%A7%D9%84%D8%B5%D8%AF%D9%8A-%D9%86%D8%AD%D9%86-%D9%81%D9%8A-%D9%88%D8%B1%D8%B4%D8%A9-%D8%A5%D8%B5%D9%84%D8%A7%D8%AD%D9%8A%D8%A9-%D9%88%D8%A5%D9%86%D8%AA%D8%A7%D8%AC%D9%8A%D8%A9",
+      "note": "",
+      "fundingDate": "2026-07-21",
+      "dateBasis": "In-text: Approved",
+      "dateEvidence": "إقرار مشروع القانون المعجل المكرّر الرامي الى فتح إعتماد إضافي في باب إحتياطي الموازنة العامة لعام 2026",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "الخطة الوطنية للنهوض المستدام بقطاع الكهرباء في لبنان",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of National Defense",
+      "ministryCode": "MoND",
+      "sector": "development",
+      "project": "EU mission to advise and assist the Lebanese Armed Forces and Internal Security Forces",
+      "status": "Ongoing",
+      "funders": [
+        "European Union"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "Lebanese Armed Forces",
+        "Internal Security Forces"
+      ],
+      "region": "National",
+      "date": "2026-11-25",
+      "confidence": "High",
+      "sourceFeed": "EU Delegation Lebanon",
+      "description": "The EU has established a new mission to advise and assist the Lebanese Armed Forces and Internal Security Forces to strengthen territorial control, border security, and internal security in Lebanon.",
+      "sourceLink": "https://www.eeas.europa.eu/eeas/opening-remarks-hrvp-kaja-kallas-11th-union-mediterranean-regional-forum_en",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"to formally establish a new EU mission to advise and assist the Lebanese Armed Forces but also Internal Security Forces\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Public Health",
+      "ministryCode": "MoPH",
+      "sector": "health",
+      "project": "Donation of Medicines",
+      "status": "Ongoing",
+      "funders": [
+        "China"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [],
+      "region": "National",
+      "date": "2026-11-25",
+      "confidence": "High",
+      "sourceFeed": "Ministry of Public Health",
+      "description": "The Chinese ambassador presented a donation of medicines to support the health sector in Lebanon, with customs procedures currently being finalized for its release.",
+      "sourceLink": "https://www.moph.gov.lb/ar/Media/view/88034/وزير-الصحة-يتسلم-من-سفير-الصين-هبة-أدوية-لدعم-القطاع-الصحي",
+      "note": "",
+      "fundingDate": "2026-11-25",
+      "dateBasis": "In-text: Announced",
+      "dateEvidence": "وشكر وزير الصحة العامة السفير الصيني على الهبة التي تم تقديمها للبنان لدعم النظام الصحي",
+      "projectPeriod": "",
+      "in2025_26": "Yes",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "هبة أدوية لدعم القطاع الصحي",
+      "fundingType": "External donor"
     }
   ]
 }
