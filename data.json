@@ -20617,6 +20617,68 @@
       "sourceChecked": "Re-checked at source",
       "livePageEvidence": "هبة أدوية لدعم القطاع الصحي",
       "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Education and Higher Education",
+      "ministryCode": "MoEHE",
+      "sector": "education",
+      "project": "School Grants for Students in Southern Lebanon",
+      "status": "Announced",
+      "funders": [
+        "Region of Île-de-France"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [
+        "L’OEUVRE D’ORIENT"
+      ],
+      "region": "South Lebanon",
+      "date": null,
+      "confidence": "High",
+      "sourceFeed": "Lebanese Presidency",
+      "description": "The Region of Île-de-France announced it will provide school grants for 3,000 students distributed among eight schools in Southern Lebanon, as part of a solidarity initiative.",
+      "sourceLink": "https://www.presidency.gov.lb/media/news/1764",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"قررت المنطقة تقديم منح مدرسية لثلاثة الاف تلميذ موزعين بين ثمانية مدارس في جنوب لبنان.\"",
+      "fundingType": "External donor"
+    },
+    {
+      "ministry": "Ministry of Education and Higher Education",
+      "ministryCode": "MoEHE",
+      "sector": "education",
+      "project": "Training One Million Lebanese on Artificial Intelligence",
+      "status": "Announced",
+      "funders": [
+        "United Arab Emirates"
+      ],
+      "amountRaw": "Not specified",
+      "amountUSDm": null,
+      "partners": [],
+      "region": "National",
+      "date": null,
+      "confidence": "Medium",
+      "sourceFeed": "Lebanese Presidency",
+      "description": "The United Arab Emirates announced a new initiative to train one million Lebanese on the use of artificial intelligence, aiming to enhance the skills of the Lebanese population in this field.",
+      "sourceLink": "https://www.presidency.gov.lb/media/news/1761",
+      "note": "",
+      "fundingDate": null,
+      "dateBasis": "Not stated in article",
+      "dateEvidence": "",
+      "projectPeriod": "",
+      "in2025_26": "Unknown",
+      "enmaeyaLink": "",
+      "origin": "Daily run",
+      "sourceChecked": "Re-checked at source",
+      "livePageEvidence": "\"لقد أطلقنا اليوم مبادرتين: المبادرة الأولى: تدريب مليون لبناني على استخدام الذكاء الاصطناعي التوليدي.\"",
+      "fundingType": "External donor"
     }
   ]
 }
